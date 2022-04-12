@@ -1,5 +1,9 @@
+#include "../inc/minirt.h"
+
 int	main(int argc, char **argv)
 {
-	input_handler(argc, argv);
+	(void) argc;
+	(void) argv;
+//	input_handler(argc, argv);
 	return (0);
 }
