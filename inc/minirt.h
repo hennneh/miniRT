@@ -29,6 +29,8 @@
 **	STRUCTS
 */
 
+#include "struct.h"
+
 /*
  * FUNCTIONS
 */
