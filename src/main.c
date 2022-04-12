@@ -1,9 +1,10 @@
 #include "../inc/minirt.h"
 
-int	ft_exit(t_data	img)
+int	ft_exit(t_data *img)
 {
-	mlx_destroy_window(img.mlx, img.win);
-	free(img.mlx);
+	mlx_destroy_window(img->mlx, img->win);
+	free(img->mlx);
+	exit(0);
 	return (0);
 }
 
