@@ -1,113 +1,55 @@
 #include "libft.h"
 
-static int	ft_words(char const *s, char c)
+static	int	ft_strcount(char const *s, char c)
 {
 	int	i;
-	int	words;
+	int	count;
 
 	i = 0;
-	words = 0;
-	while (s[i] && s[i] == c)
-		i++;
+	count = 1;
 	while (s[i])
 	{
-		words++;
-		while (s[i] && s[i] != c)
-			i++;
-		while (s[i] && s[i] == c)
-			i++;
+		if (s[i] == c && s[i + 1] != c && s[i + 1])
+			count ++;
+		i++;
 	}
-	return (words);
+	return (count);
 }
 
-static int	ft_length(char const *s, char c, int a)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = 0;
-	while (s[i] && s[i] == c)
-		i++;
-	while (a)
-	{
-		if (s[i] == c && s[i + 1] != c)
-			a--;
-		i++;
-	}
-	while (s[i] && s[i] != c)
-	{
-		len++;
-		i++;
-	}
-	return (len);
-}
-
-static char	*ft_copy(char const *s, char c, int a)
-{
-	char	*word;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	word = (char *)ft_calloc(sizeof(char), ft_length(s, c, a) + 1);
-	if (!word)
-		return (NULL);
-	while (s[i] && s[i] == c)
-		i++;
-	while (a)
-	{
-		if (s[i] == c && s[i + 1] != c)
-			a--;
-		i++;
-	}
-	while (s[i] && s[i] != c)
-	{
-		word[j] = s[i];
-		j++;
-		i++;
-	}
-	word[j] = 0;
-	return (word);
-}
-
-static void	ft_free_dest(char **dest)
-{
-	int	i;
-
-	i = 0;
-	while (dest[i])
-	{
-		free(dest[i]);
-		i++;
-	}
-}
-
+/**
+ * Allocates ft_calloc and returns an array of strings obtained by
+ * splitting ’s’ using the character ’c’ as a delimiter. The array must be
+ * ended by a NULL pointer. Returns array of new strings resulting from the
+ * split. NULL if the allocation fails.
+ * @param s [char const *] char * to be split
+ * @param c [char] char to be split by
+ * @return [char **] split array
+*/
 char	**ft_split(char const *s, char c)
 {
-	char	**dest;
-	int		words;
-	int		i;
+	char	**array;
+	int		count;
+	int		pos1;
+	int		pos2;
 
 	if (!s)
-		return (NULL);
-	words = ft_words(s, c);
-	dest = (char **)ft_calloc(sizeof(char *), (words + 1));
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (i < words)
+		return (0);
+	count = 0;
+	pos1 = 0;
+	pos2 = 0;
+	array = ft_calloc((ft_strcount(s, c) + 1), sizeof(char *));
+	if (!array)
+		return (0);
+	while (s[pos2])
 	{
-		dest[i] = ft_copy(s, c, i);
-		if (!dest[i])
-		{
-			ft_free_dest(dest);
-			free(dest);
-			return (NULL);
-		}
-		i++;
+		while (s[pos2] == c && s[pos2])
+			pos2++;
+		pos1 = pos2;
+		while (s[pos2] != c && s[pos2])
+			pos2++;
+		if (s[pos2 - 1] != c)
+			array[count] = ft_substr(s, pos1, pos2 - pos1);
+		count ++;
 	}
-	dest[i] = NULL;
-	return (dest);
+	return (array);
 }
