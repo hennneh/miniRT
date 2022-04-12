@@ -12,12 +12,14 @@
 */
 
 # include "../lft/libft.h"
+# include "../mlx/mlx.h"
 
 /*
 **	INCLUDES
 */
 
-# include <stdio.h> //  printf
+# include <stdio.h>	//  printf
+# include <math.h>	//  math lol
 
 /*
 ** MACROS
