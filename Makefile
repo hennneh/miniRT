@@ -11,7 +11,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@make bonus -C lft/
 	@make -C mlx/
-	$(CC) $(FLAGS) -Lmlx -lmlx -framework OpenGL -framework AppKit $(OBJ) mlx/libmlx.a lft/libft.a -o $@
+	$(CC) $(FLAGS) -Lmlx -lmlx -L/usr/X11/include/../lib -lXext -lX11 -lm $(OBJ) mlx/libmlx.a lft/libft.a -o $@
 
 %.o: %.c
 	$(CC) $(FLAGS) -Imlx -c $< -o $@
