@@ -7,6 +7,8 @@
 
 # define wdth 640
 # define hght 640
+# define divergence 0.1
+# define pi 3.14159265359
 
 /*
 **	LIBRARY
@@ -56,6 +58,13 @@ typedef struct	s_data {
 /*
  * FUNCTIONS
 */
+
+//GEOMETRY-
+
+double	*cross(double *a, double *b);
+double	*ray_alloc(double x, double y, double z);
+double	veclen(double *a);
+double	connect(double *a, double *b)
 
 //SRC
 
