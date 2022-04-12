@@ -26,7 +26,7 @@ typedef struct s_cam
 {
 	double	cor[3];
 	double	v_o[3];
-	double	fov;// double or int ???????
+	double	fov;// double! NOTE TO VINNY: multiply initial value by (π / 180)
 }	t_cam;
 
 /**
