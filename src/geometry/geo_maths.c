@@ -43,7 +43,7 @@ double	veclen(double *a)
 /**
  * @brief return a vector connecting two points (! order counts)
  * @param a [double*] starting point
- * @param a [double*] ending point
+ * @param b [double*] ending point
  * @return [double*]
 */
 double	connect(double *a, double *b)
@@ -55,6 +55,30 @@ double	connect(double *a, double *b)
 	res[1] = a[1] - b[1];
 	res[2] = a[2] - b[2];
 	return (res);
+}
+
+/**
+ * @brief add a two vectors together
+ * @param a [double*] the vector being added to
+ * @param b [double*] the vector to add
+*/
+void	addto(double *a, double *b)
+{
+	a[0] += b[0];
+	a[1] += b[1];
+	a[2] += b[2];
+}
+
+/**
+ * @brief multiply a vector by a constant
+ * @param a [double*] the vector mutiplied
+ * @param m [double] the multiplicant
+*/
+void	product(double *a, double m)
+{
+	a[0] *= m;
+	a[1] *= m;
+	a[2] *= m;
 }
 
 /**

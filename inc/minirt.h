@@ -64,7 +64,10 @@ typedef struct	s_data {
 double	*cross(double *a, double *b);
 double	*ray_alloc(double x, double y, double z);
 double	veclen(double *a);
-double	connect(double *a, double *b)
+double	connect(double *a, double *b);
+void	addto(double *a, double *b);
+void	unit(double	*a);
+void	product(double *a, double m);
 
 //SRC
 
