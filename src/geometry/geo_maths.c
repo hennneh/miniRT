@@ -8,6 +8,8 @@
 */
 double	*cross(double *a, double *b)
 {
+	if (!a || !b)
+		return(NULL);
 	double	*res;
 
 	res = malloc(3 * sizeof(double));
@@ -48,6 +50,8 @@ double	veclen(double *a)
 */
 double	*connect(double *a, double *b)
 {
+	if (!a || !b)
+		return(NULL);
 	double	*res;
 
 	res = malloc(3 * sizeof(double));
@@ -64,6 +68,8 @@ double	*connect(double *a, double *b)
 */
 void	addto(double *a, double *b)
 {
+	if (!a || !b)
+		return(NULL);
 	a[0] += b[0];
 	a[1] += b[1];
 	a[2] += b[2];
@@ -76,6 +82,8 @@ void	addto(double *a, double *b)
 */
 void	product(double *a, double m)
 {
+	if (!a)
+		return(NULL);
 	a[0] *= m;
 	a[1] *= m;
 	a[2] *= m;
@@ -88,6 +96,8 @@ void	product(double *a, double m)
 */
 void	unit(double	*a)
 {
+	if (!a)
+		return(NULL);
 	double	d;
 
 	d = 1 / veclen(a);
