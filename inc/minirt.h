@@ -23,6 +23,9 @@
 
 # include <stdio.h>	//  printf
 # include <math.h>	//  math lol
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>	//  open
 
 /*
 ** MACROS
@@ -44,7 +47,7 @@ typedef struct s_mrt
 	t_sph	**sp;
 	t_pl	**pl;
 	t_cyl	**cy;
-	double	***ray[3];
+	double	***ray;
 }				t_mrt;
 
 typedef struct	s_data {
@@ -64,10 +67,14 @@ typedef struct	s_data {
 double	*cross(double *a, double *b);
 double	*ray_alloc(double x, double y, double z);
 double	veclen(double *a);
-double	connect(double *a, double *b);
+double	*connect(double *a, double *b);
 void	addto(double *a, double *b);
 void	unit(double	*a);
 void	product(double *a, double m);
+
+//TRACER
+
+void	init_rays(t_mrt *mrt);
 
 //SRC
 

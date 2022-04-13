@@ -16,15 +16,17 @@ double	**scream(t_cam *cam)
 	res = malloc(3 * sizeof(double **));
 	res[0] = malloc(3 * sizeof(double *));
 	if (cam->cor[1] == 0 && cam->cor[2] == 0)
-		res[1] = unit(ray_alloc(0, 1, 0));
+		res[0] = ray_alloc(0, 1, 0);
 	else
 	{
 		tmp = ray_alloc(1, 0, 0);
-		res[1] = unit(cross(cam->v_o, tmp));
+		res[0] = cross(cam->v_o, tmp);
+		unit(res[0]);
 		free(tmp);
 	}
 	res[1] = malloc(3 * sizeof(double *));
-	res[1] = unit(cross(cam->v_o, res[0]));
+	res[1] = cross(cam->v_o, res[0]);
+	unit(res[1]);
 	res[2] = malloc(3 * sizeof(double));
 	res[2] = ray_alloc(cam->v_o[0], cam->v_o[1], cam->v_o[2]);
 	product(res[2], acos(cam->fov / 2) * wdth * divergence);
@@ -39,10 +41,13 @@ double	**scream(t_cam *cam)
 */
 double	*single_ray(int x, int y, t_cam *cam, double **scr)
 {
-	double	*addict;
+	double	addict[3];
 	double	*tmp;
+	double	*res;
 
-	addict = ray_alloc(cam->cor[0], cam->cor[1], cam->cor[2]);
+	addict[0] = cam->cor[0];
+	addict[1] = cam->cor[1];
+	addict[2] = cam->cor[2];
 	addto(addict, scr[2]);
 	tmp = ray_alloc(scr[0][0], scr[0][1], scr[0][2]);
 	product(tmp, x * divergence);
@@ -52,9 +57,14 @@ double	*single_ray(int x, int y, t_cam *cam, double **scr)
 	product(tmp, y * divergence);
 	addto(addict, tmp);
 	free(tmp);
-	return (unit(connect(cam->cor, addict)));
+	res = connect(cam->cor, addict);
+	return (res);
 }
 
+/**
+ * @brief calculate and set a ray foreach pixel to be displayed
+ * @param mrt [t_mrt*] our main struct
+*/
 void	init_rays(t_mrt *mrt)
 {
 	int		x;
@@ -63,12 +73,14 @@ void	init_rays(t_mrt *mrt)
 
 	screen = scream(mrt->cam);
 	y = 0;
+	mrt->ray = ft_calloc(hght + 1, sizeof(double **));
 	while(y <= hght)
 	{
+		mrt->ray = ft_calloc(wdth + 1, sizeof(double *));
 		x = 0;
 		while (x <= wdth)
 		{
-			mrt->ray[x][y] = single_ray(x, y, mrt->cam, screen)
+			mrt->ray[x][y] = single_ray(x, y, mrt->cam, screen);
 			x++;
 		}
 		y++;

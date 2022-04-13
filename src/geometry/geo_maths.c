@@ -10,7 +10,7 @@ double	*cross(double *a, double *b)
 {
 	double	*res;
 
-	res = malloc(3, sizeof(double));
+	res = malloc(3 * sizeof(double));
 	res[0] = a[2] * b[3] - a[3] * b[2];
 	res[1] = a[3] * b[1] - a[1] * b[3];
 	res[2] = a[1] * b[2] - a[2] * b[1];
@@ -21,7 +21,7 @@ double	*ray_alloc(double x, double y, double z)
 {
 	double	*res;
 
-	res = malloc(3, sizeof(double));
+	res = malloc(3 * sizeof(double));
 	res[0] = x;
 	res[1] = y;
 	res[2] = z;
@@ -46,11 +46,11 @@ double	veclen(double *a)
  * @param b [double*] ending point
  * @return [double*]
 */
-double	connect(double *a, double *b)
+double	*connect(double *a, double *b)
 {
 	double	*res;
 
-	res = malloc(3, sizeof(double));
+	res = malloc(3 * sizeof(double));
 	res[0] = a[0] - b[0];
 	res[1] = a[1] - b[1];
 	res[2] = a[2] - b[2];
