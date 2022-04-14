@@ -46,19 +46,59 @@ typedef struct s_lol
 	int		b;
 }	t_lol;
 
+/**
+ * struct for sphere
+ * @param cor [double[3]] coordinates of view point [x][y][z]
+ * @param di [double] sphere diameter [0.0 - 1.0]
+ * @param r [int] Red [0 - 255]
+ * @param g [int] Green [0 - 255]
+ * @param b [int] Blue [0 - 255]
+*/
 typedef struct s_sph
 {
-	/**/
+	double	cor[3];
+	double	di;
+	int		r;
+	int		g;
+	int		b;
 }	t_sph;
 
+/**
+ * struct for plane
+ * @param cor [double[3]] coordinates of view point [x][y][z]
+ * @param v_o [double[3]] 3d normalization orientation vector [x][y][z] [-1 - 1]
+ * @param r [int] Red [0 - 255]
+ * @param g [int] Green [0 - 255]
+ * @param b [int] Blue [0 - 255]
+*/
 typedef struct s_pl
 {
-	/* data */
+	double	cor[3];
+	double	v_o[3];
+	int		r;
+	int		g;
+	int		b;
 }	t_pl;
 
+/**
+ * struct for cylinder
+ * @param cor [double[3]] coordinates of view point [x][y][z]
+ * @param v_o [double[3]] 3d normalization orientation vector [x][y][z] [-1 - 1]
+ * @param dia [double] cylinder diameter
+ * @param hght [double] cylinder hight
+ * @param r [int] Red [0 - 255]
+ * @param g [int] Green [0 - 255]
+ * @param b [int] Blue [0 - 255]
+*/
 typedef struct s_cyl
 {
-	/* data */
+	double	cor[3];
+	double	v_o[3];
+	double	dia;
+	double	hght;
+	int		r;
+	int		g;
+	int		b;
 }	t_cyl;
 
 #endif
