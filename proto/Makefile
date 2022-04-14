@@ -8,12 +8,16 @@ U=$(S)setup/
 SRC =	$(P)proto.c \
 		$(U)rayinit.c \
 		$(M)geo_maths.c \
-		$(P)main.c
+		$(P)main.c \
+		$(M)ray_sphere.c \
+		$(M)geo_maths1.c
 
 OBJ =	$(P)proto.o \
 		$(U)rayinit.o \
 		$(M)geo_maths.o \
-		$(P)main.o
+		$(P)main.o \
+		$(M)ray_sphere.o \
+		$(M)geo_maths1.o
 
 CC = gcc
 

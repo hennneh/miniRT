@@ -57,6 +57,7 @@ int main(int argc, char **argv)
 	img3.img = mlx_new_image(mlx, WDTH, HGHT);
 	img3.addr = mlx_get_data_addr(img3.img, &img3.bits_per_PIxel, &img3.line_length, &img3.endian);
 	// img4 = mlx_new_image(mlx, WDTH, HGHT);
+	printf("central ray: x: %lf\ty: %lf\tz: %lf\n angle to cam_dir, %lf\n", mrt.ray[HGHT / 2][WDTH / 2][0], mrt.ray[HGHT / 2][WDTH / 2][1], mrt.ray[HGHT / 2][WDTH / 2][2], angle(mrt.ray[HGHT / 2][WDTH / 2], mrt.cam->v_o) * (180/PI));
 	for (int y = 0; y < HGHT; y++)
 	{
 		for (int x = 0; x < WDTH; x++)
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
 			// my_mlx_PIxel_put(&img1, x, y, create_trgb(0, veclen(mrt.ray[y][x]), 0, 0));
 			my_mlx_PIxel_put(&img1, x, y, create_trgb(0, 0, angle(mrt.ray[y][x], mrt.cam->v_o) * (180/PI), 0));
 			my_mlx_PIxel_put(&img2, x, y, create_trgb(0, 0, 2 * angle(mrt.ray[y][x], mrt.cam->v_o) * (180/PI), 0));
-			my_mlx_PIxel_put(&img3, x, y, create_trgb(0, hit_sphere(mrt.sp->cor, mrt.sp->rad, mrt.cam->cor, mrt.ray[y][x]), 0, 0));
+			my_mlx_PIxel_put(&img3, x, y, create_trgb(0, 10 * hit_sphere(mrt.sp->cor, mrt.sp->rad, mrt.cam->cor, mrt.ray[y][x]), 0, 0));
 			// mlx_putPIxel(img4, l, i, create_trgb(mrt.PIxels[i][l]->clr_r, mrt.PIxels[i][l]->clr_g, mrt.PIxels[i][l]->clr_b, mrt.PIxels[i][l]->light));
 			if ((x == 0 || x == WDTH - 1) && (y == HGHT/2 || y == HGHT/2 + 1))
 				printf("%0.1lf ", angle(mrt.ray[y][x], mrt.cam->v_o) * (180/PI));
