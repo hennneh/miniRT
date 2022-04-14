@@ -32,6 +32,8 @@ int main(int argc, char **argv)
 	free(input);
 	t_mrt	mrt;
 
+	extract_line(lines, &mrt);
+
 	init_rays(&mrt);
 
 	printf("\n");
@@ -42,7 +44,7 @@ int main(int argc, char **argv)
 	void	*mlx;
 	void	*win;
 	t_data	img1;
-	// t_data	*img2;
+	t_data	img2;
 	// t_data	*img3;
 	// t_data	*img4;
 
@@ -50,22 +52,26 @@ int main(int argc, char **argv)
 	win = mlx_new_window(mlx, 2 * wdth + 20, 2 * hght + 20, "Beautiful nonsense");
 	img1.img = mlx_new_image(mlx, wdth, hght);
 	img1.addr = mlx_get_data_addr(img1.img, &img1.bits_per_pixel, &img1.line_length, &img1.endian);
-	// img2 = mlx_new_image(mlx, wdth, hght);
+	img2.img = mlx_new_image(mlx, wdth, hght);
+	img2.addr = mlx_get_data_addr(img2.img, &img2.bits_per_pixel, &img2.line_length, &img2.endian);
 	// img3 = mlx_new_image(mlx, wdth, hght);
 	// img4 = mlx_new_image(mlx, wdth, hght);
 	for (int y = 0; y < hght; y++)
 	{
 		for (int x = 0; x < wdth; x++)
 		{
-			my_mlx_pixel_put(&img1, x, y, create_trgb(0, 10 * mrt.ray[y][x][0], 10 * mrt.ray[y][x][1], 10 * mrt.ray[y][x][2]));
-			// mlx_putpixel(img2, l, i, (int)(scalar(mrt.pixels[i][l]->ray, &cam->norm) * 320000));
+			// my_mlx_pixel_put(&img1, x, y, create_trgb(0, veclen(mrt.ray[y][x]), 0, 0));
+			my_mlx_pixel_put(&img1, x, y, create_trgb(0, 0, angle(mrt.ray[y][x], mrt.cam->v_o) * (180/pi), 0));
+			my_mlx_pixel_put(&img2, x, y, create_trgb(0, 0, 2 * angle(mrt.ray[y][x], mrt.cam->v_o) * (180/pi), 0));
 			// mlx_putpixel(img3, l, i, create_trgb(mrt.pixels[i][l]->clr_r, mrt.pixels[i][l]->clr_g, mrt.pixels[i][l]->clr_b, (725 * veclen(mrt.pixels[i][l]->impact))));
 			// mlx_putpixel(img4, l, i, create_trgb(mrt.pixels[i][l]->clr_r, mrt.pixels[i][l]->clr_g, mrt.pixels[i][l]->clr_b, mrt.pixels[i][l]->light));
+			if ((x == 0 || x == wdth - 1) && (y == hght/2 || y == hght/2 + 1))
+				printf("%0.1lf ", angle(mrt.ray[y][x], mrt.cam->v_o) * (180/pi));
 		}
 	}
 
 	mlx_put_image_to_window(mlx, win, img1.img, 5, 10);
-	// mlx_image_to_window(mlx, img2, 15 + wdth, 10);
+	mlx_put_image_to_window(mlx, win, img2.img, 15 + wdth, 10);
 	// mlx_image_to_window(mlx, img3, 5, 15 + hght);
 	// mlx_image_to_window(mlx, img4, 15 + wdth, 15 + hght);
 

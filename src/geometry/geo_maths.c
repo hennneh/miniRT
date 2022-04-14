@@ -13,9 +13,10 @@ double	*cross(double *a, double *b)
 	double	*res;
 
 	res = malloc(3 * sizeof(double));
-	res[0] = a[2] * b[3] - a[3] * b[2];
-	res[1] = a[3] * b[1] - a[1] * b[3];
-	res[2] = a[1] * b[2] - a[2] * b[1];
+	res[0] = (a[1] * b[2]) - (a[2] * b[1]);
+	res[1] = (a[2] * b[0]) - (a[0] * b[2]);
+	res[2] = (a[0] * b[1]) - (a[1] * b[0]);
+	unit(res);
 	return (res);
 }
 
@@ -69,7 +70,7 @@ double	*connect(double *a, double *b)
 void	addto(double *a, double *b)
 {
 	if (!a || !b)
-		return(NULL);
+		return ;
 	a[0] += b[0];
 	a[1] += b[1];
 	a[2] += b[2];
@@ -83,10 +84,29 @@ void	addto(double *a, double *b)
 void	product(double *a, double m)
 {
 	if (!a)
-		return(NULL);
+		return ;
 	a[0] *= m;
 	a[1] *= m;
 	a[2] *= m;
+}
+
+/**
+ * @brief add a set distance to a vector
+ * @param a [double*] the vector
+ * @param m [double] to be added length
+*/
+void	resize(double *a, double m)
+{
+	double	o[3];
+
+	if (!a)
+		return ;
+	o[0] = a[0];
+	o[1] = a[1];
+	o[2] = a[2];
+	unit(o);
+	product(o, m);
+	addto(a, o);
 }
 
 /**
@@ -97,11 +117,27 @@ void	product(double *a, double m)
 void	unit(double	*a)
 {
 	if (!a)
-		return(NULL);
+		return ;
 	double	d;
 
 	d = 1 / veclen(a);
 	a[0] *= d;
 	a[1] *= d;
 	a[2] *= d;
+}
+/**
+ * @brief calculate the angle between two vectors
+ * @param a [double*]
+ * @param b [double*]
+*/
+double	angle(double *a, double *b)
+{
+	double scalar;
+
+	if (!a || !b)
+		return(0);
+	scalar = ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]));
+	if (scalar < 0)
+		scalar *= -1;
+	return (acos(scalar / (veclen(a) * veclen(b))));
 }

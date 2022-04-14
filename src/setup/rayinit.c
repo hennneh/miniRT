@@ -15,11 +15,11 @@ double	**scream(t_cam *cam)
 
 	res = malloc(3 * sizeof(double **));
 	res[0] = malloc(3 * sizeof(double *));
-	if (cam->cor[1] == 0 && cam->cor[2] == 0)
-		res[0] = ray_alloc(0, 1, 0);
+	if (cam->cor[0] == 0 && cam->cor[1] == 0)
+		res[0] = ray_alloc(1, 0, 0);
 	else
 	{
-		tmp = ray_alloc(1, 0, 0);
+		tmp = ray_alloc(0, 0, 1);
 		res[0] = cross(cam->v_o, tmp);
 		unit(res[0]);
 		free(tmp);
@@ -29,15 +29,19 @@ double	**scream(t_cam *cam)
 	unit(res[1]);
 	res[2] = malloc(3 * sizeof(double));
 	res[2] = ray_alloc(cam->v_o[0], cam->v_o[1], cam->v_o[2]);
-	product(res[2], acos(cam->fov / 2) * wdth * divergence);
+	resize(res[2], cos(cam->fov / 2) * (((wdth * divergence) / 2) / cos(pi / 2 - (cam->fov / 2))));
+	// printf("sv1 %lf %lf %lf\nsv2 %lf %lf %lf\ndst %lf %lf %lf\nbreite %lf\n", res[0][0], res[0][1], res[0][2], res[1][0], res[1][1], res[1][2], res[2][0], res[2][1], res[2][2], (wdth * divergence) / 2);
 	return(res);
 }
 
 /**
- * 	vec			from			to
- * 	res			cam->cor		curr
- * 	curr		scr->cor		scr->o_v
- * 	scr->o_v	scr_h			scr_v
+ * NOTE: the offset is from the middle ray to a projection screen
+ * meaning that to represent all pixels x and y need to start at -(max / 2)
+ * @param x [int] horizontal pixelcoordinate
+ * @param y [int] vertical pixelcoordinate
+ * @param cam [t_cam*] originating viewpoint
+ * @param scr [double**] defining parameters of the projection screen
+ * @brief return a ray representing a pixel with the xy offset given
 */
 double	*single_ray(int x, int y, t_cam *cam, double **scr)
 {
@@ -72,15 +76,19 @@ void	init_rays(t_mrt *mrt)
 	double	**screen;
 
 	screen = scream(mrt->cam);
-	y = 0;
-	mrt->ray = ft_calloc(hght + 1, sizeof(double **));
-	while(y <= hght)
+	y = 0;//- hght / 2;
+	mrt->ray = ft_calloc(hght + 3, sizeof(double **));
+	if (!mrt->ray)
+		printf("malloc_error\n");
+	while(y < hght/* / 2*/)
 	{
-		mrt->ray = ft_calloc(wdth + 1, sizeof(double *));
-		x = 0;
-		while (x <= wdth)
+		mrt->ray[y] = ft_calloc(wdth + 3, sizeof(double *));
+		if (!mrt->ray[y])
+			printf("malloc_error\n");
+		x = 0;//- wdth / 2;
+		while (x < wdth/* / 2*/)
 		{
-			mrt->ray[x][y] = single_ray(x, y, mrt->cam, screen);
+			(((mrt->ray)[y])[x]) = single_ray(x - (wdth/2), y - (hght/2), mrt->cam, screen);
 			x++;
 		}
 		y++;

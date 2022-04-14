@@ -71,6 +71,8 @@ double	*connect(double *a, double *b);
 void	addto(double *a, double *b);
 void	unit(double	*a);
 void	product(double *a, double m);
+void	resize(double *a, double m);
+double	angle(double *a, double *b);
 
 //TRACER
 
@@ -81,5 +83,7 @@ void	init_rays(t_mrt *mrt);
 int		main(int argc, char **argv);
 
 // INPUT
+
+void	*extract_line(char **lines, t_mrt *mrt);
 
 #endif

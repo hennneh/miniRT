@@ -41,6 +41,7 @@ t_cam	*extract_camera(char **things)
 	elem->fov = ft_atoi(things[7]) * pi/180;
 	unit(elem->v_o);
 	free_2dstr(things);
+	// printf("pos %lf, %lf, %lf,\ndirec %lf, %lf, %lf,\nfov %lf\n", elem->cor[0], elem->cor[1], elem->cor[2], elem->v_o[0], elem->v_o[1], elem->v_o[2], elem->fov);
 	return(elem);
 }
 
@@ -49,6 +50,12 @@ t_lol	*extract_light(char **things)
 	t_lol	*elem;
 
 	elem = ft_calloc(1, sizeof(t_lol));
+	if (!things[0] || !things[1] || !things[2] || !things[3] || !things[4] || !things[5] || !things[6] || !things[7])
+	{
+		free_2dstr(things);
+		free(elem);
+		return (NULL);
+	}
 	elem->cor[0] = ft_atof(things[1]);
 	elem->cor[1] = ft_atof(things[2]);
 	elem->cor[2] = ft_atof(things[3]);
@@ -56,12 +63,6 @@ t_lol	*extract_light(char **things)
 	elem->r = ft_atoi(things[5]);
 	elem->g = ft_atoi(things[6]);
 	elem->b = ft_atoi(things[7]);
-	if (!things[0] || !things[1] || !things[2] || !things[3] || !things[4] || !things[5] || !things[6] || !things[7])
-	{
-		free(elem);
-		free_2dstr(things);
-		return (NULL);
-	}
 	free_2dstr(things);
 	return(elem);
 }
@@ -152,7 +153,9 @@ void	*extract_line(char **lines, t_mrt *mrt)
 		line = lines[i];
 		ft_char_rep(line, ',', ' ');
 		things = ft_split(line, ' ');
-		free(line);
+		// printf("line %s\n", line);
+		// for(int l = 0; things[l]; l++)
+		// 	printf("thing %s\n", things[l]);
 		if (!ft_strncmp(things[0], "A", 1))
 			mrt->al = (extract_ambient(things));
 		else if (!ft_strncmp(things[0], "C\0", 1))
@@ -161,7 +164,6 @@ void	*extract_line(char **lines, t_mrt *mrt)
 		}
 		else if (!ft_strncmp(things[0], "L\0", 1))
 		{
-			
 			mrt->l = (extract_light(things));
 		}
 		// else if (!ft_strncmp(things[0], "sp\0", 2))
@@ -177,8 +179,10 @@ void	*extract_line(char **lines, t_mrt *mrt)
 		// 	mrt-> = (extract_cylinder(things));
 		// }
 		else
+		{
 			printf("UNKNOWN OBJECT IN INPUTLINE %i\n", i);
-		free_2dstr(things);
+			free_2dstr(things);
+		}
 		i++;
 	}
 	return (NULL);
