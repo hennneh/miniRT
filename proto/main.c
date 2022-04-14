@@ -41,6 +41,10 @@ int main(int argc, char **argv)
 	// printf("%lf\n", angle(*mrt.PIxels[0][WDTH/2]->ray, *mrt.PIxels[HGHT - 1][WDTH/2]->ray));
 	//write(1, "all PIx\n", 9);
 
+	double	*X = ray_alloc(1, 0, 0);
+	double	*Y = ray_alloc(0, 1, 0);
+	double	*Z = ray_alloc(0, 0, 1);
+
 	void	*mlx;
 	void	*win;
 	t_data	img1;
@@ -63,9 +67,9 @@ int main(int argc, char **argv)
 		for (int x = 0; x < WDTH; x++)
 		{
 			// my_mlx_PIxel_put(&img1, x, y, create_trgb(0, veclen(mrt.ray[y][x]), 0, 0));
-			my_mlx_PIxel_put(&img1, x, y, create_trgb(0, 0, 10 * plane_intercept(&mrt, mrt.ray[y][x], mrt.pl), 0));
-			my_mlx_PIxel_put(&img2, x, y, create_trgb(0, 0, 2 * angle(mrt.ray[y][x], mrt.cam->v_o) * (180/PI), 0));
-			my_mlx_PIxel_put(&img3, x, y, create_trgb(0, 10 * hit_sphere(mrt.sp->cor, mrt.sp->rad, mrt.cam->cor, mrt.ray[y][x]), 0, 0));
+			my_mlx_PIxel_put(&img1, x, y, create_trgb(0, 0, -19 * plane_intercept(&mrt, mrt.ray[y][x], mrt.pl), 0));
+			my_mlx_PIxel_put(&img2, x, y, create_trgb(0, angle(mrt.ray[y][x], X) * (180/PI), 2 * angle(mrt.ray[y][x], Y) * (180/PI), 2 * angle(mrt.ray[y][x], Z) * (180/PI)));
+			my_mlx_PIxel_put(&img3, x, y, create_trgb(0, -300 * hit_sphere(mrt.sp->cor, mrt.sp->rad, mrt.cam->cor, mrt.ray[y][x]), 0, 0));
 			// mlx_putPIxel(img4, l, i, create_trgb(mrt.PIxels[i][l]->clr_r, mrt.PIxels[i][l]->clr_g, mrt.PIxels[i][l]->clr_b, mrt.PIxels[i][l]->light));
 			if ((x == 0 || x == WDTH - 1) && (y == HGHT/2 || y == HGHT/2 + 1))
 				printf("%0.1lf ", angle(mrt.ray[y][x], mrt.cam->v_o) * (180/PI));

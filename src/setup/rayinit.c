@@ -15,7 +15,7 @@ double	**scream(t_cam *cam)
 
 	res = malloc(3 * sizeof(double **));
 	res[0] = malloc(3 * sizeof(double *));
-	if (cam->cor[0] == 0 && cam->cor[1] == 0)
+	if (cam->v_o[0] == 0 && cam->v_o[1] == 0)
 		res[0] = ray_alloc(1, 0, 0);
 	else
 	{
@@ -62,7 +62,7 @@ double	*single_ray(int x, int y, t_cam *cam, double **scr)
 	addto(addict, tmp);
 	free(tmp);
 	res = connect(cam->cor, addict);
-	unit(res);
+	// unit(res);
 	return (res);
 }
 
@@ -77,17 +77,17 @@ void	init_rays(t_mrt *mrt)
 	double	**screen;
 
 	screen = scream(mrt->cam);
-	y = 0;//- HGHT / 2;
+	y = 0;
 	mrt->ray = ft_calloc(HGHT + 3, sizeof(double **));
 	if (!mrt->ray)
 		printf("malloc_error\n");
-	while(y < HGHT/* / 2*/)
+	while(y < HGHT)
 	{
 		mrt->ray[y] = ft_calloc(WDTH + 3, sizeof(double *));
 		if (!mrt->ray[y])
 			printf("malloc_error\n");
-		x = 0;//- WDTH / 2;
-		while (x < WDTH/* / 2*/)
+		x = 0;
+		while (x < WDTH)
 		{
 			(((mrt->ray)[y])[x]) = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, screen);
 			x++;
