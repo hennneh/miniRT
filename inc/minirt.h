@@ -7,7 +7,7 @@
 
 # define WDTH 640
 # define HGHT 640
-# define DIVERGNCE 0.1
+# define DIVERGENCE 0.1
 # define PI 3.14159265359
 
 /*
@@ -44,9 +44,9 @@ typedef struct s_mrt
 	t_al	*al;
 	t_lol	*l;
 	t_cam	*cam;
-	t_sph	**sp;
-	t_pl	**pl;
-	t_cyl	**cy;
+	t_sph	*sp;
+	t_pl	*pl;
+	t_cyl	*cy;
 	double	***ray;
 }				t_mrt;
 
@@ -54,7 +54,7 @@ typedef struct s_data
 {
 	void	*img;
 	char	*addr;
-	int		bits_per_pixel;
+	int		bits_per_PIxel;
 	int		line_length;
 	int		endian;
 }				t_data;
@@ -78,6 +78,7 @@ double	angle(double *a, double *b);
 //TRACER
 
 void	init_rays(t_mrt *mrt);
+double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
 
 //SRC
 

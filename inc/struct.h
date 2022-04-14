@@ -57,7 +57,7 @@ typedef struct s_lol
 typedef struct s_sph
 {
 	double	cor[3];
-	double	di;
+	double	rad;
 	int		r;
 	int		g;
 	int		b;
@@ -85,7 +85,7 @@ typedef struct s_pl
  * @param cor [double[3]] coordinates of view point [x][y][z]
  * @param v_o [double[3]] 3d normalization orientation vector [x][y][z] [-1 - 1]
  * @param dia [double] cylinder diameter
- * @param hght [double] cylinder hight
+ * @param HGHT [double] cylinder hight
  * @param r [int] Red [0 - 255]
  * @param g [int] Green [0 - 255]
  * @param b [int] Blue [0 - 255]

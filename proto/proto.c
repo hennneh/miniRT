@@ -38,7 +38,7 @@ t_cam	*extract_camera(char **things)
 	elem->v_o[0] = ft_atof(things[4]);
 	elem->v_o[1] = ft_atof(things[5]);
 	elem->v_o[2] = ft_atof(things[6]);
-	elem->fov = ft_atoi(things[7]) * pi/180;
+	elem->fov = ft_atoi(things[7]) * PI/180;
 	unit(elem->v_o);
 	free_2dstr(things);
 	// printf("pos %lf, %lf, %lf,\ndirec %lf, %lf, %lf,\nfov %lf\n", elem->cor[0], elem->cor[1], elem->cor[2], elem->v_o[0], elem->v_o[1], elem->v_o[2], elem->fov);
@@ -67,28 +67,28 @@ t_lol	*extract_light(char **things)
 	return(elem);
 }
 
-// t_sph	*extract_sphere(char **things)
-// {
-// 	t_sph	*elem;
+t_sph	*extract_sphere(char **things)
+{
+	t_sph	*elem;
 
-// 	elem = ft_calloc(1, sizeof(t_sph));
-// 	if (!things[0] || !things[1] || !things[2] || !things[3] || !things[4] || !things[5] || !things[6] || !things[7])
-// 	{
-// 		free(elem);
-// 		free_2dstr(things);
-// 		return (NULL);
-// 	}
-// 	elem->cor[0] = ft_atof(things[1]);
-// 	elem->cor[1] = ft_atof(things[2]);
-// 	elem->cor[2] = ft_atof(things[3]);
-// 	elem->d = ft_atoi(things[4]);
-// 	elem->r = ft_atoi(things[5]);
-// 	elem->g = ft_atoi(things[6]);
-// 	elem->b = ft_atoi(things[7]);
-// 	//printf("clr sphere %i %i %i \n", elem->r, elem->g, elem->b);
-// 	free_2dstr(things);
-// 	return(elem);
-// }
+	elem = ft_calloc(1, sizeof(t_sph));
+	if (!things[0] || !things[1] || !things[2] || !things[3] || !things[4] || !things[5] || !things[6] || !things[7])
+	{
+		free(elem);
+		free_2dstr(things);
+		return (NULL);
+	}
+	elem->cor[0] = ft_atof(things[1]);
+	elem->cor[1] = ft_atof(things[2]);
+	elem->cor[2] = ft_atof(things[3]);
+	elem->rad = ft_atoi(things[4]) / 2;
+	elem->r = ft_atoi(things[5]);
+	elem->g = ft_atoi(things[6]);
+	elem->b = ft_atoi(things[7]);
+	//printf("clr sphere %i %i %i \n", elem->r, elem->g, elem->b);
+	free_2dstr(things);
+	return(elem);
+}
 
 // t_pl	*extract_plane(char **things)
 // {
@@ -166,10 +166,10 @@ void	*extract_line(char **lines, t_mrt *mrt)
 		{
 			mrt->l = (extract_light(things));
 		}
-		// else if (!ft_strncmp(things[0], "sp\0", 2))
-		// {
-		// 	mrt->sph = (extract_sphere(things));
-		// }
+		else if (!ft_strncmp(things[0], "sp\0", 2))
+		{
+			mrt->sp = (extract_sphere(things));
+		}
 		// else if (!ft_strncmp(things[0], "pl\0", 2))
 		// {
 		// 	mrt-> = (extract_plane(things));
