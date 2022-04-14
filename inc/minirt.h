@@ -5,10 +5,10 @@
  * DEFINES
  */
 
-# define wdth 640
-# define hght 640
-# define divergence 0.1
-# define pi 3.14159265359
+# define WDTH 640
+# define HGHT 640
+# define DIVERGNCE 0.1
+# define PI 3.14159265359
 
 /*
 **	LIBRARY
@@ -35,7 +35,7 @@
 **	STRUCTS
 */
 
-#include "struct.h"
+# include "struct.h"
 
 typedef struct s_mrt
 {
@@ -50,7 +50,8 @@ typedef struct s_mrt
 	double	***ray;
 }				t_mrt;
 
-typedef struct	s_data {
+typedef struct s_data
+{
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
