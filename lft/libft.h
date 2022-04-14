@@ -3,6 +3,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include "gnl/get_next_line.h"
 
 typedef struct s_list	t_list;
 struct		s_list
@@ -58,6 +59,7 @@ void		*ft_realloc(void *old, size_t old_len, size_t add_len);
 int			free_2dstr(char **s);
 int			ft_isnumeric(char *num);
 double		ft_atof(char *str);
+void		ft_char_rep(char *str, char target, char replacement);
 
 //
 
