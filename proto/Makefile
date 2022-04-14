@@ -10,14 +10,16 @@ SRC =	$(P)proto.c \
 		$(M)geo_maths.c \
 		$(P)main.c \
 		$(M)ray_sphere.c \
-		$(M)geo_maths1.c
+		$(M)geo_maths1.c \
+		$(M)plane_interception.c
 
 OBJ =	$(P)proto.o \
 		$(U)rayinit.o \
 		$(M)geo_maths.o \
 		$(P)main.o \
 		$(M)ray_sphere.o \
-		$(M)geo_maths1.o
+		$(M)geo_maths1.o \
+		$(M)plane_interception.o
 
 CC = gcc
 

@@ -90,30 +90,30 @@ t_sph	*extract_sphere(char **things)
 	return(elem);
 }
 
-// t_pl	*extract_plane(char **things)
-// {
-// 	t_pl	*elem;
+t_pl	*extract_plane(char **things)
+{
+	t_pl	*elem;
 
-// 	elem = ft_calloc(1, sizeof(t_pl));
-// 	if (!things[0] || !things[1] || !things[2] || !things[3] || !things[4] || !things[5] || !things[6] || !things[7] || !things[8] || !things[9])
-// 	{
-// 		free(elem);
-// 		free_2dstr(things);
-// 		return (NULL);
-// 	}
-// 	elem->cor[0] = ft_atof(things[1]);
-// 	elem->cor[1] = ft_atof(things[2]);
-// 	elem->cor[2] = ft_atof(things[3]);
-// 	elem->v_o[0] = ft_atof(things[4]);
-// 	elem->v_o[1] = ft_atof(things[5]);
-// 	elem->v_o[2] = ft_atof(things[6]);
-// 	elem->r = ft_atoi(things[7]);
-// 	elem->g = ft_atoi(things[8]);
-// 	elem->b = ft_atoi(things[9]);
-// 	uniting(&elem->norm);
-// 	free_2dstr(things);
-// 	return(elem);
-// }
+	elem = ft_calloc(1, sizeof(t_pl));
+	if (!things[0] || !things[1] || !things[2] || !things[3] || !things[4] || !things[5] || !things[6] || !things[7] || !things[8] || !things[9])
+	{
+		free(elem);
+		free_2dstr(things);
+		return (NULL);
+	}
+	elem->cor[0] = ft_atof(things[1]);
+	elem->cor[1] = ft_atof(things[2]);
+	elem->cor[2] = ft_atof(things[3]);
+	elem->v_o[0] = ft_atof(things[4]);
+	elem->v_o[1] = ft_atof(things[5]);
+	elem->v_o[2] = ft_atof(things[6]);
+	elem->r = ft_atoi(things[7]);
+	elem->g = ft_atoi(things[8]);
+	elem->b = ft_atoi(things[9]);
+	unit(elem->v_o);
+	free_2dstr(things);
+	return(elem);
+}
 
 // t_cyl	*extract_cylinder(char **things)
 // {
@@ -170,10 +170,10 @@ void	*extract_line(char **lines, t_mrt *mrt)
 		{
 			mrt->sp = (extract_sphere(things));
 		}
-		// else if (!ft_strncmp(things[0], "pl\0", 2))
-		// {
-		// 	mrt-> = (extract_plane(things));
-		// }
+		else if (!ft_strncmp(things[0], "pl\0", 2))
+		{
+			mrt->pl = (extract_plane(things));
+		}
 		// else if (!ft_strncmp(things[0], "cy\0", 2))
 		// {
 		// 	mrt-> = (extract_cylinder(things));
