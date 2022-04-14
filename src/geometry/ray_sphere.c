@@ -26,19 +26,19 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 	tmp[2] = calculate_dot(oc, NULL) - radius * radius;
 	disc = tmp[1] * tmp[1] - 4 * tmp[0] * tmp[2];
 	if (disc < 0)
-		return (-1.0);
+		return (0);
 	else
 		return (((-1 * tmp[1]) - sqrt(disc)) / (2.0 * tmp[0]));
 }
 
 
-int main()
-{
-	double sphere[3] = {-4.49801,1.14318,5.5404};
-	double radius = 1.5;
-	double ray_or[3] = {-0.19, 1.82, 1.0};
-	double ray_dir[3] = {-6,0,7.62242};
+// int main()
+// {
+// 	double sphere[3] = {-4.49801,1.14318,5.5404};
+// 	double radius = 1.5;
+// 	double ray_or[3] = {-0.19, 1.82, 1.0};
+// 	double ray_dir[3] = {-6,0,7.62242};
 
-	double result = hit_sphere(sphere, radius, ray_or, ray_dir);
-	printf("Calculated result is: %f\n", result);
-}
+// 	double result = hit_sphere(sphere, radius, ray_or, ray_dir);
+// 	printf("Calculated result is: %f\n", result);
+// }

@@ -62,6 +62,7 @@ double	*single_ray(int x, int y, t_cam *cam, double **scr)
 	addto(addict, tmp);
 	free(tmp);
 	res = connect(cam->cor, addict);
+	unit(res);
 	return (res);
 }
 

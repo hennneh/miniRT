@@ -75,10 +75,13 @@ void	product(double *a, double m);
 void	resize(double *a, double m);
 double	angle(double *a, double *b);
 
+double	calculate_dot(double *a, double *b);
+
 //TRACER
 
 void	init_rays(t_mrt *mrt);
 double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
+double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
 
 //SRC
 

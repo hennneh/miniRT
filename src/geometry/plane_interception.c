@@ -1,3 +1,5 @@
+#include "../../inc/minirt.h"
+
 /*
  * if the ray vector given to the function times the normal of the plane is equal 
  * to 0, they are in parallel.
@@ -18,18 +20,18 @@
  * t = ((p0 - l0) * n) / (l * n)
  */
 
-double	*plane-intercept(s_mrt *mrt, double l[3], t_pl *plane)
+double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane)
 {
 	double	t;
-	double	point[3];
 
 	t = 0;
-	if (!dotproduct(plane->n, l))
-		return (NULL);
+	if (!calculate_dot(plane->v_o, l))
+		return (0);
 	else
 	{
-		t = (connect(mrt->cam->cor, plane->cor) * plane->n) / dotproduct(plane->n, l);
-		resize(l, t);
-		return (l);
+		t = (calculate_dot(connect(mrt->cam->cor, plane->cor), plane->v_o)) / calculate_dot(plane->v_o, l);
+		if (t > 0)
+			return (t);
+		return (0);
 	}
 }
