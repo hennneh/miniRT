@@ -96,6 +96,7 @@ int	init_fov(char *info, double *fov)
 {
 	double	tmp;
 
+	*fov = -1.0;
 	if (ft_isdouble(info) || check_deci(info) != 1)
 		return (1);
 	tmp = ft_atof(info);
@@ -114,6 +115,7 @@ int	init_fov(char *info, double *fov)
 */
 int	init_dim(char *info, double *dim, int flag)
 {
+	*dim = -1.0;
 	if (ft_isdouble(info) || check_deci(info) != 1)
 		return (1);
 	*dim = ft_atof(info);
