@@ -33,18 +33,29 @@ typedef struct s_cam
  * struct for Light
  * @param cor [double[3]] coordinates of view point [x][y][z]
  * @param brit [double] light brightness ratio [0.0 - 1.0]
+*/
+typedef struct s_lol
+{
+	double	cor[3];
+	double	brit;
+}	t_lol;
+
+/**
+ * struct for Light bonus with RGB
+ * @param cor [double[3]] coordinates of view point [x][y][z]
+ * @param brit [double] light brightness ratio [0.0 - 1.0]
  * @param r [int] Red [0 - 255]
  * @param g [int] Green [0 - 255]
  * @param b [int] Blue [0 - 255]
 */
-typedef struct s_lol
+typedef struct s_lol_b
 {
 	double	cor[3];
 	double	brit;
 	int		r;
 	int		g;
 	int		b;
-}	t_lol;
+}	t_lol_b;
 
 /**
  * struct for sphere
