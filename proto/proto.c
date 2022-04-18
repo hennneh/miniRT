@@ -38,7 +38,7 @@ t_cam	*extract_camera(char **things)
 	elem->v_o[0] = ft_atof(things[4]);
 	elem->v_o[1] = ft_atof(things[5]);
 	elem->v_o[2] = ft_atof(things[6]);
-	elem->fov = ft_atoi(things[7]) * pi/180;
+	elem->fov = ft_atoi(things[7]) * PI/180;
 	unit(elem->v_o);
 	free_2dstr(things);
 	// printf("pos %lf, %lf, %lf,\ndirec %lf, %lf, %lf,\nfov %lf\n", elem->cor[0], elem->cor[1], elem->cor[2], elem->v_o[0], elem->v_o[1], elem->v_o[2], elem->fov);
