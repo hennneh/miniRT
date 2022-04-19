@@ -74,15 +74,16 @@ static void	ft_buffjoinend(char **line, char *s2, int y)
 	return ;
 }
 
-/*
-**Write a function which returns a line read from a file descriptor, without
-**the newline.
-** Returns:
-**	1 : A line has been read
-**	0 : EOF has been reached
-**	-1 : An error happened
+/**
+ * Write a function which returns a line read from a file descriptor, without
+ * the newline.
+ * @param fd [int] file discriptor to be read;
+ * @param line [char **] line to be returned;
+ * @return [int]
+ *	[1] A line has been read;
+ *	[0] EOF has been reached;
+ *	[-1] An error happened;
 */
-
 int	get_next_line(int fd, char **line)
 {
 	static char	buff[BUFFER_SIZE + 1];

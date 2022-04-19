@@ -21,11 +21,12 @@
 **	INCLUDES
 */
 
-# include <stdio.h>	//  printf
+# include <stdio.h>	//  printf, perror
 # include <math.h>	//  math lol
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>	//  open
+# include <fcntl.h> // open
+# include <unistd.h> // close, read, write
+# include <stdlib.h> // malloc, free, exit
+# include <string.h> // strerror
 
 /*
 ** MACROS
