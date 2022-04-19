@@ -60,9 +60,9 @@ t_lol	*extract_light(char **things)
 	elem->cor[1] = ft_atof(things[2]);
 	elem->cor[2] = ft_atof(things[3]);
 	elem->brit = ft_atoi(things[4]);
-	elem->r = ft_atoi(things[5]);
-	elem->g = ft_atoi(things[6]);
-	elem->b = ft_atoi(things[7]);
+	// elem->r = ft_atoi(things[5]);BONUS
+	// elem->g = ft_atoi(things[6]);BONUS
+	// elem->b = ft_atoi(things[7]);BONUS
 	free_2dstr(things);
 	return(elem);
 }
