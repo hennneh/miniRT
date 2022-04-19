@@ -60,6 +60,7 @@ int			free_2dstr(char **s);
 int			ft_isnumeric(char *num);
 int			ft_isdouble(char *num);
 double		ft_atof(char *str);
+void		ft_char_rep(char *str, char target, char replacement);
 
 //
 
