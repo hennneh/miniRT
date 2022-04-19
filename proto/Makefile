@@ -25,8 +25,7 @@ CC = gcc
 
 LIB = ../../lft/
 
-LIBMLX = ../../mlx/libmlx42.a
-# LIBMLX = ./newmlx/libmlx42.a
+LIBMLX = ../../mlx/libmlx.a
 
 CFLAGS = -Wall -Wextra -Werror
 
