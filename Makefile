@@ -2,13 +2,18 @@ NAME = miniRT
 CC = gcc
 FLAGS = -Wall -Werror -Wextra
 
-SRC =	src/main.c \
-		src/input/rt_input.c \
-		src/input/init/ft_init.c \
-		src/input/init/init_objects.c \
-		src/input/init/init_scene.c \
-		src/input/util/rt_count.c \
-		src/input/util/rt_whtspc.c \
+SR = ./src/
+IN = $(SR)input/
+IT = $(IN)init/
+UT = $(IN)util/
+
+SRC =	$(SR)main.c \
+		$(IN)rt_input.c \
+		$(IT)ft_init.c \
+		$(IT)init_objects.c \
+		$(IT)init_scene.c \
+		$(UT)rt_count.c \
+		$(UT)rt_whtspc.c \
 
 OBJ = $(SRC:.c=.o)
 
