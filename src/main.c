@@ -13,6 +13,7 @@
 // 	printf("rgb : [%d][%d][%d]\n}\n", m->sp[0]->r, m->sp[0]->g, m->sp[0]->b);
 // 	return (1);
 // }
+
 void	calc(t_mrt *mrt)
 {
 	t_data	img;

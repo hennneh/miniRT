@@ -15,7 +15,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 {
 	int	i;
 	int	k;
-	static int	sd;
+  int	sd;
 	int	cd;
 	double	*ray;
 	void	*obj;
@@ -58,7 +58,6 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 	// 	}
 	// 	i++;
 	// }
-
 	if (obj && k == 1)
 		my_mlx_pixel_put(img, x, y, create_trgb(0, ((t_sph *)obj)->r, ((t_sph *)obj)->g, ((t_sph *)obj)->b));
 	else if (obj && k == 2)
