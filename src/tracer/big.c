@@ -11,26 +11,22 @@
 //	i'm_already_tracer
 //	Amazing_trace,how_sweet_the_sound
 
-int	nachfolger(int x, int y, t_mrt *mrt, double **scr)
+int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 {
 	int	i;
 	int	sd;
 	int	cd;
-	int	res;
 	double	*ray;
 	void	*obj;
 
 	i = 0;
 	sd = RENDER_DISTANCE;
 	ray = single_ray(x, y, mrt->cam, scr);
+	obj = NULL;
 	while (mrt && mrt->sp && mrt->sp[i])
 	{
-		cd = hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
-		if (cd >= 0 && cd < sd)
-		{
-			sd = cd;
-			obj = mrt->sp[i];
-		}
+		cd = -100 * hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
+		my_mlx_pixel_put(img, x, y, create_trgb(0, mrt->sp[i]->r, mrt->sp[i]->g, mrt->sp[i]->b));
 		i++;
 	}
 	// i = 0;
@@ -56,11 +52,5 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr)
 	// 	}
 	// 	i++;
 	// }
-	printf("debug3\n");
-	res = create_trgb(0, 0, 0, 0);
-	if (cd != RENDER_DISTANCE)
-	{
-		res = create_trgb(0, ((t_sph *)obj)->r, ((t_sph *)obj)->g, ((t_sph *)obj)->b);
-	}
-	return (res);
+	return (0);
 }

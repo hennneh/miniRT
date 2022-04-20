@@ -6,9 +6,9 @@ void	init_mrt(t_mrt *mrt, int count[6])
 	mrt->al = ft_calloc(sizeof(t_al), 1);
 	mrt->l = ft_calloc(sizeof(t_lol), 1);
 	mrt->cam = ft_calloc(sizeof(t_cam), 1);
-	mrt->sp = ft_calloc(sizeof(t_sph *), count[3]);
-	mrt->pl = ft_calloc(sizeof(t_pl *), count[4]);
-	mrt->cy = ft_calloc(sizeof(t_cyl *), count[5]);
+	mrt->sp = ft_calloc(sizeof(t_sph *), count[3] + 1);
+	mrt->pl = ft_calloc(sizeof(t_pl *), count[4] + 1);
+	mrt->cy = ft_calloc(sizeof(t_cyl *), count[5] + 1);
 	return ;
 }
 

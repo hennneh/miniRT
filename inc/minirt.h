@@ -56,7 +56,7 @@ typedef struct s_data
 {
 	void	*img;
 	char	*addr;
-	int		bits_per_PIxel;
+	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
 }				t_data;
@@ -87,7 +87,7 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
 double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
-int	nachfolger(int x, int y, t_mrt *mrt, double **scr);
+int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC
 
