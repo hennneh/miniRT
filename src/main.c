@@ -13,75 +13,111 @@
 // 	printf("rgb : [%d][%d][%d]\n}\n", m->sp[0]->r, m->sp[0]->g, m->sp[0]->b);
 // 	return (1);
 // }
+void	calc(t_mrt *mrt)
+{
+	t_data	img;
+	int	y;
+	int	x;
+	double	**scr;
+
+	scr = scream(mrt->cam);
+	img.img = mlx_new_image(mrt->mlx, WDTH, HGHT);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	y = 0;
+	while (y < HGHT)
+	{
+		x = 0;
+		while (x < WDTH)
+		{
+			nachfolger(x, y, mrt, scr, &img);
+			x++;
+		}
+		y++;
+	}
+	mrt->img = img.img;
+}
+
+void	debug(t_mrt *mrt)
+{
+	int	x;
+	int	y;
+	int	i;
+	double	d;
+	double	*ray;
+	double	**scr;
+
+	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
+	scr = scream(mrt->cam);
+	printf("ray trough x %i, y %i\n", x, y);
+	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
+	i = 0;
+	while (mrt && mrt->sp && mrt->sp[i])
+	{
+		d = hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
+		if (d)
+			printf("sphere hit		%i, at a distance of %lf\n", i, d);
+		i++;
+	}
+	i = 0;
+	while (mrt && mrt->pl && mrt->pl[i])
+	{
+		d =  plane_intercept(mrt, ray, mrt->pl[i]);
+		if (d)
+			printf("plane hit		%i, at a distance of %lf\n", i, d);
+		i++;
+	}
+	// i = 0;
+	// while (mrt && mrt->cy && mrt->cy[i])
+	// {
+	// 	d = cylinder_intersect(mrt->cy[i]->cor, mrt->cy[i]->rad, mrt->cy[i]->hght, mrt->cam->cor, ray);
+	// 	if (d)
+	// 		printf("cylinder hit	%i, at a distance of %i\n", i, d);
+	// 	i++;
+	// }
+}
+
+
+int	render(t_mrt *mrt)
+{
+	mlx_put_image_to_window(mrt->mlx, mrt->win, mrt->img, 0, 0);
+	return (0);
+}
+
+int	end(t_mrt *mrt)
+{
+	//exit functions
+	if (mrt)
+		exit(0);
+	return (0);
+}
+
+int	key_hook(int key, t_mrt *mrt)
+{
+	if (key == 65307)
+		end(mrt);
+	if (key == 100)
+		debug(mrt);
+	return (0);
+}
 
 int	main(int argc, char **argv)
 {
-	void	*mlx;
-	void	*mlx_win;
-	double	**scr;
-	t_data	img;
 	t_mrt	mrt;
   
 	if (argc != 2)
 	{
-		printf("not exactly one arguemnt\n");
+		printf("not exactly one argument\n");
 		return (1);
 	}
 	if (input(&mrt, argv[1]))
 		return (printf("ERROR INPUT\n"));
-	// input(&mrt, argv[1]);
-
-	// mrt.sp = ft_calloc(4, sizeof(t_sph *));
-	// mrt.sp[0] = ft_calloc(1, sizeof(t_sph));
-	// mrt.sp[0]->cor[0] = 0;
-	// mrt.sp[0]->cor[1] = 0;
-	// mrt.sp[0]->cor[2] = 0;
-	// mrt.sp[0]->rad = 6;
-	// mrt.sp[0]->r = 0;
-	// mrt.sp[0]->g = 0;
-	// mrt.sp[0]->b = 255;
-
-	// mrt.sp[1] = ft_calloc(1, sizeof(t_sph));
-	// mrt.sp[1]->cor[0] = 255;
-	// mrt.sp[1]->cor[1] = 0;
-	// mrt.sp[1]->cor[2] = 0;
-	// mrt.sp[1]->rad = 6;
-	// mrt.sp[1]->r = 0;
-	// mrt.sp[1]->g = 255;
-	// mrt.sp[1]->b = 0;
-
-	// mrt.sp[2] = ft_calloc(1, sizeof(t_sph));
-	// mrt.sp[2]->cor[0] = 10;
-	// mrt.sp[2]->cor[1] = 0;
-	// mrt.sp[2]->cor[2] = 0;
-	// mrt.sp[2]->rad = 6;
-	// mrt.sp[2]->r = 100;
-	// mrt.sp[2]->g = 100;
-	// mrt.sp[2]->b = 0;
-
-	// mrt.sp[3] = NULL;
-
-	// mrt.cam = ft_calloc(1, sizeof(t_cam));
-	// mrt.cam->cor[0] = 0;
-	// mrt.cam->cor[1] = 30;
-	// mrt.cam->cor[2] = 0;
-	// mrt.cam->fov = 90;
-	// mrt.cam->v_o[0] = 0;
-	// mrt.cam->v_o[1] = -1;
-	// mrt.cam->v_o[2] = 0;
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, WDTH, HGHT, "Hello world!");
-	img.img = mlx_new_image(mlx, WDTH, HGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	scr = scream(mrt.cam);
-	for (int y = 0; y < HGHT; y++)
-	{
-		for (int x = 0; x < WDTH; x++)
-		{
-			nachfolger(x, y, &mrt, scr, &img);
-		}
-	}
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	mlx_loop(mlx);
+	mrt.mlx = mlx_init();
+	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT, "I wanna be Tracer");
+	calc(&mrt);
+	mlx_mouse_show(mrt.mlx, mrt.win);
+	mlx_loop_hook(mrt.mlx, render, &mrt);
+	mlx_key_hook(mrt.win, key_hook, &mrt);
+	mlx_hook(mrt.win, 33, (1L << 17), end, &mrt);
+	mlx_loop(mrt.mlx);
 	return (0);
 }

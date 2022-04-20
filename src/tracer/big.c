@@ -26,7 +26,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 	obj = NULL;
 	while (mrt && mrt->sp && mrt->sp[i])
 	{
-		cd = 1000 * hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
+		cd = -1000 * hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
 		if (cd < sd && cd != 0)
 		{
 			sd = cd;
