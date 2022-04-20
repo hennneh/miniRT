@@ -45,9 +45,9 @@ typedef struct s_mrt
 	t_al	*al;
 	t_lol	*l;
 	t_cam	*cam;
-	t_sph	*sp;
-	t_pl	*pl;
-	t_cyl	*cy;
+	t_sph	**sp;
+	t_pl	**pl;
+	t_cyl	**cy;
 	double	***ray;
 }				t_mrt;
 

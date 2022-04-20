@@ -14,6 +14,8 @@ int	init_sph(t_sph *sp, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		sp->id = 'S';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &sp->cor, 0))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &sp->rad, 1))
@@ -38,6 +40,8 @@ int	init_pl(t_pl *pl, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		pl->id = 'P';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &pl->cor, 0))
 		return (1);
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &pl->v_o, 1))
@@ -62,6 +66,8 @@ int	init_cyl(t_cyl *cy, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		cy->id = 'Z';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &cy->cor, 0))
 		return (1);
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &cy->v_o, 1))
