@@ -5,9 +5,10 @@
  * DEFINES
  */
 
+# define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
-# define DIVERGNCE 0.1
+# define DIVERGENCE 0.1
 # define PI 3.14159265359
 
 /*
@@ -21,11 +22,12 @@
 **	INCLUDES
 */
 
-# include <stdio.h>	//  printf
+# include <stdio.h>	//  printf, perror
 # include <math.h>	//  math lol
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>	//  open
+# include <fcntl.h> // open
+# include <unistd.h> // close, read, write
+# include <stdlib.h> // malloc, free, exit
+# include <string.h> // strerror
 
 /*
 ** MACROS
@@ -74,10 +76,18 @@ void	unit(double	*a);
 void	product(double *a, double m);
 void	resize(double *a, double m);
 double	angle(double *a, double *b);
+double	calculate_dot(double *a, double *b);
 
 //TRACER
 
+double	*single_ray(int x, int y, t_cam *cam, double **scr);
+double	**scream(t_cam *cam);
 void	init_rays(t_mrt *mrt);
+double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
+double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
+double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
+
+int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC
 
@@ -86,5 +96,38 @@ int		main(int argc, char **argv);
 // INPUT
 
 void	*extract_line(char **lines, t_mrt *mrt);
+
+//UTILES
+
+int	create_trgb(int t, int r, int g, int b);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+
+char	*trm_whtsp(char *s, int dir);
+int		is_whspace(char *s, int dir);
+int		ft_white(char c);
+
+int		count_input(t_list *lst, int count[6], char *tmp);
+int		check_count(int count[6]);
+
+//INITIALIZATION
+
+int		check_deci(char *s);
+int		init_cor(char **info, double *cor, int flag);
+int		init_rgb(char **info, int *r, int *g, int *b);
+int		init_fov(char *info, double *fov);
+int		init_dim(char *info, double *dim, int flag);
+
+int		init_al(t_al *al, char **info);
+int		init_cam(t_cam *ca, char **info);
+int		init_lol(t_lol *l, char **info);
+int		init_lol_b(t_lol_b *l, char **info);
+
+int		init_sph(t_sph **sp, char **info, int p);
+int		init_pl(t_pl **pl, char **info, int p);
+int		init_cyl(t_cyl **cy, char **info, int p);
+
+//FUNCTIONS
+
+int		input(t_mrt *mrt, char *file);
 
 #endif
