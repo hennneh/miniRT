@@ -1,5 +1,5 @@
 
-#include "../rt_input.h"
+#include "../../../inc/minirt.h"
 
 /**
  * checks how many decimals a string has
@@ -29,18 +29,18 @@ int	check_deci(char *s)
  * @param flag [int] 0 if x,y,z, cor; 1 if v_o
  * @return [int] 0 if succesful; 1 if error;
 */
-int	init_cor(char **info, double *cor[3], int flag)
+int	init_cor(char **info, double *cor, int flag)
 {
 	int	i;
 
-	ft_bzero(*cor, 3 * sizeof(double));
+	ft_bzero(cor, 3 * sizeof(double));
 	i = 0;
 	while (info[i])
 	{
 		if (i > 2 || check_deci(info[i]) != 1 || ft_isdouble(info[i]))
 			return (1);//ERROR
-		*cor[i] = ft_atof(info[i]);
-		if (flag == 1 && (*cor[i] < -1 || *cor[i] > 1))
+		cor[i] = ft_atof(info[i]);
+		if (flag == 1 && (cor[i] < -1 || cor[i] > 1))
 			return (1);//ERROR
 		i ++;
 	}

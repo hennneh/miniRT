@@ -1,5 +1,5 @@
 
-#include "rt_input.h"
+#include "../../inc/minirt.h"
 
 void	init_mrt(t_mrt *mrt, int count[6])
 {
@@ -26,18 +26,18 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count[6])
 	init_mrt(mrt, count);
 	while (lst)
 	{
-		if ((char *)(lst->content)[0] == 'A')
+		if (((char *)lst->content)[0] == 'A')
 			flag = init_al(mrt->al, ft_split(lst->content, ' '));
-		else if ((char *)(lst->content)[0] == 'C')
-			flag = init_al(mrt->cam, ft_split(lst->content, ' '));
-		else if ((char *)(lst->content)[0] == 'L')
-			flag = init_al(mrt->l, ft_split(lst->content, ' '));
-		else if ((char *)(lst->content)[0] == 's')
-			flag = init_al(mrt->sp[i++], ft_split(lst->content, ' '));
-		else if ((char *)(lst->content)[0] == 'p')
-			flag = init_al(mrt->pl[x++], ft_split(lst->content, ' '));
-		else if ((char *)(lst->content)[0] == 'c')
-			flag = init_al(mrt->cy[y++], ft_split(lst->content, ' '));
+		else if (((char *)lst->content)[0] == 'C')
+			flag = init_cam(mrt->cam, ft_split(lst->content, ' '));
+		else if (((char *)lst->content)[0] == 'L')
+			flag = init_lol(mrt->l, ft_split(lst->content, ' '));
+		else if (((char *)lst->content)[0] == 's')
+			flag = init_sph(mrt->sp[i++], ft_split(lst->content, ' '));
+		else if (((char *)lst->content)[0] == 'p')
+			flag = init_pl(mrt->pl[x++], ft_split(lst->content, ' '));
+		else if (((char *)lst->content)[0] == 'c')
+			flag = init_cyl(mrt->cy[y++], ft_split(lst->content, ' '));
 		if (flag == 1)
 			return (1);
 		lst = lst->next;
@@ -63,7 +63,7 @@ t_list	*import_data(char *file)
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
-		if (ft_strlen(&line) > 0)
+		if (ft_strlen(line) > 0)
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 	}
 	close(fd);
@@ -73,7 +73,7 @@ t_list	*import_data(char *file)
 int	input(t_mrt *mrt, char *file)
 {
 	int		count[6];
-	int		good;
+	//int		good;
 	t_list	*lst;
 
 	lst = import_data(file);
@@ -84,8 +84,9 @@ int	input(t_mrt *mrt, char *file)
 		exit(1);
 	}
 	ft_bzero(count, sizeof(int) * 6);
-	if (!count_input(lst, &count, NULL) && !check_count(count))
+	if (!count_input(lst, count, NULL) && !check_count(count))
 		parse_input(mrt, lst, count);
 	else
 		exit(1);//ERROR
+	return (0);
 }
