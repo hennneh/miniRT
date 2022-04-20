@@ -168,15 +168,18 @@ void	*extract_line(char **lines, t_mrt *mrt)
 		}
 		else if (!ft_strncmp(things[0], "sp\0", 2))
 		{
-			mrt->sp = (extract_sphere(things));
+			mrt->sp = malloc(sizeof(t_sph *));
+			mrt->sp[0] = (extract_sphere(things));
 		}
 		else if (!ft_strncmp(things[0], "pl\0", 2))
 		{
-			mrt->pl = (extract_plane(things));
+			mrt->pl = malloc(sizeof(t_pl *));
+			mrt->pl[0] = (extract_plane(things));
 		}
 		else if (!ft_strncmp(things[0], "cy\0", 2))
 		{
-			mrt->cy = (extract_cylinder(things));
+			mrt->cy = malloc(sizeof(t_cyl *));
+			mrt->cy[0] = (extract_cylinder(things));
 		}
 		else
 		{

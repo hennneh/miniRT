@@ -14,6 +14,13 @@ SRC =	$(SR)main.c \
 		$(IT)init_scene.c \
 		$(UT)rt_count.c \
 		$(UT)rt_whtspc.c \
+		src/geometry/geo_maths.c \
+		src/geometry/geo_maths1.c \
+		src/geometry/plane_interception.c \
+		src/geometry/ray_cylinder.c \
+		src/geometry/ray_sphere.c \
+		src/setup/rayinit.c \
+		src/tracer/big.c
 
 OBJ = $(SRC:.c=.o)
 

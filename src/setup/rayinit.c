@@ -1,5 +1,18 @@
 #include "../../inc/minirt.h"
 
+int	create_trgb(int t, int r, int g, int b)
+{
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_PIxel / 8));
+	*(unsigned int*)dst = color;
+}
+
 /**
  * @brief to initialize i use an imaginary screen plane, to which i point my rays
  * @param	cam [t_cam*] the camera in the scene
@@ -30,7 +43,6 @@ double	**scream(t_cam *cam)
 	res[2] = malloc(3 * sizeof(double));
 	res[2] = ray_alloc(cam->v_o[0], cam->v_o[1], cam->v_o[2]);
 	resize(res[2], cos(cam->fov / 2) * (((WDTH * DIVERGENCE) / 2) / cos(PI / 2 - (cam->fov / 2))));
-	// printf("sv1 %lf %lf %lf\nsv2 %lf %lf %lf\ndst %lf %lf %lf\nbreite %lf\n", res[0][0], res[0][1], res[0][2], res[1][0], res[1][1], res[1][2], res[2][0], res[2][1], res[2][2], (WDTH * DIVERGENCE) / 2);
 	return(res);
 }
 
