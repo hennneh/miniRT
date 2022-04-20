@@ -20,7 +20,7 @@ double	cylinder_intersect(double *pos, double radius, double height, double *ray
 	if (t1 > t2)
 		t1 = t2;
 	t2 = pos[1] + t1 * ray_dir[1];
-	if (r >= ray_or[1] && r <= ray_or[1] + height)
+	if (t2 >= ray_or[1] && t2 <= ray_or[1] + height)
 		return (t1);
 	else
 		return (-1);

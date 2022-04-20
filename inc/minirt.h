@@ -83,6 +83,7 @@ double	calculate_dot(double *a, double *b);
 void	init_rays(t_mrt *mrt);
 double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
 double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
+double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
 //SRC
 
