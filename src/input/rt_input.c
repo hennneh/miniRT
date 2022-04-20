@@ -6,9 +6,9 @@ void	init_mrt(t_mrt *mrt, int count[6])
 	mrt->al = ft_calloc(sizeof(t_al), 1);
 	mrt->l = ft_calloc(sizeof(t_lol), 1);
 	mrt->cam = ft_calloc(sizeof(t_cam), 1);
-	mrt->sp = ft_calloc(sizeof(t_sph), count[3]);
-	mrt->pl = ft_calloc(sizeof(t_pl), count[4]);
-	mrt->cy = ft_calloc(sizeof(t_cyl), count[5]);
+	mrt->sp = ft_calloc(sizeof(t_sph *), count[3]);
+	mrt->pl = ft_calloc(sizeof(t_pl *), count[4]);
+	mrt->cy = ft_calloc(sizeof(t_cyl *), count[5]);
 	return ;
 }
 
@@ -73,7 +73,7 @@ t_list	*import_data(char *file)
 int	input(t_mrt *mrt, char *file)
 {
 	int		count[6];
-	//int		good;
+	int		good;
 	t_list	*lst;
 
 	lst = import_data(file);
@@ -85,8 +85,8 @@ int	input(t_mrt *mrt, char *file)
 	}
 	ft_bzero(count, sizeof(int) * 6);
 	if (!count_input(lst, count, NULL) && !check_count(count))
-		parse_input(mrt, lst, count);
+		good = parse_input(mrt, lst, count);
 	else
 		exit(1);//ERROR
-	return (0);
+	return (good);
 }
