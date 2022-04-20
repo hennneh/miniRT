@@ -50,6 +50,7 @@ typedef struct s_mrt
 	t_pl	**pl;
 	t_cyl	**cy;
 	double	***ray;
+	void	*img;
 }				t_mrt;
 
 typedef struct s_data

@@ -14,33 +14,39 @@
 int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 {
 	int	i;
-	int	sd;
+	int	k;
+  int	sd;
 	int	cd;
 	double	*ray;
 	void	*obj;
 
 	i = 0;
 	sd = RENDER_DISTANCE;
-	ray = single_ray(x, y, mrt->cam, scr);
+	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	obj = NULL;
 	while (mrt && mrt->sp && mrt->sp[i])
 	{
-		cd = -100 * hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
-		my_mlx_pixel_put(img, x, y, create_trgb(0, mrt->sp[i]->r, mrt->sp[i]->g, mrt->sp[i]->b));
+		cd = -1000 * hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
+		if (cd < sd && cd != 0)
+		{
+			sd = cd;
+			obj = mrt->sp[i];
+			k = 1;
+		}
 		i++;
 	}
-	// i = 0;
-	// while (mrt && mrt->pl && mrt->pl[i])
-	// {
-	// 	cd = plane_intercept(mrt, ray, mrt->pl[i]);
-	// 	if (cd >= 0 && cd < sd)
-	// 	{
-	// 		sd = cd;
-	// 		obj = mrt->pl[i];
-	// 	}
-	// 	i++;
-	// printf("debug4\n");
-	// }
+	i = 0;
+	while (mrt && mrt->pl && mrt->pl[i])
+	{
+		cd = 1000 * plane_intercept(mrt, ray, mrt->pl[i]);
+		if (cd < sd && cd != 0)
+		{
+			sd = cd;
+			obj = mrt->pl[i];
+			k = 2;
+		}
+		i++;
+	}
 	// i = 0;
 	// while (mrt && mrt->cy && mrt->cy[i])
 	// {
@@ -52,5 +58,11 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 	// 	}
 	// 	i++;
 	// }
+	if (obj && k == 1)
+		my_mlx_pixel_put(img, x, y, create_trgb(0, ((t_sph *)obj)->r, ((t_sph *)obj)->g, ((t_sph *)obj)->b));
+	else if (obj && k == 2)
+		my_mlx_pixel_put(img, x, y, create_trgb(0, ((t_pl*)obj)->r, ((t_pl*)obj)->g, ((t_pl*)obj)->b));
+	else
+		my_mlx_pixel_put(img, x, y, create_trgb(0, mrt->al->lr * mrt->al->r, mrt->al->lr * mrt->al->g, mrt->al->lr * mrt->al->b));
 	return (0);
 }
