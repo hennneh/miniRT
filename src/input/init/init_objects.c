@@ -1,5 +1,5 @@
 
-#include "../rt_input.h"
+#include "../../../inc/minirt.h"
 
 /**
  * initilzes a sphere struct
@@ -14,7 +14,9 @@ int	init_sph(t_sph *sp, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &sp->cor, 0))
+	else
+		sp->id = 'S';
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), sp->cor, 0))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &sp->rad, 1))
 		return (1);
@@ -38,9 +40,11 @@ int	init_pl(t_pl *pl, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &pl->cor, 0))
+	else
+		pl->id = 'P';
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), pl->cor, 0))
 		return (1);
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &pl->v_o, 1))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), pl->v_o, 1))
 		return (1);
 	if (!info[i] || init_rgb(ft_split(info[i ++], ','), &pl->r, &pl->g, &pl->b))
 		return (1);
@@ -62,9 +66,11 @@ int	init_cyl(t_cyl *cy, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &cy->cor, 0))
+	else
+		cy->id = 'Z';
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), cy->cor, 0))
 		return (1);
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &cy->v_o, 1))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), cy->v_o, 1))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &cy->rad, 1))
 		return (1);
