@@ -22,6 +22,7 @@ int	init_al(t_al *al, char **info)
 		return (1);
 	if (info[i])
 		return (1);
+	// printf("good ambient light\n");//DELETE
 	return (0);
 }
 
@@ -48,6 +49,7 @@ int	init_cam(t_cam *ca, char **info)
 		return (1);
 	if (info[i])
 		return (1);
+	// printf("good Camera\n");//DELETE
 	return (0);
 }
 
@@ -72,6 +74,7 @@ int	init_lol(t_lol *l, char **info)
 		return (1);
 	if (info[i])
 		return (1);
+	// printf("good light\n");//DELETE
 	return (0);
 }
 
@@ -98,5 +101,6 @@ int	init_lol_b(t_lol_b *l, char **info)
 		return (1);
 	if (info[i])
 		return (1);
+	// printf("good light bonus\n");//DELETE
 	return (0);
 }

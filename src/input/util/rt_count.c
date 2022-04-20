@@ -18,11 +18,11 @@ int	count_input(t_list *lst, int *count, char *tmp)
 			count[1]++;
 		else if (tmp[0] == 'L' && ft_white(tmp[1]))
 			count[2]++;
-		else if (!ft_strnstr(tmp, "sp", 2) && ft_white(tmp[2]))
+		else if (!ft_strncmp(tmp, "sp", 2) && ft_white(tmp[2]))
 			count[3]++;
-		else if (!ft_strnstr(tmp, "pl", 2) && ft_white(tmp[2]))
+		else if (!ft_strncmp(tmp, "pl", 2) && ft_white(tmp[2]))
 			count[4]++;
-		else if (!ft_strnstr(tmp, "cl", 2) && ft_white(tmp[2]))
+		else if (!ft_strncmp(tmp, "cy", 2) && ft_white(tmp[2]))
 			count[5]++;
 		free(lst->content);
 		lst->content = tmp;

@@ -33,15 +33,16 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count[6])
 		else if (((char *)lst->content)[0] == 'L')
 			flag = init_lol(mrt->l, ft_split(lst->content, ' '));
 		else if (((char *)lst->content)[0] == 's')
-			flag = init_sph(mrt->sp[i++], ft_split(lst->content, ' '));
+			flag = init_sph(mrt->sp, ft_split(lst->content, ' '), count[3]-- - 1);
 		else if (((char *)lst->content)[0] == 'p')
-			flag = init_pl(mrt->pl[x++], ft_split(lst->content, ' '));
+			flag = init_pl(mrt->pl, ft_split(lst->content, ' '),count[4]-- - 1);
 		else if (((char *)lst->content)[0] == 'c')
-			flag = init_cyl(mrt->cy[y++], ft_split(lst->content, ' '));
-		if (flag == 1)
-			return (1);
+			flag = init_cyl(mrt->cy, ft_split(lst->content, ' '),count[5]-- - 1);
+		if (flag)
+			return (printf("[%d]{%s}\n", flag, (char *)lst->content));
 		lst = lst->next;
 	}
+	// printf("\ngood parse\n"); //DELETE
 	return (0);
 }
 
@@ -63,7 +64,7 @@ t_list	*import_data(char *file)
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
-		if (ft_strlen(line) > 0)
+		if (ft_strlen(line) > 0) // && not just whitespaces
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 	}
 	close(fd);
