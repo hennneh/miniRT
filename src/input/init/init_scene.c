@@ -14,6 +14,8 @@ int	init_al(t_al *al, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		al->id = 'A';
 	if (!info[i] || init_dim(info[i ++], &al->lr, 2))
 		return (1);
 	if (!info[i] || init_rgb(ft_split(info[i ++], ','), &al->r, &al->g, &al->b))
@@ -36,6 +38,8 @@ int	init_cam(t_cam *ca, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		ca->id = 'K';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->cor, 0))
 		return (1);
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->v_o, 1))
@@ -60,6 +64,8 @@ int	init_lol(t_lol *l, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		l->id = 'L';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &l->cor, 0))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &l->brit, 2))
@@ -82,6 +88,8 @@ int	init_lol_b(t_lol_b *l, char **info)
 	i = 1;
 	if (!info || !info[0])// check the indentifyer ??
 		return (1);
+	else
+		l->id = 'l';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &l->cor, 0))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &l->brit, 2))

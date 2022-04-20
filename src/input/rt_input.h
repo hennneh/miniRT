@@ -24,6 +24,14 @@ int		init_rgb(char **info, int *r, int *g, int *b);
 int		init_fov(char *info, double *fov);
 int		init_dim(char *info, double *dim, int flag);
 
+int		init_al(t_al *al, char **info);
+int		init_cam(t_cam *ca, char **info);
+int		init_lol(t_lol *l, char **info);
+int		init_lol_b(t_lol_b *l, char **info);
+
+int		init_sph(t_sph *sp, char **info);
+int		init_pl(t_pl *pl, char **info);
+int		init_cyl(t_cyl *cy, char **info);
 
 //FUNCTIONS
 
