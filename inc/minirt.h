@@ -5,6 +5,7 @@
  * DEFINES
  */
 
+# define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
 # define DIVERGENCE 0.1
@@ -55,7 +56,7 @@ typedef struct s_data
 {
 	void	*img;
 	char	*addr;
-	int		bits_per_PIxel;
+	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
 }				t_data;
@@ -75,14 +76,18 @@ void	unit(double	*a);
 void	product(double *a, double m);
 void	resize(double *a, double m);
 double	angle(double *a, double *b);
-
 double	calculate_dot(double *a, double *b);
 
 //TRACER
 
+double	*single_ray(int x, int y, t_cam *cam, double **scr);
+double	**scream(t_cam *cam);
 void	init_rays(t_mrt *mrt);
 double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
 double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
+double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
+
+int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC
 
@@ -93,6 +98,9 @@ int		main(int argc, char **argv);
 void	*extract_line(char **lines, t_mrt *mrt);
 
 //UTILES
+
+int	create_trgb(int t, int r, int g, int b);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 char	*trm_whtsp(char *s, int dir);
 int		is_whspace(char *s, int dir);

@@ -11,7 +11,8 @@ SRC =	$(P)proto.c \
 		$(P)main.c \
 		$(M)ray_sphere.c \
 		$(M)geo_maths1.c \
-		$(M)plane_interception.c
+		$(M)plane_interception.c \
+		$(M)ray_cylinder.c
 
 OBJ =	$(P)proto.o \
 		$(U)rayinit.o \
@@ -19,7 +20,8 @@ OBJ =	$(P)proto.o \
 		$(P)main.o \
 		$(M)ray_sphere.o \
 		$(M)geo_maths1.o \
-		$(M)plane_interception.o
+		$(M)plane_interception.o \
+		$(M)ray_cylinder.o
 
 CC = gcc
 
