@@ -1,5 +1,5 @@
 
-#include "../rt_input.h"
+#include "../../../inc/minirt.h"
 
 /**
  * initilzes a Ambient Light struct
@@ -40,9 +40,9 @@ int	init_cam(t_cam *ca, char **info)
 		return (1);
 	else
 		ca->id = 'K';
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->cor, 0))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), ca->cor, 0))
 		return (1);
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->v_o, 1))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), ca->v_o, 1))
 		return (1);
 	if (!info[i] || init_fov(info[i ++], &ca->fov))
 		return (1);
@@ -66,7 +66,7 @@ int	init_lol(t_lol *l, char **info)
 		return (1);
 	else
 		l->id = 'L';
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &l->cor, 0))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), l->cor, 0))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &l->brit, 2))
 		return (1);
@@ -90,7 +90,7 @@ int	init_lol_b(t_lol_b *l, char **info)
 		return (1);
 	else
 		l->id = 'l';
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &l->cor, 0))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), l->cor, 0))
 		return (1);
 	if (!info[i] || init_dim(info[i ++], &l->brit, 2))
 		return (1);
