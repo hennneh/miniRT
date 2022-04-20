@@ -16,6 +16,7 @@
 
 # include "../lft/libft.h"
 # include "../mlx/mlx.h"
+# include "../src/input/rt_input.h"
 
 /*
 **	INCLUDES
