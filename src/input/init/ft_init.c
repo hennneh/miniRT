@@ -37,7 +37,7 @@ int	init_cor(char **info, double *cor, int flag)
 	i = 0;
 	while (info[i])
 	{
-		if (i > 2 || check_deci(info[i]) != 1 || ft_isdouble(info[i]))
+		if (i > 2 || check_deci(info[i]) > 1 || ft_isdouble(info[i]))
 			return (1);//ERROR
 		cor[i] = ft_atof(info[i]);
 		if (flag == 1 && (cor[i] < -1 || cor[i] > 1))
@@ -97,7 +97,7 @@ int	init_fov(char *info, double *fov)
 	double	tmp;
 
 	*fov = -1.0;
-	if (ft_isdouble(info) || check_deci(info) != 1)
+	if (ft_isdouble(info) || check_deci(info) > 1)
 		return (1);
 	tmp = ft_atof(info);
 	if (tmp < 0 || tmp > 180)
@@ -116,7 +116,7 @@ int	init_fov(char *info, double *fov)
 int	init_dim(char *info, double *dim, int flag)
 {
 	*dim = -1.0;
-	if (ft_isdouble(info) || check_deci(info) != 1)
+	if (ft_isdouble(info) || check_deci(info) > 1)
 		return (1);
 	*dim = ft_atof(info);
 	if (*dim < 0)
