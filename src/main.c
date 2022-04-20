@@ -21,7 +21,10 @@ int	main(int argc, char **argv)
 	t_mrt	mrt;
 
 	if (argc != 2)
+	{
+		printf("not exactly one arguemnt\n");
 		return (1);
+	}
 	if (input(&mrt, argv[1]))
 		return (printf("ERROR INPUT\n"));
 	// else
