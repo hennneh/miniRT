@@ -21,12 +21,18 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 
 	i = 0;
 	sd = RENDER_DISTANCE;
-	ray = single_ray(x, y, mrt->cam, scr);
+	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	obj = NULL;
 	while (mrt && mrt->sp && mrt->sp[i])
 	{
-		cd = -100 * hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
-		my_mlx_pixel_put(img, x, y, create_trgb(0, mrt->sp[i]->r, mrt->sp[i]->g, mrt->sp[i]->b));
+		cd = hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
+		// my_mlx_pixel_put(img, x, y, create_trgb(0, mrt->sp[i]->r, mrt->sp[i]->g, mrt->sp[i]->b));
+		my_mlx_pixel_put(img, x, y, create_trgb(0, 0, 0, 0)); // AMB
+		if (cd < sd && cd != 0)
+		{
+			sd = cd;
+			my_mlx_pixel_put(img, x, y, create_trgb(0, mrt->sp[i]->r, mrt->sp[i]->g, mrt->sp[i]->b));
+		}
 		i++;
 	}
 	// i = 0;
