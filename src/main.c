@@ -27,8 +27,8 @@ int	main(int argc, char **argv)
 	}
 	if (input(&mrt, argv[1]))
 		return (printf("ERROR INPUT\n"));
-	else
-		return (print_mrt(&mrt));
+	// else
+	// 	return (print_mrt(&mrt));
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
 	mlx_loop(mlx);
