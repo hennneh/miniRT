@@ -1,18 +1,17 @@
 #include "../../inc/minirt.h"
 
-int	light(t_mrt *mrt, double *obj)
+int	shadow(t_mrt *mrt, double *obj)
 {
 	double	ray[3];
 	
 	if (!mrt->l || !obj)
-		return (0);
+		return (NULL);
 	ray = connect(mrt->l, obj);
 	while (mrt->sp[i])
 	{
-		if (calc_intersec(ray, obj, mrt))
-			set_shadow();
-		else
-			set_light();
+		if (hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, obj, ray)
+			return (1);
+		i++;
 	}
 	//repeat for planes and cylinders
 	return (0);
