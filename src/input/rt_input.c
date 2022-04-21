@@ -1,18 +1,16 @@
 
 #include "../../inc/minirt.h"
 
-void	init_mrt(t_mrt *mrt, int count[6])
+void	init_mrt(t_mrt *mrt, int count)
 {
 	mrt->al = ft_calloc(sizeof(t_al), 1);
 	mrt->l = ft_calloc(sizeof(t_lol), 1);
 	mrt->cam = ft_calloc(sizeof(t_cam), 1);
-	mrt->sp = ft_calloc(sizeof(t_sph *), count[3] + 1);
-	mrt->pl = ft_calloc(sizeof(t_pl *), count[4] + 1);
-	mrt->cy = ft_calloc(sizeof(t_cyl *), count[5] + 1);
+	mrt->obj = ft_calloc(sizeof(t_obj *), count + 1);
 	return ;
 }
 
-int	parse_input(t_mrt *mrt, t_list *lst, int count[6])
+int	parse_input(t_mrt *mrt, t_list *lst, int count)
 {
 	int	flag;
 
@@ -27,16 +25,15 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count[6])
 		else if (((char *)lst->content)[0] == 'L')
 			flag = init_lol(mrt->l, split_wh(lst->content));
 		else if (((char *)lst->content)[0] == 's')
-			flag = init_sph(mrt->sp, split_wh(lst->content), --count[3]);
+			flag = init_sph(mrt->obj, split_wh(lst->content), --count);
 		else if (((char *)lst->content)[0] == 'p')
-			flag = init_pl(mrt->pl, split_wh(lst->content), --count[4]);
+			flag = init_pl(mrt->obj, split_wh(lst->content), --count);
 		else if (((char *)lst->content)[0] == 'c')
-			flag = init_cyl(mrt->cy, split_wh(lst->content), --count[5]);
+			flag = init_cyl(mrt->obj, split_wh(lst->content), --count);
 		if (flag)
-			return (printf("[%d]{%s}\n", flag, (char *)lst->content));//ERROR
+			return ((printf("[%d]{%s}\n", flag, (char *)lst->content) * 0) + count);//ERROR
 		lst = lst->next;
 	}
-	ft_lstclear(&lst, free);
 	// printf("\ngood parse\n"); //DELETE
 	return (0);
 }
@@ -68,7 +65,7 @@ t_list	*import_data(char *file)
 
 int	input(t_mrt *mrt, char *file)
 {
-	int		count[6];
+	int		count[4];
 	int		good;
 	t_list	*lst;
 
@@ -78,10 +75,12 @@ int	input(t_mrt *mrt, char *file)
 		perror("Error\nEmpty file\n");
 		exit(1);
 	}
-	ft_bzero(count, sizeof(int) * 6);
+	good = 0;
+	ft_bzero(count, sizeof(int) * 4);
 	if (!count_input(lst, count, NULL) && !check_count(count))
-		good = parse_input(mrt, lst, count);
+		good = parse_input(mrt, lst, count[3]);
 	else
-		exit(1);//ERROR
+		good = 2;
+	ft_lstclear(&lst, free);
 	return (good);
 }

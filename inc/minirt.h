@@ -45,9 +45,7 @@ typedef struct s_mrt
 	t_al	*al;
 	t_lol	*l;
 	t_cam	*cam;
-	t_sph	**sp;
-	t_pl	**pl;
-	t_cyl	**cy;
+	t_obj	**obj;
 	double	***ray;
 }				t_mrt;
 
@@ -115,9 +113,9 @@ int		init_cam(t_cam *ca, char **info);
 int		init_lol(t_lol *l, char **info);
 int		init_lol_b(t_lol_b *l, char **info);
 
-int		init_sph(t_sph **sp, char **info, int p);
-int		init_pl(t_pl **pl, char **info, int p);
-int		init_cyl(t_cyl **cy, char **info, int p);
+int		init_sph(t_obj **sp, char **info, int p);
+int		init_pl(t_obj **pl, char **info, int p);
+int		init_cyl(t_obj **cy, char **info, int p);
 
 //FUNCTIONS
 

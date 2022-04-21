@@ -21,9 +21,9 @@ int	count_input(t_list *lst, int *count, char *tmp)
 		else if (!ft_strncmp(tmp, "sp", 2) && ft_white(tmp[2]))
 			count[3]++;
 		else if (!ft_strncmp(tmp, "pl", 2) && ft_white(tmp[2]))
-			count[4]++;
+			count[3]++;
 		else if (!ft_strncmp(tmp, "cy", 2) && ft_white(tmp[2]))
-			count[5]++;
+			count[3]++;
 		free(lst->content);
 		lst->content = tmp;
 		lst = lst->next;

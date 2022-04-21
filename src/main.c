@@ -22,7 +22,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		printf("not exactly one arguemnt\n");
+		printf("Error\nIncorrect number of Args\n");
 		return (1);
 	}
 	if (input(&mrt, argv[1]))
