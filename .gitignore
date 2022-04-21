@@ -2,3 +2,4 @@ libft.a
 miniRT
 *.o
 .vscode/
+extra/test_files/

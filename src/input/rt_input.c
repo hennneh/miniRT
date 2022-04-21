@@ -59,7 +59,7 @@ t_list	*import_data(char *file)
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
-		if (ft_strlen(line) > 0 && is_whspace(line, 1) < ft_strlen(line))
+		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1) < ft_strlen(line))
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 	}
 	close(fd);
