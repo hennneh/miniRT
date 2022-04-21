@@ -97,8 +97,8 @@ int		is_whspace(char *s, int dir);
 int		ft_white(char c);
 char	**split_wh(char const *s);
 
-int		count_input(t_list *lst, int count[6], char *tmp);
-int		check_count(int count[6]);
+int		count_input(t_list *lst, int *count, char *tmp);
+int		check_count(int *count);
 
 //INITIALIZATION
 

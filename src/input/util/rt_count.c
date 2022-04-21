@@ -36,7 +36,7 @@ int	count_input(t_list *lst, int *count, char *tmp)
  * @param count [int[6]] counter
  * @return [int] 0 if good, 1 if error
 */
-int	check_count(int count[6])
+int	check_count(int *count)
 {
 	if (count[0] != 1)
 		perror("Error\nIncorrect number of Ambient Lights\n");
