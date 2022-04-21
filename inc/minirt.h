@@ -97,6 +97,7 @@ void	*extract_line(char **lines, t_mrt *mrt);
 char	*trm_whtsp(char *s, int dir);
 int		is_whspace(char *s, int dir);
 int		ft_white(char c);
+char	**split_wh(char const *s);
 
 int		count_input(t_list *lst, int count[6], char *tmp);
 int		check_count(int count[6]);

@@ -15,33 +15,28 @@ void	init_mrt(t_mrt *mrt, int count[6])
 int	parse_input(t_mrt *mrt, t_list *lst, int count[6])
 {
 	int	flag;
-	int	i;
-	int	x;
-	int	y;
 
 	flag = 0;
-	i = 0;
-	y = 0;
-	x = 0;
 	init_mrt(mrt, count);
 	while (lst)
 	{
 		if (((char *)lst->content)[0] == 'A')
-			flag = init_al(mrt->al, ft_split(lst->content, ' '));
+			flag = init_al(mrt->al, split_wh(lst->content));
 		else if (((char *)lst->content)[0] == 'C')
-			flag = init_cam(mrt->cam, ft_split(lst->content, ' '));
+			flag = init_cam(mrt->cam, split_wh(lst->content));
 		else if (((char *)lst->content)[0] == 'L')
-			flag = init_lol(mrt->l, ft_split(lst->content, ' '));
+			flag = init_lol(mrt->l, split_wh(lst->content));
 		else if (((char *)lst->content)[0] == 's')
-			flag = init_sph(mrt->sp, ft_split(lst->content, ' '), count[3]-- - 1);
+			flag = init_sph(mrt->sp, split_wh(lst->content), --count[3]);
 		else if (((char *)lst->content)[0] == 'p')
-			flag = init_pl(mrt->pl, ft_split(lst->content, ' '),count[4]-- - 1);
+			flag = init_pl(mrt->pl, split_wh(lst->content), --count[4]);
 		else if (((char *)lst->content)[0] == 'c')
-			flag = init_cyl(mrt->cy, ft_split(lst->content, ' '),count[5]-- - 1);
+			flag = init_cyl(mrt->cy, split_wh(lst->content), --count[5]);
 		if (flag)
-			return (printf("[%d]{%s}\n", flag, (char *)lst->content));
+			return (printf("[%d]{%s}\n", flag, (char *)lst->content));//ERROR
 		lst = lst->next;
 	}
+	ft_lstclear(&lst, free);
 	// printf("\ngood parse\n"); //DELETE
 	return (0);
 }
@@ -64,7 +59,7 @@ t_list	*import_data(char *file)
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
-		if (ft_strlen(line) > 0) // && not just whitespaces
+		if (ft_strlen(line) > 0 && is_whspace(line, 1) < ft_strlen(line))
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 	}
 	close(fd);
@@ -81,7 +76,6 @@ int	input(t_mrt *mrt, char *file)
 	if (!lst)
 	{
 		perror("Error\nEmpty file\n");
-		ft_lstclear(&lst, free);
 		exit(1);
 	}
 	ft_bzero(count, sizeof(int) * 6);
