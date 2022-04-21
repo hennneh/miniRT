@@ -31,10 +31,10 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count)
 		else if (((char *)lst->content)[0] == 'c')
 			flag = init_cyl(mrt->obj, split_wh(lst->content), --count);
 		if (flag)
-			return ((printf("[%d]{%s}\n", flag, (char *)lst->content) * 0) + count);//ERROR
+			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) + count);//ERROR
 		lst = lst->next;
 	}
-	// printf("\ngood parse\n"); //DELETE
+	//printf("\ncount :[%d]\n", count); //DELETE
 	return (0);
 }
 
@@ -80,7 +80,7 @@ int	input(t_mrt *mrt, char *file)
 	if (!count_input(lst, count, NULL) && !check_count(count))
 		good = parse_input(mrt, lst, count[3]);
 	else
-		good = 2;
+		good = -1;
 	ft_lstclear(&lst, free);
 	return (good);
 }
