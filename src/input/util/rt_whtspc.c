@@ -1,5 +1,5 @@
 
-#include "../rt_input.h"
+#include "../../../inc/minirt.h"
 
 /**
  * ft_white checks if 'c is a whitespace

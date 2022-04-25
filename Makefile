@@ -2,7 +2,26 @@ NAME = miniRT
 CC = gcc
 FLAGS = -Wall -Werror -Wextra
 
-SRC = src/main.c
+SR = ./src/
+IN = $(SR)input/
+IT = $(IN)init/
+UT = $(IN)util/
+
+SRC =	$(SR)main.c \
+		$(IN)rt_input.c \
+		$(IT)ft_init.c \
+		$(IT)init_objects.c \
+		$(IT)init_scene.c \
+		$(UT)rt_count.c \
+		$(UT)rt_whtspc.c \
+		src/geometry/geo_maths.c \
+		src/geometry/geo_maths1.c \
+		src/geometry/plane_interception.c \
+		src/geometry/ray_cylinder.c \
+		src/geometry/ray_sphere.c \
+		src/setup/rayinit.c \
+		src/tracer/scour.c\
+		src/tracer/big.c
 
 OBJ = $(SRC:.c=.o)
 
