@@ -86,9 +86,12 @@ double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
 
 int		main(int argc, char **argv);
 
+// EXIT
+
+void	rt_er_exit(t_mrt *mrt, int good, int count);
 // INPUT
 
-void	*extract_line(char **lines, t_mrt *mrt);
+void	*extract_line(char **lines, t_mrt *mrt);//proto
 
 //UTILES
 

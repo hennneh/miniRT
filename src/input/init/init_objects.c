@@ -3,7 +3,7 @@
 
 /**
  * initilzes a sphere struct
- * @param ob [t_obj **] sphere struct
+ * @param sp [t_obj **] sphere struct
  * @param info [char **] information line split by whitespace
  * @param p [int] position in array
  * @return [int] 0 if successful; 1 if error in line
