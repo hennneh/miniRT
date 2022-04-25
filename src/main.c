@@ -60,6 +60,7 @@ void	debug(t_mrt *mrt)
 			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
 			if (d)
 			{
+				resize(ray, d);
 				printf("sphere hit		%i, at a distance of %lf\nInput Colors R%d G%d B%d\n", i, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
 				double	*impact;
 				double	*ref;
