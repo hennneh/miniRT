@@ -17,12 +17,11 @@ SRC =	$(SR)main.c \
 		src/geometry/geo_maths.c \
 		src/geometry/geo_maths1.c \
 		src/geometry/plane_interception.c \
-		src/geometry/ray_cylinder.c \
 		src/geometry/ray_sphere.c \
 		src/setup/rayinit.c \
-		src/tracer/scour.c\
 		src/tracer/big.c
 		src/shadow/shadow.c \
+#		src/geometry/ray_cylinder.c
 
 OBJ = $(SRC:.c=.o)
 

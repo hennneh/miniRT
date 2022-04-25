@@ -5,6 +5,7 @@
  * DEFINES
  */
 
+# define ROUND_ERROR 1000
 # define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
@@ -84,12 +85,9 @@ double	*single_ray(int x, int y, t_cam *cam, double **scr);
 double	**scream(t_cam *cam);
 void	init_rays(t_mrt *mrt);
 double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
-double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
+double	plane_intercept(t_mrt *mrt, double *l, t_obj *plane);
 double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
-void	*scour_sph(t_mrt *mrt, double *ray, int *k, int *sd);
-void	*scour_pl(t_mrt *mrt, double *ray, int *k, int *sd);
-void	*scour_cyl(t_mrt *mrt, double *ray, int *k, int *sd);
 int		nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC

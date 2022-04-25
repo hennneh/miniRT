@@ -20,7 +20,7 @@
  * t = ((p0 - l0) * n) / (l * n)
  */
 
-double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane)
+double	plane_intercept(t_mrt *mrt, double *l, t_obj *plane)
 {
 	double	t;
 

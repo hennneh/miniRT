@@ -9,7 +9,7 @@ int	shadow(t_mrt *mrt, double *obj)
 	ray = connect(mrt->l, obj);
 	while (mrt->sp[i])
 	{
-		if (hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, obj, ray))
+
 			return (1);
 		i++;
 	}
@@ -23,7 +23,9 @@ int	shadow(t_mrt *mrt, double *obj)
 int	shadow(t_mrt *mrt, double *obj)
 {
 	double	ray[3];
+  int     i;
 
+  i = 0;
 	if (!mrt->l || !obj)
 		return (NULL);
 	ray = connect(mrt->l, obj);
