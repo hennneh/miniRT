@@ -67,7 +67,7 @@ typedef struct s_lol_b
 
 /**
  * struct for object
- * @param id [char] char identifier
+ * @param id [char] char identifier S = sphere; P = plane; Z = cylinder
  * @param cor [double[3]] coordinates of view point [x][y][z]
  * @param v_o [double[3]] 3d normalization orientation vector [x][y][z] [-1 - 1]
  * @param rad [double] object rad 
@@ -89,3 +89,64 @@ typedef struct s_obj
 }	t_obj;
 
 #endif
+
+// /**
+//  * struct for sphere
+//  * @param id [char] char identifier
+//  * @param cor [double[3]] coordinates of view point [x][y][z]
+//  * @param rad [double] sphere rad 
+//  * @param r [int] Red [0 - 255]
+//  * @param g [int] Green [0 - 255]
+//  * @param b [int] Blue [0 - 255]
+// */
+// typedef struct s_sph
+// {
+// 	char	id;
+// 	double	cor[3];
+// 	double	rad;
+// 	int		r;
+// 	int		g;
+// 	int		b;
+// }	t_sph;
+
+// /**
+//  * struct for plane
+//  * @param id [char] char identifier
+//  * @param cor [double[3]] coordinates of view point [x][y][z]
+//  * @param v_o [double[3]] 3d normalization orientation vector [x][y][z] [-1 - 1]
+//  * @param r [int] Red [0 - 255]
+//  * @param g [int] Green [0 - 255]
+//  * @param b [int] Blue [0 - 255]
+// */
+// typedef struct s_pl
+// {
+// 	char	id;
+// 	double	cor[3];
+// 	double	v_o[3];
+// 	int		r;
+// 	int		g;
+// 	int		b;
+// }	t_pl;
+
+// /**
+//  * struct for cylinder
+//  * @param id [char] char identifier
+//  * @param cor [double[3]] coordinates of view point [x][y][z]
+//  * @param v_o [double[3]] 3d normalization orientation vector [x][y][z] [-1 - 1]
+//  * @param rad [double] cylinder radius
+//  * @param hght [double] cylinder hight
+//  * @param r [int] Red [0 - 255]
+//  * @param g [int] Green [0 - 255]
+//  * @param b [int] Blue [0 - 255]
+// */
+// typedef struct s_cyl
+// {
+// 	char	id;
+// 	double	cor[3];
+// 	double	v_o[3];
+// 	double	rad;
+// 	double	hght;
+// 	int		r;
+// 	int		g;
+// 	int		b;
+// }	t_cyl;

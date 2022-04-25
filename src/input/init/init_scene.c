@@ -49,6 +49,8 @@ int	init_cam(t_cam *ca, char **info)
 		return (1);
 	if (info[i])
 		return (1);
+	if (ca->v_o[0] == 0.0 && ca->v_o[1] == 0.0 && ca->v_o[2] == 0.0)
+		ca->v_o[0] = 1.0;
 	// printf("good Camera\n");//DELETE
 	return (0);
 }

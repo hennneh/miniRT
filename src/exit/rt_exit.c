@@ -1,6 +1,13 @@
 
 #include "../../inc/minirt.h"
 
+/**
+ * Error Exit, goes through mrt and frees all inputs
+ * @param mrt [t_mrt *] mrt struct
+ * @param good [int] first position filled
+ * @param count [int] max number of objects
+ * @return [void] exits at end of function with (1)
+*/
 void	rt_er_exit(t_mrt *mrt, int good, int count)
 {
 	if (mrt->al)
@@ -21,6 +28,11 @@ void	rt_er_exit(t_mrt *mrt, int good, int count)
 	exit(1);
 }
 
+/**
+ * Exit, goes through mrt and frees all inputs
+ * @param mrt [t_mrt *] mrt struct
+ * @return [void] exits at end of function with (0)
+*/
 void	rt_exit(t_mrt *mrt)
 {
 	int	x;
