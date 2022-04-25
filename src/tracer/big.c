@@ -14,7 +14,6 @@
 int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
 {
 	double	*impact;
-	double	*ref;
 	double	*norm;
 	double	*light;
 	int		res;
@@ -25,7 +24,7 @@ int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
 	res = 0;
 	impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
 	addto(impact, ray);
-	if (obj && obj->id == 'S')
+	if (obj->id == 'S')
 	{
 		norm = connect(obj->cor, impact);
 	}
@@ -33,9 +32,8 @@ int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
 	{
 		norm = ray_alloc(obj->v_o[0], obj->v_o[1], obj->v_o[2]);
 	}
-	ref = reflect(ray, norm);
 	light = connect(impact, mrt->l->cor);
-	bright = ((PI / 2) - angle(light, ref)) * mrt->l->brit;
+	bright = (angle(light, norm)) * mrt->l->brit;
 	// if (shadow(mrt, impact))
 	// 	bright = 0;
 	if (obj && obj->id == 'S')
