@@ -4,3 +4,4 @@ miniRT
 libmlx.a
 libmlx_Darwin.a
 mlx-test
+.DS_Store
