@@ -46,9 +46,7 @@ typedef struct s_mrt
 	t_al	*al;
 	t_lol	*l;
 	t_cam	*cam;
-	t_sph	**sp;
-	t_pl	**pl;
-	t_cyl	**cy;
+	t_obj	**obj;
 	double	***ray;
 	void	*img;
 }				t_mrt;
@@ -110,9 +108,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 char	*trm_whtsp(char *s, int dir);
 int		is_whspace(char *s, int dir);
 int		ft_white(char c);
+char	**split_wh(char const *s);
 
-int		count_input(t_list *lst, int count[6], char *tmp);
-int		check_count(int count[6]);
+int		count_input(t_list *lst, int *count, char *tmp);
+int		check_count(int *count);
 
 //INITIALIZATION
 
@@ -127,9 +126,9 @@ int		init_cam(t_cam *ca, char **info);
 int		init_lol(t_lol *l, char **info);
 int		init_lol_b(t_lol_b *l, char **info);
 
-int		init_sph(t_sph **sp, char **info, int p);
-int		init_pl(t_pl **pl, char **info, int p);
-int		init_cyl(t_cyl **cy, char **info, int p);
+int		init_sph(t_obj **sp, char **info, int p);
+int		init_pl(t_obj **pl, char **info, int p);
+int		init_cyl(t_obj **cy, char **info, int p);
 
 //FUNCTIONS
 
