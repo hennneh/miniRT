@@ -53,7 +53,7 @@ double	**scream(t_cam *cam)
  * @param y [int] vertical PIxelcoordinate
  * @param cam [t_cam*] originating viewpoint
  * @param scr [double**] defining parameters of the projection screen
- * @brief return a ray representing a pixel with the xy offset given
+ * @brief return a ray representing a PIxel with the xy offset given
 */
 double	*single_ray(int x, int y, t_cam *cam, double **scr)
 {

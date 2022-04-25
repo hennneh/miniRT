@@ -46,10 +46,9 @@ typedef struct s_mrt
 	t_al	*al;
 	t_lol	*l;
 	t_cam	*cam;
-	t_sph	**sp;
-	t_pl	**pl;
-	t_cyl	**cy;
+	t_obj	**obj;
 	double	***ray;
+	void	*img;
 }				t_mrt;
 
 typedef struct s_data
@@ -76,6 +75,7 @@ void	unit(double	*a);
 void	product(double *a, double m);
 void	resize(double *a, double m);
 double	angle(double *a, double *b);
+double	*reflect(double in[3], double norm[3]);
 double	calculate_dot(double *a, double *b);
 
 //TRACER
@@ -87,15 +87,21 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
 double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
-int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
+void	*scour_sph(t_mrt *mrt, double *ray, int *k, int *sd);
+void	*scour_pl(t_mrt *mrt, double *ray, int *k, int *sd);
+void	*scour_cyl(t_mrt *mrt, double *ray, int *k, int *sd);
+int		nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC
 
 int		main(int argc, char **argv);
 
+// EXIT
+
+void	rt_er_exit(t_mrt *mrt, int good, int count);
 // INPUT
 
-void	*extract_line(char **lines, t_mrt *mrt);
+void	*extract_line(char **lines, t_mrt *mrt);//proto
 
 //UTILES
 
@@ -105,9 +111,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 char	*trm_whtsp(char *s, int dir);
 int		is_whspace(char *s, int dir);
 int		ft_white(char c);
+char	**split_wh(char const *s);
 
-int		count_input(t_list *lst, int count[6], char *tmp);
-int		check_count(int count[6]);
+int		count_input(t_list *lst, int *count, char *tmp);
+int		check_count(int *count);
 
 //INITIALIZATION
 
@@ -122,9 +129,9 @@ int		init_cam(t_cam *ca, char **info);
 int		init_lol(t_lol *l, char **info);
 int		init_lol_b(t_lol_b *l, char **info);
 
-int		init_sph(t_sph **sp, char **info, int p);
-int		init_pl(t_pl **pl, char **info, int p);
-int		init_cyl(t_cyl **cy, char **info, int p);
+int		init_sph(t_obj **sp, char **info, int p);
+int		init_pl(t_obj **pl, char **info, int p);
+int		init_cyl(t_obj **cy, char **info, int p);
 
 //FUNCTIONS
 
