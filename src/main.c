@@ -53,37 +53,44 @@ void	debug(t_mrt *mrt)
 	printf("ray trough x %i, y %i\n", x, y);
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	i = 0;
-	while (mrt && mrt->sp && mrt->sp[i])
+	while (mrt && mrt->obj && mrt->obj[i])
 	{
-		d = hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
-		if (d)
+		if (mrt->obj[i]->id == 'S')
 		{
-			printf("sphere hit		%i, at a distance of %lf\n", i, d);
-			double	*impact;
-			double	*ref;
-			double	*norm;
-			double	*light;
-			double	bright;
-			impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
-			addto(impact, ray);
-			norm = connect(mrt->sp[i]->cor, impact);
-			ref = reflect(ray, norm);
-			light = connect(impact, mrt->l->cor);
-			bright = angle(light, ref) * (180 / PI);
-			printf("impact at	%lf %lf %lf\n", impact[0], impact[1], impact[2]);
-			printf("light per at	 %lf %lf %lf\n", light[0], light[1], light[2]);
-			printf("reflection	 %lf %lf %lf angle to light %lf\n", ref[0], ref[1], ref[2], angle(light, ref) * (180/PI));
-			printf("brightness factor %lf\n", bright);
+			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
+			if (d)
+			{
+				printf("sphere hit		%i, at a distance of %lf\nInput Colors R%d G%d B%d\n", i, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+				double	*impact;
+				double	*ref;
+				double	*norm;
+				double	*light;
+				double	bright;
+				impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
+				addto(impact, ray);
+				norm = connect(mrt->obj[i]->cor, impact);
+				ref = reflect(ray, norm);
+				light = connect(impact, mrt->l->cor);
+				bright = angle(light, ref) * (180 / PI);
+				printf("impact at	%lf %lf %lf\n", impact[0], impact[1], impact[2]);
+				printf("light per at	 %lf %lf %lf\n", light[0], light[1], light[2]);
+				printf("reflection	 %lf %lf %lf angle to light %lf\n", ref[0], ref[1], ref[2], angle(light, ref));
+				printf("brightness factor %lf\n", bright);
+			}
+		}
+		if (mrt->obj[i]->id == 'P')
+		{
+			d =  plane_intercept(mrt, ray, mrt->obj[i]);
+			if (d)
+				printf("plane hit		%i, at a distance of %lf\nInput Colors R%d G%d B%d\n", i, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+			i++;
 		}
 		i++;
 	}
 	i = 0;
-	while (mrt && mrt->pl && mrt->pl[i])
+	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id == 'P')
 	{
-		d =  plane_intercept(mrt, ray, mrt->pl[i]);
-		if (d)
-			printf("plane hit		%i, at a distance of %lf\n", i, d);
-		i++;
+		
 	}
 	// i = 0;
 	// while (mrt && mrt->cy && mrt->cy[i])
