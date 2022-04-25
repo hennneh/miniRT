@@ -99,13 +99,15 @@ int		main(int argc, char **argv);
 // EXIT
 
 void	rt_er_exit(t_mrt *mrt, int good, int count);
+void	rt_exit(t_mrt *mrt);
+
 // INPUT
 
 void	*extract_line(char **lines, t_mrt *mrt);//proto
 
 //UTILES
 
-int	create_trgb(int t, int r, int g, int b);
+int		create_trgb(int t, int r, int g, int b);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 char	*trm_whtsp(char *s, int dir);

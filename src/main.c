@@ -138,5 +138,6 @@ int	main(int argc, char **argv)
 	mlx_key_hook(mrt.win, key_hook, &mrt);
 	mlx_hook(mrt.win, 33, (1L << 17), end, &mrt);
 	mlx_loop(mrt.mlx);
+	rt_exit(&mrt);
 	return (0);
 }
