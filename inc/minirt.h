@@ -94,9 +94,12 @@ int		nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 int		main(int argc, char **argv);
 
+// EXIT
+
+void	rt_er_exit(t_mrt *mrt, int good, int count);
 // INPUT
 
-void	*extract_line(char **lines, t_mrt *mrt);
+void	*extract_line(char **lines, t_mrt *mrt);//proto
 
 //UTILES
 

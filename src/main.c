@@ -129,7 +129,7 @@ int	key_hook(int key, t_mrt *mrt)
 int	main(int argc, char **argv)
 {
 	t_mrt	mrt;
-  
+
 	if (argc != 2)
 	{
 		printf("Error\nIncorrect number of Args\n");
