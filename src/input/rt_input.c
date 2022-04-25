@@ -10,31 +10,31 @@ void	init_mrt(t_mrt *mrt, int count)
 	return ;
 }
 
-int	parse_input(t_mrt *mrt, t_list *lst, int count)
+int	parse_input(t_mrt *mrt, t_list *lst, int count, int flag)
 {
-	int	flag;
+	char	**tmp;
 
-	flag = 0;
 	init_mrt(mrt, count);
 	while (lst)
 	{
+		tmp = split_wh(lst->content);
 		if (((char *)lst->content)[0] == 'A')
-			flag = init_al(mrt->al, split_wh(lst->content));
+			flag = init_al(mrt->al, tmp);
 		else if (((char *)lst->content)[0] == 'C')
-			flag = init_cam(mrt->cam, split_wh(lst->content));
+			flag = init_cam(mrt->cam, tmp);
 		else if (((char *)lst->content)[0] == 'L')
-			flag = init_lol(mrt->l, split_wh(lst->content));
+			flag = init_lol(mrt->l, tmp);
 		else if (((char *)lst->content)[0] == 's')
-			flag = init_sph(mrt->obj, split_wh(lst->content), --count);
+			flag = init_sph(mrt->obj, tmp, --count);
 		else if (((char *)lst->content)[0] == 'p')
-			flag = init_pl(mrt->obj, split_wh(lst->content), --count);
+			flag = init_pl(mrt->obj, tmp, --count);
 		else if (((char *)lst->content)[0] == 'c')
-			flag = init_cyl(mrt->obj, split_wh(lst->content), --count);
+			flag = init_cyl(mrt->obj, tmp, --count);
+		free_2dstr(tmp);
 		if (flag)
 			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) + count);//ERROR
 		lst = lst->next;
 	}
-	//printf("\ncount :[%d]\n", count); //DELETE
 	return (0);
 }
 
@@ -78,7 +78,7 @@ int	input(t_mrt *mrt, char *file)
 	good = 0;
 	ft_bzero(count, sizeof(int) * 4);
 	if (!count_input(lst, count, NULL) && !check_count(count))
-		good = parse_input(mrt, lst, count[3]);
+		good = parse_input(mrt, lst, count[3], 0);
 	else
 		good = -1;
 	ft_lstclear(&lst, free);

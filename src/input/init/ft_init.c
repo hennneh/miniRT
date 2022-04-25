@@ -38,15 +38,15 @@ int	init_cor(char **info, double *cor, int flag)
 	while (info[i])
 	{
 		if (i > 2 || check_deci(info[i]) > 1 || ft_isdouble(info[i]))
-			return (1);//ERROR
+			return (free_2dstr(info) + 1);//ERROR
 		cor[i] = ft_atof(info[i]);
 		if (flag == 1 && (cor[i] < -1 || cor[i] > 1))
-			return (1);//ERROR
+			return (free_2dstr(info) + 1);//ERROR
 		i ++;
 	}
 	if (i != 3)
-		return (1);
-	return (0);
+		return (free_2dstr(info) + 1);
+	return (free_2dstr(info));
 }
 
 /**
@@ -69,10 +69,10 @@ int	init_rgb(char **info, int *r, int *g, int *b)
 	while (info[i])
 	{
 		if (i > 2 || ft_isnumeric(info[i]))
-			return (1);
+			return (free_2dstr(info) + 1);
 		tmp = ft_atoi(info[i]);
 		if (tmp < 0 || tmp > 255)
-			return (1);
+			return (free_2dstr(info) + 1);
 		if (i == 0)
 			*r = tmp;
 		if (i == 1)
@@ -82,8 +82,8 @@ int	init_rgb(char **info, int *r, int *g, int *b)
 		i ++;
 	}
 	if (i != 3)
-		return (1);
-	return (0);
+		return (free_2dstr(info) + 1);
+	return (free_2dstr(info));
 }
 
 /**

@@ -42,7 +42,10 @@ double	ft_atof(char *str)
 	ret = 0;
 	behind = ft_strchr(str, '.');
 	if (!behind)
+	{
+		free(front);
 		return ((double)(ft_atoi(str)));
+	}
 	if (ft_strlen(behind) < len)
 	{
 		len -= ft_strlen(behind);
