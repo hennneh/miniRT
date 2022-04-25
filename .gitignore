@@ -1,3 +1,6 @@
 libft.a
 miniRT
 *.o
+libmlx.a
+libmlx_Darwin.a
+mlx-test

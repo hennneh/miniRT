@@ -87,7 +87,12 @@ double	**scream(t_cam *cam);
 void	init_rays(t_mrt *mrt);
 double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir);
 double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
-double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
+double	cylinder_intersect(double *pos, double *dir, double radius, double height, double *ray_or, double *ray_dir);
+double	new_cylinder_intersect(double *pos, double *dir, double radius, double height, double *ray_or, double *ray_dir);
+double	newer_cylinder_intersect(double *pos, double *dir, double radius, double height, double *ray_or, double *ray_dir);
+void	cylinder_coefficient(double *pos, double *dir, double radius, double *tmp, double *ray_or, double *ray_dir);
+
+
 
 void	*scour_sph(t_mrt *mrt, double *ray, int *k, int *sd);
 void	*scour_pl(t_mrt *mrt, double *ray, int *k, int *sd);
