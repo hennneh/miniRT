@@ -82,5 +82,7 @@ int	input(t_mrt *mrt, char *file)
 	else
 		good = -1;
 	ft_lstclear(&lst, free);
+	if (good > 0)
+		rt_er_exit(mrt, good, count[3]);
 	return (good);
 }

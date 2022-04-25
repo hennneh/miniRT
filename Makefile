@@ -21,6 +21,7 @@ SRC =	$(SR)main.c \
 		src/setup/rayinit.c \
 		src/shadow/shadow.c \
 		src/tracer/big.c
+		src/shadow/shadow.c \
 #		src/geometry/ray_cylinder.c
 
 OBJ = $(SRC:.c=.o)
