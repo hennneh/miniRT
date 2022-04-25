@@ -1,19 +1,34 @@
 #include "../../inc/minirt.h"
+<<<<<<< HEAD
+
+int	shadow(t_mrt *mrt, double *impact)
+=======
 /*
 int	shadow(t_mrt *mrt, double *obj)
+>>>>>>> a6756b4754e7e01a112e50092aba9af3fe3c35c7
 {
-	double	ray[3];
-	
-	if (!mrt->l || !obj)
-		return (NULL);
-	ray = connect(mrt->l, obj);
-	while (mrt->sp[i])
+	double	*ray;
+	int		i;
+
+	i = 0;
+	if (!mrt->l || !impact)
+		return (0);
+	ray = connect(impact, mrt->l->cor);
+	while (mrt->obj[i])
 	{
+<<<<<<< HEAD
+		if (mrt->obj[i]->id == 'S' && hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, impact, ray))
+			break ;
+		if (mrt->obj[i]->id == 'P' && plane_intercept(mrt, ray, mrt->obj[i]))
+			break ;
+=======
 
 			return (1);
+>>>>>>> a6756b4754e7e01a112e50092aba9af3fe3c35c7
 		i++;
 	}
-	//repeat for planes and cylinders
+	if (mrt->obj[i])
+		return (1);
 	return (0);
 }
 */

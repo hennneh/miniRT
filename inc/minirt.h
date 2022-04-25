@@ -88,6 +88,7 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 double	plane_intercept(t_mrt *mrt, double *l, t_obj *plane);
 double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
+int		shadow(t_mrt *mrt, double *impact);
 int		nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC

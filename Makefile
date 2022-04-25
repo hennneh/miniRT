@@ -19,6 +19,7 @@ SRC =	$(SR)main.c \
 		src/geometry/plane_interception.c \
 		src/geometry/ray_sphere.c \
 		src/setup/rayinit.c \
+		src/shadow/shadow.c \
 		src/tracer/big.c
 		src/shadow/shadow.c \
 #		src/geometry/ray_cylinder.c
