@@ -77,6 +77,7 @@ void	unit(double	*a);
 void	product(double *a, double m);
 void	resize(double *a, double m);
 double	angle(double *a, double *b);
+double	*reflect(double in[3], double norm[3]);
 double	calculate_dot(double *a, double *b);
 
 //TRACER
@@ -88,7 +89,10 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane);
 double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
-int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
+void	*scour_sph(t_mrt *mrt, double *ray, int *k, int *sd);
+void	*scour_pl(t_mrt *mrt, double *ray, int *k, int *sd);
+void	*scour_cyl(t_mrt *mrt, double *ray, int *k, int *sd);
+int		nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC
 

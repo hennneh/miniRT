@@ -38,6 +38,7 @@ void	calc(t_mrt *mrt)
 	mrt->img = img.img;
 }
 
+// Trace me baby one more time
 void	debug(t_mrt *mrt)
 {
 	int	x;
@@ -56,7 +57,24 @@ void	debug(t_mrt *mrt)
 	{
 		d = hit_sphere(mrt->sp[i]->cor, mrt->sp[i]->rad, mrt->cam->cor, ray);
 		if (d)
+		{
 			printf("sphere hit		%i, at a distance of %lf\n", i, d);
+			double	*impact;
+			double	*ref;
+			double	*norm;
+			double	*light;
+			double	bright;
+			impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
+			addto(impact, ray);
+			norm = connect(mrt->sp[i]->cor, impact);
+			ref = reflect(ray, norm);
+			light = connect(impact, mrt->l->cor);
+			bright = angle(light, ref) * (180 / PI);
+			printf("impact at	%lf %lf %lf\n", impact[0], impact[1], impact[2]);
+			printf("light per at	 %lf %lf %lf\n", light[0], light[1], light[2]);
+			printf("reflection	 %lf %lf %lf angle to light %lf\n", ref[0], ref[1], ref[2], angle(light, ref) * (180/PI));
+			printf("brightness factor %lf\n", bright);
+		}
 		i++;
 	}
 	i = 0;
