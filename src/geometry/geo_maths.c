@@ -141,3 +141,28 @@ double	angle(double *a, double *b)
 		scalar *= -1;
 	return (acos(scalar / (veclen(a) * veclen(b))));
 }
+
+/**
+ * @brief reflect a given vector on a normal-vector
+ * @param in [double*] the vector to be reflected
+ * @param norm [double*] the achse to reflect over
+ * we create a vector perpendiculliar to NORM and IN
+ * and then use that vector to create another, perpendiculliar to NORM but in plane with IN
+ * -> TANG; which we will use to calculate the reflection in 2d geometry.
+ * a connecting vector between IN (1) and TANG (calc) is then returned as the result
+*/
+double	*reflect(double in[3], double norm[3])
+{
+	double	*tmp;
+	double	*tang;
+	double	*res;
+
+	unit(in);
+	tmp = cross(in, norm);
+	tang = cross(tmp, norm);
+	free(tmp);
+	unit(tang);
+	product(tang, -2 * cos(angle(in, tang)));
+	res = connect(in, tang);
+	return (res);
+}
