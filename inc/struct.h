@@ -19,7 +19,7 @@ typedef struct s_al
 }	t_al;
 
 /**
- * struct for the Camara
+ * struct for the Camara; If v_o == [0][0][0], -> [1][0][0]
  * @param id [char] char identifier
  * @param cor [double[3]] coordinates of view point [x][y][z]
  * @param v_o [double[3]] orientation vector [x][y][z] [-1 - 1]
@@ -34,7 +34,7 @@ typedef struct s_cam
 }	t_cam;
 
 /**
- * struct for Light
+ * struct for Light 
  * @param id [char] char identifier
  * @param cor [double[3]] coordinates of view point [x][y][z]
  * @param brit [double] light brightness ratio [0.0 - 1.0]
