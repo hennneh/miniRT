@@ -14,38 +14,36 @@
 int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
 {
 	double	*impact;
-	double	*ref;
-	double	*norm;
-	double	*light;
+	// double	*norm;
+	// double	*light;
 	int		res;
-	double	bright;
+	// double	bright;
 
+	if (!obj)
+		return (0);
+	res = 0;
 	impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
 	addto(impact, ray);
-	if (obj->id == 'S')
-	{
-		norm = connect(obj->cor, impact);
-	}
-	else //if (k == 2)
-	{
-		norm = ray_alloc(obj->v_o[0], obj->v_o[1], obj->v_o[2]);
-	}
-	ref = reflect(ray, norm);
-	light = connect(impact, mrt->l->cor);
-	bright = ((PI / 2) - angle(light, ref)) * mrt->l->brit;
-	// if henne shadow -> bright = 0
+	// if (obj->id == 'S')
+	// {
+	// 	norm = connect(obj->cor, impact);
+	// }
 	// else
-	if (obj && obj->id == 'S')
-		res = create_trgb(0	, bright * obj->r
-							, bright * obj->g
-							, bright * obj->b);
-	else if (obj && obj->id == 'P')
-		res = create_trgb(0	, bright * obj->r
-							, bright * obj->g
-							, bright * obj->b);
+	// {
+	// 	norm = ray_alloc(obj->v_o[0], obj->v_o[1], obj->v_o[2]);
+	// }
+	// light = connect(impact, mrt->l->cor);
+	// bright = (angle(light, norm)) / 100000 * mrt->l->brit;
+	if (shadow(mrt, impact))
+	{
+		return 0;
+	}
+	if (obj && (obj->id == 'S' || obj->id == 'P'))
+		res = create_trgb(0, (obj->r + mrt->al->r)
+							, (obj->g + mrt->al->g)
+							, (obj->b + mrt->al->b));
 	else
-		res = create_trgb(0, mrt->al->r, mrt->al->g, mrt->al->b);
-	// res = create_trgb(0, obj->r, obj->g, obj->b);
+		return (0);
 	return (res);
 }
 
@@ -63,23 +61,29 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 	i = 0;
 	while (mrt->obj[i])
 	{
-		if (mrt->obj[i]->id == 'S' && ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray) < sd)
+		if (mrt->obj[i]->id == 'S')
 		{
-			near = mrt->obj[i];
-			sd = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
+			col = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
+			if (col < sd && col > 0)
+			{
+				near = mrt->obj[i];
+				sd = col;
+			}
 		}
-		else if (mrt->obj[i]->id == 'P' && ROUND_ERROR * plane_intercept(mrt, ray, mrt->obj[i]) < sd)
+		else if (mrt->obj[i]->id == 'P')
 		{
-			near = mrt->obj[i];
-			sd = ROUND_ERROR * plane_intercept(mrt, ray, mrt->obj[i]);
+			col = ROUND_ERROR * plane_intercept(mrt, ray, mrt->obj[i]);
+			if (col < sd && col > 0)
+			{
+				near = mrt->obj[i];
+				sd = col;
+			}
 		}
 		i++;
 	}
-	resize(ray, sd);
+	unit(ray);
+	product(ray, col);
 	col = colorme(mrt, near, ray);
-	if (near)
-		my_mlx_pixel_put(img, x, y, col);
-	else
-		my_mlx_pixel_put(img, x, y, col);
+	my_mlx_pixel_put(img, x, y, col);
 	return (0);
 }
