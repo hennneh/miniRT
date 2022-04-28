@@ -1,5 +1,6 @@
 #include "../../inc/minirt.h"
 
+
 int	shadow(t_mrt *mrt, double *impact)
 {
 	double	*ray;

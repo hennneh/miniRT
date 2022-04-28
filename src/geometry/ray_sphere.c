@@ -28,7 +28,7 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 	if (disc < 0)
 		return (0);
 	else
-		return (((tmp[1]) - sqrt(disc)) / (2.0 * tmp[0]));
+		return (-1 *((tmp[1]) - sqrt(disc)) / (2.0 * tmp[0]));
 }
 
 
