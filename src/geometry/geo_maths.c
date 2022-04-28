@@ -136,10 +136,8 @@ double	angle(double *a, double *b)
 
 	if (!a || !b)
 		return(0);
-	scalar = ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]));
-	if (scalar < 0)
-		scalar *= -1;
-	return (acos(scalar / (veclen(a) * veclen(b))));
+	scalar = calculate_dot(a, b);
+	return (acos((scalar / (veclen(a) * veclen(b)))));
 }
 
 /**

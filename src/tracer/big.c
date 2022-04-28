@@ -14,36 +14,36 @@
 int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
 {
 	double	*impact;
-	double	*norm;
-	double	*light;
+	// double	*norm;
+	// double	*light;
 	int		res;
-	double	bright;
+	// double	bright;
 
 	if (!obj)
-		return (create_trgb(0, mrt->al->r, mrt->al->g, mrt->al->b));
+		return (0);
 	res = 0;
 	impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
 	addto(impact, ray);
-	if (obj->id == 'S')
+	// if (obj->id == 'S')
+	// {
+	// 	norm = connect(obj->cor, impact);
+	// }
+	// else
+	// {
+	// 	norm = ray_alloc(obj->v_o[0], obj->v_o[1], obj->v_o[2]);
+	// }
+	// light = connect(impact, mrt->l->cor);
+	// bright = (angle(light, norm)) / 100000 * mrt->l->brit;
+	if (shadow(mrt, impact))
 	{
-		norm = connect(obj->cor, impact);
+		return 0;
 	}
+	if (obj && (obj->id == 'S' || obj->id == 'P'))
+		res = create_trgb(0, (obj->r + mrt->al->r)
+							, (obj->g + mrt->al->g)
+							, (obj->b + mrt->al->b));
 	else
-	{
-		norm = ray_alloc(obj->v_o[0], obj->v_o[1], obj->v_o[2]);
-	}
-	light = connect(impact, mrt->l->cor);
-	bright = (angle(light, norm)) * mrt->l->brit;
-	// if (shadow(mrt, impact))
-	// 	bright = 0;
-	if (obj && obj->id == 'S')
-		res = create_trgb(0	, bright * obj->r
-							, bright * obj->g
-							, bright * obj->b);
-	else if (obj && obj->id == 'P')
-		res = create_trgb(0	, bright * obj->r
-							, bright * obj->g
-							, bright * obj->b);
+		return (0);
 	return (res);
 }
 
@@ -81,7 +81,8 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 		}
 		i++;
 	}
-	resize(ray, sd - 1);
+	unit(ray);
+	product(ray, col);
 	col = colorme(mrt, near, ray);
 	my_mlx_pixel_put(img, x, y, col);
 	return (0);

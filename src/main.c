@@ -47,51 +47,44 @@ void	debug(t_mrt *mrt)
 	double	d;
 	double	*ray;
 	double	**scr;
+	double	*norm;
+	double	*impact;
 
 	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
 	scr = scream(mrt->cam);
 	printf("ray trough x %i, y %i\n", x, y);
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	i = 0;
-	while (mrt && mrt->obj && mrt->obj[i])
+	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
 	{
+		d = 0;
+		impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
+		addto(impact, ray);
 		if (mrt->obj[i]->id == 'S')
 		{
 			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
-			if (d)
-			{
-				resize(ray, d);
-				printf("sphere hit		%i, at a distance of %lf\nInput Colors R%d G%d B%d\n", i, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-				double	*impact;
-				double	*ref;
-				double	*norm;
-				double	*light;
-				double	bright;
-				impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
-				addto(impact, ray);
-				norm = connect(mrt->obj[i]->cor, impact);
-				ref = reflect(ray, norm);
-				light = connect(impact, mrt->l->cor);
-				bright = angle(light, ref) * (180 / PI);
-				printf("impact at	%lf %lf %lf\n", impact[0], impact[1], impact[2]);
-				printf("light per at	 %lf %lf %lf\n", light[0], light[1], light[2]);
-				printf("reflection	 %lf %lf %lf angle to light %lf\n", ref[0], ref[1], ref[2], angle(light, ref));
-				printf("brightness factor %lf\n", bright);
-			}
+			norm = connect(impact, mrt->obj[i]->cor);
 		}
 		if (mrt->obj[i]->id == 'P')
 		{
-			d =  plane_intercept(mrt, ray, mrt->obj[i]);
-			if (d)
-				printf("plane hit		%i, at a distance of %lf\nInput Colors R%d G%d B%d\n", i, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-			i++;
+			d = ROUND_ERROR * plane_intercept(mrt, ray, mrt->obj[i]);
+			norm = ray_alloc(mrt->obj[i]->v_o[0], mrt->obj[i]->v_o[1], mrt->obj[i]->v_o[2]);
+		}
+		if (d)
+		{
+			resize(ray, d);
+			printf("KIND %C	, at a distance of %lf\nInput Colors R%d G%d B%d\n", mrt->obj[i]->id, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+			double	*light;
+			double	bright;
+			impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
+			addto(impact, ray);
+			light = connect(impact, mrt->l->cor);
+			bright = (angle(light, norm)) * 1000 * mrt->l->brit;
+			printf("impact at	%lf %lf %lf\n", impact[0], impact[1], impact[2]);
+			printf("light per at	 %lf %lf %lf\n", light[0], light[1], light[2]);
+			printf("brightness factor %lf\n", bright);
 		}
 		i++;
-	}
-	i = 0;
-	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id == 'P')
-	{
-		
 	}
 	// i = 0;
 	// while (mrt && mrt->cy && mrt->cy[i])
