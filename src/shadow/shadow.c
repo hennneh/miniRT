@@ -43,3 +43,28 @@ int	shadow(t_mrt *mrt, double *impact, char p)
 		return(1);
 	return (0);
 }
+
+int	main(void)
+{
+	t_mrt	mrt;
+	t_cam	cam;
+	cam.pos = {0,0,0};
+	cam.v_o = {1,1,0};
+	mrt.cam = &cam;
+	t_obj	obj[3];
+	obj[2] = NULL;
+	mrt.obj = &obj;
+	obj[0].id = 'S';
+	obj[1].id = 'S';
+	obj[0].cor = {5,5,0};
+	obj[1].cor = {10,10,0};
+	obj[0].rad = 1.0;
+	obj[1].rad = 1.0;
+	double	vec = {4,4,0};
+	int	ret = shadow(&mrt, vec);
+	if (ret == 1)
+		printf("1\n");
+	else
+		printf("0\n");
+	return (0);
+}
