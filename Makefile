@@ -21,6 +21,7 @@ SRC =	$(SR)main.c \
 		$(GE)geo_maths1.c \
 		$(GE)plane_interception.c \
 		$(GE)ray_sphere.c \
+		src/shadow/shadow.c \
 		src/setup/rayinit.c \
 		src/tracer/big.c
 #		$(GE)ray_cylinder.c

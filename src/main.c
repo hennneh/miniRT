@@ -44,6 +44,7 @@ void	debug(t_mrt *mrt)
 	int	x;
 	int	y;
 	int	i;
+	int	shad;
 	double	d;
 	double	*ray;
 	double	**scr;
@@ -74,15 +75,10 @@ void	debug(t_mrt *mrt)
 		{
 			resize(ray, d);
 			printf("KIND %C	, at a distance of %lf\nInput Colors R%d G%d B%d\n", mrt->obj[i]->id, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-			double	*light;
-			double	bright;
 			impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
 			addto(impact, ray);
-			light = connect(impact, mrt->l->cor);
-			bright = (angle(light, norm)) * 1000 * mrt->l->brit;
-			printf("impact at	%lf %lf %lf\n", impact[0], impact[1], impact[2]);
-			printf("light per at	 %lf %lf %lf\n", light[0], light[1], light[2]);
-			printf("brightness factor %lf\n", bright);
+			shad = shadow(mrt, impact, 'P');
+			printf("shadow ? %i\n", shad);
 		}
 		i++;
 	}

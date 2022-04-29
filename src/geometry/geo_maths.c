@@ -56,9 +56,9 @@ double	*connect(double *a, double *b)
 	double	*res;
 
 	res = malloc(3 * sizeof(double));
-	res[0] = a[0] - b[0];
-	res[1] = a[1] - b[1];
-	res[2] = a[2] - b[2];
+	res[0] = b[0] - a[0];
+	res[1] = b[1] - a[1];
+	res[2] = b[2] - a[2];
 	return (res);
 }
 

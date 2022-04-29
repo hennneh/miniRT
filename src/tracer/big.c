@@ -34,14 +34,14 @@ int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
 	// }
 	// light = connect(impact, mrt->l->cor);
 	// bright = (angle(light, norm)) / 100000 * mrt->l->brit;
-	if (shadow(mrt, impact))
+	if (shadow(mrt, impact, 0) == 1)
 	{
 		return 0;
 	}
 	if (obj && (obj->id == 'S' || obj->id == 'P'))
-		res = create_trgb(0, (obj->r + mrt->al->r)
-							, (obj->g + mrt->al->g)
-							, (obj->b + mrt->al->b));
+		res = create_trgb(0,	obj->r
+							,	obj->g
+							,	obj->b);
 	else
 		return (0);
 	return (res);

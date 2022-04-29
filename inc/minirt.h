@@ -5,6 +5,7 @@
  * DEFINES
  */
 
+
 # define ROUND_ERROR 1000
 # define RENDER_DISTANCE 20000
 # define WDTH 640
@@ -88,7 +89,8 @@ double	hit_sphere(double *point, double radius, double *ray_or, double *ray_dir)
 double	plane_intercept(t_mrt *mrt, double *l, t_obj *plane);
 double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
 
-int		shadow(t_mrt *mrt, double *impact);
+int	shadow(t_mrt *mrt, double *impact, char p);
+int		colorme(t_mrt *mrt, t_obj *obj, double *ray);
 int		nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img);
 
 //SRC
