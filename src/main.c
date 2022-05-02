@@ -39,59 +39,66 @@ void	calc(t_mrt *mrt)
 	// need to free scr
 }
 
-// // Trace me baby one more time
-// void	debug(t_mrt *mrt)
-// {
-// 	int	x;
-// 	int	y;
-// 	int	i;
-// 	int	shad;
-// 	double	d;
-// 	t_vec	ray;
-// 	t_vec	impact;
-// 	t_vec	norm;
-// 	t_vec	*scr;
+// Trace me baby one more time
+void	debug(t_mrt *mrt)
+{
+	int	x;
+	int	y;
+	int	i;
+	int	shad;
+	double	d;
+	double	bright;
+	t_vec	ray;
+	t_vec	impact;
+	t_vec	norm;
+	t_vec	light;
+	t_vec	*scr;
 
-// 	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
-// 	scr = scream(mrt->cam);
-// 	printf("ray trough x %i, y %i\n", x, y);
-// 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
-// 	i = 0;
-// 	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
-// 	{
-// 		d = 0;
-// 		impact = init_vec(mrt->cam->cor.x, mrt->cam->cor.y, mrt->cam->cor.z);
-// 		addto(&impact, ray);
-// 		if (mrt->obj[i]->id == 'S')
-// 		{
-// 			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
-// 			norm = connect(impact, mrt->obj[i]->cor);
-// 		}
-// 		if (mrt->obj[i]->id == 'P')
-// 		{
-// 			d = ROUND_ERROR * hit_plane(mrt, ray, mrt->obj[i]);
-// 			norm = init_vec(mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z);
-// 		}
-// 		if (d)
-// 		{
-// 			resize(&ray, d);
-// 			printf("KIND %C	, at a distance of %lf\nInput Colors R%d G%d B%d\n", mrt->obj[i]->id, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-// 			impact = init_vec(mrt->cam->cor.x, mrt->cam->cor.y, mrt->cam->cor.z);
-// 			addto(&impact, ray);
-// 			shad = shadow(mrt, impact, 'P');
-// 			printf("shadow ? %i\n", shad);
-// 		}
-// 		i++;
-// 	}
-// 	// i = 0;
-// 	// while (mrt && mrt->cy && mrt->cy[i])
-// 	// {
-// 	// 	d = cylinder_intersect(mrt->cy[i]->cor, mrt->cy[i]->rad, mrt->cy[i]->hght, mrt->cam->cor, ray);
-// 	// 	if (d)
-// 	// 		printf("cylinder hit	%i, at a distance of %i\n", i, d);
-// 	// 	i++;
-// 	// }
-// }
+	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
+	scr = scream(mrt->cam);
+	printf("ray trough x %i, y %i\n", x, y);
+	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
+	i = 0;
+	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
+	{
+		d = 0;
+		impact = init_vec(mrt->cam->cor.x, mrt->cam->cor.y, mrt->cam->cor.z);
+		addto(&impact, ray);
+				norm = init_vec(1,0,0);
+		if (mrt->obj[i]->id == 'S')
+		{
+			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
+			norm = connect(impact, mrt->obj[i]->cor);
+		}
+		if (mrt->obj[i]->id == 'P')
+		{
+			d = ROUND_ERROR * hit_plane(mrt, ray, mrt->obj[i]);
+			norm = init_vec(mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z);
+		}
+		if (d)
+		{
+			resize(&ray, d);
+			printf("KIND %C	, at a distance of %lf\nInput Colors R%d G%d B%d\n", mrt->obj[i]->id, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+			impact = mrt->cam->cor;
+			addto(&impact, ray);
+			light = connect(impact, mrt->l->cor);
+			bright = angle(light, norm);
+			printf("light %lf %lf %lf\n", light.x, light.y, light.z);
+			printf("\t\t\tangle %lf \n", bright + 1);
+			shad = shadow(mrt, impact, 'P');
+			printf("shadow ? %i\n", shad);
+		}
+		i++;
+	}
+	// i = 0;
+	// while (mrt && mrt->cy && mrt->cy[i])
+	// {
+	// 	d = cylinder_intersect(mrt->cy[i]->cor, mrt->cy[i]->rad, mrt->cy[i]->hght, mrt->cam->cor, ray);
+	// 	if (d)
+	// 		printf("cylinder hit	%i, at a distance of %i\n", i, d);
+	// 	i++;
+	// }
+}
 
 
 int	render(t_mrt *mrt)
@@ -112,8 +119,8 @@ int	key_hook(int key, t_mrt *mrt)
 {
 	if (key == 65307)
 		end(mrt);
-	// if (key == 100)
-	// 	debug(mrt);
+	if (key == 100)
+		debug(mrt);
 	return (0);
 }
 

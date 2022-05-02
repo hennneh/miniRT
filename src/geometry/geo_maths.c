@@ -107,7 +107,7 @@ void	resize(t_vec *a, double m)
 	o.y = a->y;
 	o.z = a->z;
 	unit(&o);
-		m--;
+	m -= 1;
 	product(&o, m);
 	addto(a, o);
 }
@@ -133,14 +133,16 @@ void	unit(t_vec	*a)
  * @param a [double*]
  * @param b [double*]
 */
-double	angle(t_vec *a, t_vec *b)
+double	angle(t_vec a, t_vec b)
 {
 	double scalar;
 
-	if (!a || !b)
-		return(0);
-	scalar = calculate_dot(a, b);
-	return (acos((scalar / (veclen(*a) * veclen(*b)))));
+	unit(&a);
+	unit(&b);
+	scalar = calculate_dot(&a, &b);
+	if (scalar < 0)
+		scalar *= -1;
+	return ((acos(scalar)) / PI);
 }
 
 /**
@@ -177,6 +179,6 @@ t_vec	reflect(t_vec in, t_vec norm)
 	unit(&in);
 	tang = cross(cross(in, norm), norm);
 	unit(&tang);
-	product(&tang, -2 * cos(angle(&in, &tang)));
+	product(&tang, -2 * cos(angle(in, tang)));
 	return (connect(in, tang));
 }

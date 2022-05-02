@@ -24,6 +24,7 @@ int	colorme(t_mrt *mrt, t_obj *obj, t_vec ray)
 	res = 0;
 	impact = mrt->cam->cor;
 	addto(&impact, ray);
+				norm = init_vec(1,0,0);
 	if (obj && obj->id == 'S')
 	{
 		norm = connect(obj->cor, impact);
@@ -33,7 +34,7 @@ int	colorme(t_mrt *mrt, t_obj *obj, t_vec ray)
 		norm = obj->v_o;
 	}
 	light = connect(impact, mrt->l->cor);
-	bright = angle(&light, &norm) * PI/2;
+	bright = angle(light, norm);
 	return (create_trgb(0,(int)(bright * light.x),(int)(bright * light.y),(int)(bright * light.z)));
 	// if (shadow(mrt, impact, 0) == 1)
 	// {

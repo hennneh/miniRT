@@ -76,7 +76,7 @@ void	addto(t_vec *a, t_vec b);
 void	product(t_vec *a, double m);
 void	resize(t_vec *a, double m);
 void	unit(t_vec	*a);
-double	angle(t_vec *a, t_vec *b);
+double	angle(t_vec a, t_vec b);
 double	calculate_dot(t_vec *a, t_vec *b);
 t_vec	reflect(t_vec in, t_vec norm);
 
