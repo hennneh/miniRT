@@ -11,54 +11,55 @@
 //	i'm_already_tracer
 //	Amazing_trace,how_sweet_the_sound
 
-int	colorme(t_mrt *mrt, t_obj *obj, double *ray)
+int	colorme(t_mrt *mrt, t_obj *obj, t_vec ray)
 {
-	double	*impact;
-	// double	*norm;
-	// double	*light;
+	t_vec	impact;
+	t_vec	norm;
+	t_vec	light;
 	int		res;
-	// double	bright;
+	double	bright = 10;
 
-	if (!obj)
-		return (0);
+	// if (!obj) // point of failiure
+	// 	return (0);
 	res = 0;
-	impact = ray_alloc(mrt->cam->cor[0], mrt->cam->cor[1], mrt->cam->cor[2]);
-	addto(impact, ray);
-	// if (obj->id == 'S')
-	// {
-	// 	norm = connect(obj->cor, impact);
-	// }
-	// else
-	// {
-	// 	norm = ray_alloc(obj->v_o[0], obj->v_o[1], obj->v_o[2]);
-	// }
-	// light = connect(impact, mrt->l->cor);
-	// bright = (angle(light, norm)) / 100000 * mrt->l->brit;
-	if (shadow(mrt, impact, 0) == 1)
+	impact = mrt->cam->cor;
+	addto(&impact, ray);
+	if (obj && obj->id == 'S')
 	{
-		return 0;
+		norm = connect(obj->cor, impact);
 	}
+	else if (obj)
+	{
+		norm = obj->v_o;
+	}
+	light = connect(impact, mrt->l->cor);
+	bright = angle(&light, &norm) * PI/2;
+	return (create_trgb(0,(int)(bright * light.x),(int)(bright * light.y),(int)(bright * light.z)));
+	// if (shadow(mrt, impact, 0) == 1)
+	// {
+	// 	return 0;
+	// }
 	if (obj && (obj->id == 'S' || obj->id == 'P'))
 		res = create_trgb(0,	obj->r
 							,	obj->g
 							,	obj->b);
-	else
-		return (0);
 	return (res);
 }
 
-int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
+int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img)
 {
-	int		sd;
-	int		col;
+	double	sd;
+	double	col;
+	int		rgb;
 	int		i;
 	t_obj	*near;
-	double	*ray;
+	t_vec	ray;
 
 	sd = RENDER_DISTANCE;
 	near = NULL;
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	i = 0;
+	col = 0;
 	while (mrt->obj[i])
 	{
 		if (mrt->obj[i]->id == 'S')
@@ -72,7 +73,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 		}
 		else if (mrt->obj[i]->id == 'P')
 		{
-			col = ROUND_ERROR * plane_intercept(mrt, ray, mrt->obj[i]);
+			col = ROUND_ERROR * hit_plane(mrt, ray, mrt->obj[i]);
 			if (col < sd && col > 0)
 			{
 				near = mrt->obj[i];
@@ -81,9 +82,9 @@ int	nachfolger(int x, int y, t_mrt *mrt, double **scr, t_data *img)
 		}
 		i++;
 	}
-	unit(ray);
-	product(ray, col);
-	col = colorme(mrt, near, ray);
-	my_mlx_pixel_put(img, x, y, col);
+	unit(&ray);
+	product(&ray, col);
+	rgb = colorme(mrt, NULL, ray);
+	my_mlx_pixel_put(img, x, y, rgb);
 	return (0);
 }

@@ -18,8 +18,7 @@ SRC =	$(SR)main.c \
 		$(UT)rt_count.c \
 		$(UT)rt_whtspc.c \
 		$(GE)geo_maths.c \
-		$(GE)geo_maths1.c \
-		$(GE)plane_interception.c \
+		$(GE)ray_plane.c \
 		$(GE)ray_sphere.c \
 		src/shadow/shadow.c \
 		src/setup/rayinit.c \
