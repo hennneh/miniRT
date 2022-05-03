@@ -1,5 +1,7 @@
 #include "../../inc/minirt.h"
 
+#define EPSILON 0.00001
+
 double	cylinder_intersect(double *pos, double *dir, double radius, double height, double *ray_or, double *ray_dir)
 {
 	double	a;
@@ -33,19 +35,6 @@ double	cylinder_intersect(double *pos, double *dir, double radius, double height
 		return (-1.0);
 }
 
-double	*normalize(double *vector)
-{
-	double	len;
-	double	*v;
-
-	v = malloc(sizeof(double) * 3);
-	len = sqrt(pow(vector[0], 2) + pow(vector[1], 2) + pow(vector[2], 2));
-	v[0] = vector[0] / len;
-	v[1] = vector[1] / len;
-	v[2] = vector[2] / len;
-	return (v);
-}
-
 double	*get_vector(double *point_one, double *point_two)
 {
 	double	*vec;
@@ -57,66 +46,49 @@ double	*get_vector(double *point_one, double *point_two)
 	return (vec);
 }
 
-void	cylinder_coefficient(double *pos, double *dir, double radius, double *tmp, double *ray_or, double *ray_dir)
+t_vec	vec_product(t_vec a, double m)
 {
-	double	*v;
-	double	*n;
+	t_vec	res;
 
-	n = normalize(dir);
-	v = get_vector(pos, ray_or);
-	
-	tmp[0] = 1 - pow(calculate_dot(ray_dir, n), 2);
-	tmp[1] = 2 * (calculate_dot(ray_dir, v) - calculate_dot(ray_dir, n) * calculate_dot(v, n));
-	tmp[2] = calculate_dot(v, NULL) - pow(calculate_dot(v, n), 2) - pow(radius, 2);
-	free(n);
-	free(v);
-	tmp[3] = pow(tmp[1], 2) - 4 * tmp[0] * tmp[2];
+	res.x = a.x * m;
+	res.y = a.y * m;
+	res.z = a.z * m;
+	return (res);
 }
 
-double	new_cylinder_intersect(double *pos, double *dir, double radius, double height, double *ray_or, double *ray_dir)
+void	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec *ray_or, t_vec *ray_dir)
 {
-	double	t[2];
-	double	*tmp;
-	double	h[3];
+	t_vec	v;
+	t_vec	u;
+	t_vec	normalized;
+	t_vec	dir;
 
-	(void) height;
-	tmp = malloc(sizeof(double) * 4);
-	//double *ray_dir = normalize(ray_dir);
-	cylinder_coefficient(pos, dir, radius, tmp, ray_or, ray_dir);
-	if (tmp[3] < 0)
+	normalized = *dir;
+	unit(&normalized);
+	v = vec_product(normalized, calculate_dot(ray_dir, &normalized));
+	u = vec_product(normalized, calculate_dot(ray_or, pos));
+	u = connect(u, connect(*pos, *ray_or));
+	double a = calculate_dot(&v, &v);//1 - pow(calculate_dot(ray_dir, n), 2);
+	double b = 2 * calculate_dot(&v, &u);
+	double c = calculate_dot(&u, &u) - pow(radius, 2);
+	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
+	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
+	if ((x[0] != x[0] && x[1] != x[1]) || (x[0] < EPSILON && x[1] < EPSILON))
 	{
-		free(tmp);
+		x[0] = INFINITY;
+		x[1] = INFINITY;
 		return (0);
 	}
-	//printf("tmp[3] = %f\n", tmp[3]);
-	t[0] = (-tmp[1] - sqrt(tmp[3])) / (2 * tmp[0]);
-	if (t[0] < 0.0)
-		t[0] = (-tmp[1] + sqrt(tmp[3])) / (2 * tmp[0]);
-	if (t[0] < 0.0)
-	{
-		free(tmp);
-		return (0);
-	}
-	h[0] = ray_dir[0] * t[0] + ray_or[0] - pos[0];
-	h[1] = ray_dir[1] * t[0] + ray_or[1] - pos[1];
-	h[2] = ray_dir[2] * t[0] + ray_or[2] - pos[2];
-	t[1] = calculate_dot(dir, h);
-	free(tmp);
-	//printf("1: %f\n", t[1]);
-	// if (t[1] < 0 || t[1] > height)
-	// {
-	// 	printf("%f\n", t[1]);
-	// 	return (0);
-	// }
-	//printf("0: %f\n", t[0]);
-	return(fabs(t[0]));
-
+	return (1);
 }
 
-// double newer_cylinder_intersection(double *pos, double *dir, double radius, double height, double *ray_or, double *ray_dir)
-// {
-// 	double *x = connect(pos, ray_or);
-	
-// 	double *norm = normalize();
-// 	return (0.0);
-// }
+double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
+{
+	double	x[2];
+	double	dist[2];
+	t_vec	normalized;
+
+	normalized = *dir;
+	dist[0] = calculate_dot();
+
+}
