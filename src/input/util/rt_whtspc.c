@@ -65,3 +65,56 @@ char	*trm_whtsp(char *s, int dir)
 		return ("");
 	return (ft_substr(s, pos1, pos2 - pos1));
 }
+
+static	int	ft_strcount_wh(char const *s)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 1;
+	while (s[i])
+	{
+		if (ft_white(s[i]) && s[i + 1] && !ft_white(s[i + 1]))
+			count ++;
+		i++;
+	}
+	return (count);
+}
+
+/**
+ * Allocates ft_calloc and returns an array of strings obtained by
+ * splitting ’s’ using whitespace as a delimiter. The array must be
+ * ended by a NULL pointer. Returns array of new strings resulting from the
+ * split. NULL if the allocation fails.
+ * @param s [char const *] char * to be split
+ * @return [char **] split array
+*/
+char	**split_wh(char const *s)
+{
+	char	**array;
+	int		count;
+	int		pos1;
+	int		pos2;
+
+	if (!s)
+		return (0);
+	count = 0;
+	pos1 = 0;
+	pos2 = 0;
+	array = ft_calloc((ft_strcount_wh(s) + 1), sizeof(char *));
+	if (!array)
+		return (0);
+	while (s[pos2])
+	{
+		while (s[pos2] && ft_white(s[pos2]))
+			pos2++;
+		pos1 = pos2;
+		while (s[pos2] && !ft_white(s[pos2]))
+			pos2++;
+		if (!ft_white(s[pos2 - 1]))
+			array[count] = ft_substr(s, pos1, pos2 - pos1);
+		count ++;
+	}
+	return (array);
+}

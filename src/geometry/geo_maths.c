@@ -6,28 +6,35 @@
  * @param b [double*]
  * @return [double*]
 */
-double	*cross(double *a, double *b)
+t_vec	cross(t_vec a, t_vec b)
 {
-	if (!a || !b)
-		return(NULL);
-	double	*res;
+	t_vec	res;
 
-	res = malloc(3 * sizeof(double));
-	res[0] = (a[1] * b[2]) - (a[2] * b[1]);
-	res[1] = (a[2] * b[0]) - (a[0] * b[2]);
-	res[2] = (a[0] * b[1]) - (a[1] * b[0]);
-	unit(res);
+	res.x = (a.y * b.z) - (a.z * b.y);
+	res.y = (a.z * b.x) - (a.x * b.z);
+	res.z = (a.x * b.y) - (a.y * b.x);
+	unit(&res);
 	return (res);
 }
 
-double	*ray_alloc(double x, double y, double z)
+t_vec	init_vec(double x, double y, double z)
 {
-	double	*res;
+	t_vec	res;
 
-	res = malloc(3 * sizeof(double));
-	res[0] = x;
-	res[1] = y;
-	res[2] = z;
+	res.x = x;
+	res.y = y;
+	res.z = z;
+	return (res);
+}
+
+t_vec	*vec_alloc(t_vec clone)
+{
+	t_vec	*res;
+
+	res = malloc(sizeof(t_vec));
+	res->x = clone.x;
+	res->y = clone.y;
+	res->z = clone.z;
 	return (res);
 }
 
@@ -36,10 +43,10 @@ double	*ray_alloc(double x, double y, double z)
  * @param a [double*]
  * @return [double*]
 */
-double	veclen(double *a)
+double	veclen(t_vec a)
 {
-	if (a && (a[0] || a[1] || a[2]))
-		return(pow(pow(a[0], 2) + pow(a[1], 2) + pow(a[2], 2), 0.5));
+	if (a.x || a.y || a.z)
+		return(pow(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2), 0.5));
 	return(0);
 }
 
@@ -49,16 +56,13 @@ double	veclen(double *a)
  * @param b [double*] ending point
  * @return [double*]
 */
-double	*connect(double *a, double *b)
+t_vec	connect(t_vec a, t_vec b)
 {
-	if (!a || !b)
-		return(NULL);
-	double	*res;
+	t_vec	res;
 
-	res = malloc(3 * sizeof(double));
-	res[0] = a[0] - b[0];
-	res[1] = a[1] - b[1];
-	res[2] = a[2] - b[2];
+	res.x = b.x - a.x;
+	res.y = b.y - a.y;
+	res.z = b.z - a.z;
 	return (res);
 }
 
@@ -67,13 +71,11 @@ double	*connect(double *a, double *b)
  * @param a [double*] the vector being added to
  * @param b [double*] the vector to add
 */
-void	addto(double *a, double *b)
+void	addto(t_vec *a, t_vec b)
 {
-	if (!a || !b)
-		return ;
-	a[0] += b[0];
-	a[1] += b[1];
-	a[2] += b[2];
+	a->x += b.x;
+	a->y += b.y;
+	a->z += b.z;
 }
 
 /**
@@ -81,13 +83,13 @@ void	addto(double *a, double *b)
  * @param a [double*] the vector mutiplied
  * @param m [double] the multiplicant
 */
-void	product(double *a, double m)
+void	product(t_vec *a, double m)
 {
 	if (!a)
 		return ;
-	a[0] *= m;
-	a[1] *= m;
-	a[2] *= m;
+	a->x *= m;
+	a->y *= m;
+	a->z *= m;
 }
 
 /**
@@ -95,17 +97,18 @@ void	product(double *a, double m)
  * @param a [double*] the vector
  * @param m [double] to be added length
 */
-void	resize(double *a, double m)
+void	resize(t_vec *a, double m)
 {
-	double	o[3];
+	t_vec	o;
 
 	if (!a)
 		return ;
-	o[0] = a[0];
-	o[1] = a[1];
-	o[2] = a[2];
-	unit(o);
-	product(o, m);
+	o.x = a->x;
+	o.y = a->y;
+	o.z = a->z;
+	unit(&o);
+	m -= 1;
+	product(&o, m);
 	addto(a, o);
 }
 
@@ -114,32 +117,50 @@ void	resize(double *a, double m)
  * @param a [double*] vector to operade on
  * @return [void]
 */
-void	unit(double	*a)
+void	unit(t_vec	*a)
 {
 	if (!a)
 		return ;
 	double	d;
 
-	d = 1 / veclen(a);
-	a[0] *= d;
-	a[1] *= d;
-	a[2] *= d;
+	d = 1 / veclen(*a);
+	a->x *= d;
+	a->y *= d;
+	a->z *= d;
 }
 /**
  * @brief calculate the angle between two vectors
  * @param a [double*]
  * @param b [double*]
 */
-double	angle(double *a, double *b)
+double	angle(t_vec a, t_vec b)
 {
 	double scalar;
 
-	if (!a || !b)
-		return(0);
-	scalar = ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]));
+	unit(&a);
+	unit(&b);
+	scalar = calculate_dot(&a, &b);
 	if (scalar < 0)
 		scalar *= -1;
-	return (acos(scalar / (veclen(a) * veclen(b))));
+	return ((acos(scalar)) / PI);
+}
+
+/**
+ * @brief Return the dot calculations of two Vectors
+ * 
+ * @param a Pointer of type double
+ * @param b Pointer of type double
+ * @return double
+ */
+double	calculate_dot(t_vec *a, t_vec *b)
+{
+	double	dot;
+
+	if (b != NULL)
+		dot = a->x * b->x + a->y * b->y + a->z * b->z;
+	else
+		dot = a->x * a->x + a->y * a->y + a->z * a->z;
+	return (dot);
 }
 
 /**
@@ -151,18 +172,13 @@ double	angle(double *a, double *b)
  * -> TANG; which we will use to calculate the reflection in 2d geometry.
  * a connecting vector between IN (1) and TANG (calc) is then returned as the result
 */
-double	*reflect(double in[3], double norm[3])
+t_vec	reflect(t_vec in, t_vec norm)
 {
-	double	*tmp;
-	double	*tang;
-	double	*res;
+	t_vec	tang;
 
-	unit(in);
-	tmp = cross(in, norm);
-	tang = cross(tmp, norm);
-	free(tmp);
-	unit(tang);
-	product(tang, -2 * cos(angle(in, tang)));
-	res = connect(in, tang);
-	return (res);
+	unit(&in);
+	tang = cross(cross(in, norm), norm);
+	unit(&tang);
+	product(&tang, -2 * cos(angle(in, tang)));
+	return (connect(in, tang));
 }
