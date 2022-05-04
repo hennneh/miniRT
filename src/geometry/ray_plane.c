@@ -20,17 +20,21 @@
  * t = ((p0 - l0) * n) / (l * n)
  */
 
-double	plane_intercept(t_mrt *mrt, double *l, t_pl *plane)
+double	hit_plane(t_mrt *mrt, t_vec ray, t_obj *plane)
 {
 	double	t;
+	double	test;
+	t_vec	tmp;
 
 	t = 0;
-	if (!calculate_dot(plane->v_o, l))
+	test = calculate_dot(&plane->v_o, &ray);
+	if (!test || fabs(test) < 0.0001)
 		return (0);
 	else
 	{
-		t = (calculate_dot(connect(mrt->cam->cor, plane->cor), plane->v_o)) / calculate_dot(plane->v_o, l);
-		if (t > 0)
+		tmp = connect(mrt->cam->cor, plane->cor);
+		t = (calculate_dot(&tmp, &plane->v_o) / test);
+		if (t >= 0)
 			return (t);
 		return (0);
 	}

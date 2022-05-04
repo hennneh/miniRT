@@ -29,24 +29,28 @@ int	check_deci(char *s)
  * @param flag [int] 0 if x,y,z, cor; 1 if v_o
  * @return [int] 0 if succesful; 1 if error;
 */
-int	init_cor(char **info, double *cor, int flag)
+int	init_cor(char **info, t_vec *cor, int flag)
 {
 	int	i;
+	double	tmp[3];
 
 	ft_bzero(cor, 3 * sizeof(double));
 	i = 0;
 	while (info[i])
 	{
 		if (i > 2 || check_deci(info[i]) > 1 || ft_isdouble(info[i]))
-			return (1);//ERROR
-		cor[i] = ft_atof(info[i]);
-		if (flag == 1 && (cor[i] < -1 || cor[i] > 1))
-			return (1);//ERROR
+			return (free_2dstr(info) + 1);//ERROR
+		tmp[i] = ft_atof(info[i]);
+		if (flag == 1 && (tmp[i] < -1 || tmp[i] > 1))
+			return (free_2dstr(info) + 1);//ERROR
 		i ++;
 	}
+	cor->x = tmp[0];
+	cor->y = tmp[1];
+	cor->z = tmp[2];
 	if (i != 3)
-		return (1);
-	return (0);
+		return (free_2dstr(info) + 1);
+	return (free_2dstr(info));
 }
 
 /**
@@ -69,10 +73,10 @@ int	init_rgb(char **info, int *r, int *g, int *b)
 	while (info[i])
 	{
 		if (i > 2 || ft_isnumeric(info[i]))
-			return (1);
+			return (free_2dstr(info) + 1);
 		tmp = ft_atoi(info[i]);
 		if (tmp < 0 || tmp > 255)
-			return (1);
+			return (free_2dstr(info) + 1);
 		if (i == 0)
 			*r = tmp;
 		if (i == 1)
@@ -82,8 +86,8 @@ int	init_rgb(char **info, int *r, int *g, int *b)
 		i ++;
 	}
 	if (i != 3)
-		return (1);
-	return (0);
+		return (free_2dstr(info) + 1);
+	return (free_2dstr(info));
 }
 
 /**

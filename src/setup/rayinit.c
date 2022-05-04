@@ -21,28 +21,22 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
  * 					[2]: direction vector of the correct length
  * distance = acos (FOV/2) * ("WDTH")
 */
-double	**scream(t_cam *cam)
+t_vec	*scream(t_cam *cam)
 {
-	double	**res;
-	double	*tmp;
+	t_vec	*res;
 
-	res = malloc(3 * sizeof(double **));
-	res[0] = malloc(3 * sizeof(double *));
-	if (cam->v_o[0] == 0 && cam->v_o[1] == 0)
-		res[0] = ray_alloc(1, 0, 0);
+	res = malloc(3 * sizeof(t_vec));
+	if (cam->v_o.x == 0 && cam->v_o.y == 0)
+		res[0] = init_vec(1, 0, 0);
 	else
 	{
-		tmp = ray_alloc(0, 0, 1);
-		res[0] = cross(cam->v_o, tmp);
-		unit(res[0]);
-		free(tmp);
+		res[0] = cross(cam->v_o, init_vec(0, 0, 1));
+		unit(&res[0]);
 	}
-	res[1] = malloc(3 * sizeof(double *));
 	res[1] = cross(cam->v_o, res[0]);
-	unit(res[1]);
-	res[2] = malloc(3 * sizeof(double));
-	res[2] = ray_alloc(cam->v_o[0], cam->v_o[1], cam->v_o[2]);
-	resize(res[2], cos(cam->fov / 2) * (((WDTH * DIVERGENCE) / 2) / cos(PI / 2 - (cam->fov / 2))));
+	unit(&res[1]);
+	res[2] = init_vec(cam->v_o.x, cam->v_o.y, cam->v_o.z);
+	resize(&res[2], cos(cam->fov / 2) * (((WDTH * DIVERGENCE) / 2) / cos(PI / 2 - (cam->fov / 2))));
 	return(res);
 }
 
@@ -55,55 +49,18 @@ double	**scream(t_cam *cam)
  * @param scr [double**] defining parameters of the projection screen
  * @brief return a ray representing a PIxel with the xy offset given
 */
-double	*single_ray(int x, int y, t_cam *cam, double **scr)
+t_vec	single_ray(int x, int y, t_cam *cam, t_vec	scr[3])
 {
-	double	addict[3];
-	double	*tmp;
-	double	*res;
+	t_vec	summand;
+	t_vec	tmp;
 
-	addict[0] = cam->cor[0];
-	addict[1] = cam->cor[1];
-	addict[2] = cam->cor[2];
-	addto(addict, scr[2]);
-	tmp = ray_alloc(scr[0][0], scr[0][1], scr[0][2]);
-	product(tmp, x * DIVERGENCE);
-	addto(addict, tmp);
-	free(tmp);
-	tmp = ray_alloc(scr[1][0], scr[1][1], scr[1][2]);
-	product(tmp, y * DIVERGENCE);
-	addto(addict, tmp);
-	free(tmp);
-	res = connect(cam->cor, addict);
-	// unit(res);
-	return (res);
-}
-
-/**
- * @brief calculate and set a ray foreach PIxel to be displayed
- * @param mrt [t_mrt*] our main struct
-*/
-void	init_rays(t_mrt *mrt)
-{
-	int		x;
-	int		y;
-	double	**screen;
-
-	screen = scream(mrt->cam);
-	y = 0;
-	mrt->ray = ft_calloc(HGHT + 3, sizeof(double **));
-	if (!mrt->ray)
-		printf("malloc_error\n");
-	while(y < HGHT)
-	{
-		mrt->ray[y] = ft_calloc(WDTH + 3, sizeof(double *));
-		if (!mrt->ray[y])
-			printf("malloc_error\n");
-		x = 0;
-		while (x < WDTH)
-		{
-			(((mrt->ray)[y])[x]) = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, screen);
-			x++;
-		}
-		y++;
-	}
+	summand = cam->cor;
+	addto(&summand, scr[2]);
+	tmp = scr[0];
+	product(&tmp, x * DIVERGENCE);
+	addto(&summand, tmp);
+	tmp = scr[1];
+	product(&tmp, y * DIVERGENCE);
+	addto(&summand, tmp);
+	return (connect(cam->cor, summand));
 }
