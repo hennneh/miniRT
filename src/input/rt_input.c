@@ -78,9 +78,13 @@ int	input(t_mrt *mrt, char *file)
 	good = 0;
 	ft_bzero(count, sizeof(int) * 4);
 	if (!count_input(lst, count, NULL) && !check_count(count))
+	{
 		good = parse_input(mrt, lst, count[3], 0);
+	}
 	else
+	{
 		good = -1;
+	}
 	ft_lstclear(&lst, free);
 	if (good > 0)
 		rt_er_exit(mrt, good, count[3]);

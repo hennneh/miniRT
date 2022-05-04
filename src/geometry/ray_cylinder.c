@@ -56,30 +56,63 @@ t_vec	vec_product(t_vec a, double m)
 	return (res);
 }
 
-void	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec *ray_or, t_vec *ray_dir)
+int	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec *ray_or, t_vec *ray_dir)
 {
 	t_vec	v;
 	t_vec	u;
 	t_vec	normalized;
-	t_vec	dir;
 
 	normalized = *dir;
 	unit(&normalized);
 	v = vec_product(normalized, calculate_dot(ray_dir, &normalized));
+	v = connect(v, *ray_dir);
 	u = vec_product(normalized, calculate_dot(ray_or, pos));
 	u = connect(u, connect(*pos, *ray_or));
 	double a = calculate_dot(&v, &v);//1 - pow(calculate_dot(ray_dir, n), 2);
 	double b = 2 * calculate_dot(&v, &u);
 	double c = calculate_dot(&u, &u) - pow(radius, 2);
-	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
-	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
+	printf("a: %f \nb: %f\nc: %f\n", a, b, c);
+	x[0] = (-b + sqrt(pow(b * -1, 2) - 4 * a * c)) - (2 * a);
+	x[1] = (-b - sqrt(pow(b * -1, 2) - 4 * a * c)) - (2 * a);
+	x[0] = fabs(x[0]);
+	x[1] = fabs(x[1]);
 	if ((x[0] != x[0] && x[1] != x[1]) || (x[0] < EPSILON && x[1] < EPSILON))
 	{
+		printf("this is shit i guess\nx1 = %f\nx2 = %f\n", x[0], x[1]);
 		x[0] = INFINITY;
 		x[1] = INFINITY;
 		return (0);
 	}
 	return (1);
+}
+
+t_vec	calc_cy_normal(double *x, t_vec pos, t_vec dir, double *dist, t_vec ray_or, t_vec ray_dir, double height)
+{
+	double	d;
+	double	t;
+	t_vec	normalized;
+
+	normalized = dir;
+	unit(&normalized);
+	if ((dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON) && (dist[1] >= 0 && dist[1] <= height && x[1] > EPSILON))
+	{
+		d = x[0] < x[1] ? dist[0] : dist[1];
+		t = x[0] < x[1] ? x[0] : x[1];
+	}
+	else if(dist[0] >= 0 && dist[0] <= height)
+	{
+		d = dist[0];
+		t = x[0];
+	}
+	else
+	{
+		d = dist[1];
+		t = x[1];
+	}
+	x[0] = t;
+	t_vec	tmp = connect(connect(ray_or, pos), connect(vec_product(normalized, d), vec_product(ray_dir, t)));
+	unit(&tmp);
+	return (tmp);
 }
 
 double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
@@ -89,6 +122,17 @@ double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double heig
 	t_vec	normalized;
 
 	normalized = *dir;
-	dist[0] = calculate_dot();
+	unit(&normalized);
+	if (cylinder_coefficient(pos, dir, radius, x, ray_or, ray_dir) == 0)
+		return (INFINITY);
 
+	t_vec helper = connect(*dir, connect(connect(*ray_or, *pos), vec_product(*dir, x[0])));
+	dist[0] = calculate_dot(&normalized, &helper);
+	printf("somewhere between\n");
+	helper = connect(*dir, connect(connect(*ray_or, *pos), vec_product(*dir, x[1])));
+	dist[1] = calculate_dot(&normalized, &helper);
+	if (!((dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON) || (dist[1] >= 0 && dist[1] <= height && x[0] > EPSILON)))
+		return (INFINITY);
+	calc_cy_normal(x, *pos, *dir, dist, *ray_or, *ray_dir, height);
+	return (x[0]);
 }
