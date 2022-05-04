@@ -29,12 +29,12 @@ OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) inc/minirt.h
 	@make bonus -C lft/
 	@make -C mlx/
 	$(CC) $(FLAGS) -Lmlx -lmlx -L/usr/X11/include/../lib -lXext -lX11 -lm $(OBJ) mlx/libmlx.a lft/libft.a -o $@
 
-%.o: %.c
+%.o: %.c inc/minirt.h
 	$(CC) $(FLAGS) -Imlx -c $< -o $@
 
 clean:

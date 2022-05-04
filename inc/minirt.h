@@ -5,8 +5,6 @@
  * DEFINES
  */
 
-
-# define ROUND_ERROR 1000
 # define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640

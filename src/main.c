@@ -45,13 +45,13 @@ void	debug(t_mrt *mrt)
 	int	x;
 	int	y;
 	int	i;
-	int	shad;
+	// int	shad;
 	double	d;
-	double	bright;
+	// double	bright;
 	t_vec	ray;
 	t_vec	impact;
 	t_vec	norm;
-	t_vec	light;
+	// t_vec	light;
 	t_vec	*scr;
 
 	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
@@ -67,12 +67,12 @@ void	debug(t_mrt *mrt)
 				norm = init_vec(1,0,0);
 		if (mrt->obj[i]->id == 'S')
 		{
-			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
+			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
 			norm = connect(impact, mrt->obj[i]->cor);
 		}
 		if (mrt->obj[i]->id == 'P')
 		{
-			d = ROUND_ERROR * hit_plane(mrt, ray, mrt->obj[i]);
+			d = hit_plane(mrt, ray, mrt->obj[i]);
 			norm = init_vec(mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z);
 		}
 		if (mrt->obj[i]->id == 'Z')
@@ -83,16 +83,18 @@ void	debug(t_mrt *mrt)
 		if (d)
 		{
 			resize(&ray, d);
-			printf("KIND %C	, at a distance of %lf\nInput Colors R%d G%d B%d\n", mrt->obj[i]->id, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-			printf("norm of object  %lf  %lf  %lf\n", norm.x, norm.y, norm.z);
-			impact = mrt->cam->cor;
-			addto(&impact, ray);
-			light = connect(impact, mrt->l->cor);
-			bright = angle(light, norm);
-			printf("light %lf %lf %lf\n", light.x, light.y, light.z);
-			printf("\t\t\tangle %lf \n", bright + 1);
-			shad = shadow(mrt, impact, 'P');
-			printf("shadow ? %i\n", shad);
+			printf("KIND %C	, at a distance of %lf\n", mrt->obj[i]->id, d);
+			printf("Input Colors R%d G%d B%d\n", mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+			// printf("norm of object  %lf  %lf  %lf\n", norm.x, norm.y, norm.z);
+			// impact = mrt->cam->cor;
+			// addto(&impact, ray);
+			// light = connect(impact, mrt->l->cor);
+			// unit (&norm);
+			// bright = angle(light, norm);
+			// printf("light %lf %lf %lf\n", light.x, light.y, light.z);
+			// printf("\t\t\tangle %lf \n", bright + 1);
+			// shad = shadow(mrt, impact, 'P');
+			printf("object nr %i\n", i);
 		}
 		i++;
 	}
