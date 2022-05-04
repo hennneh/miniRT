@@ -49,7 +49,7 @@ double	*get_vector(double *point_one, double *point_two)
 t_vec	vec_product(t_vec a, double m)
 {
 	t_vec	res;
-
+ 
 	res.x = a.x * m;
 	res.y = a.y * m;
 	res.z = a.z * m;
@@ -72,8 +72,8 @@ int	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec
 	double b = 2 * calculate_dot(&v, &u);
 	double c = calculate_dot(&u, &u) - pow(radius, 2);
 	printf("a: %f \nb: %f\nc: %f\n", a, b, c);
-	x[0] = (-b + sqrt(pow(b * -1, 2) - 4 * a * c)) - (2 * a);
-	x[1] = (-b - sqrt(pow(b * -1, 2) - 4 * a * c)) - (2 * a);
+	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
+	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
 	x[0] = fabs(x[0]);
 	x[1] = fabs(x[1]);
 	if ((x[0] != x[0] && x[1] != x[1]) || (x[0] < EPSILON && x[1] < EPSILON))
