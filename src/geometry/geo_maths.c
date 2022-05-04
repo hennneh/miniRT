@@ -2,9 +2,9 @@
 
 /**
  * @brief return a vector orthogonal to both the given vectors
- * @param a [double*]
- * @param b [double*]
- * @return [double*]
+ * @param a [t_vec]
+ * @param b [t_vec]
+ * @return [t_vec]
 */
 t_vec	cross(t_vec a, t_vec b)
 {
@@ -40,8 +40,8 @@ t_vec	*vec_alloc(t_vec clone)
 
 /**
  * @brief return the length of a vector
- * @param a [double*]
- * @return [double*]
+ * @param a [t_vec]
+ * @return [t_vec]
 */
 double	veclen(t_vec a)
 {
@@ -52,9 +52,9 @@ double	veclen(t_vec a)
 
 /**
  * @brief return a vector connecting two points (! order counts)
- * @param a [double*] starting point
- * @param b [double*] ending point
- * @return [double*]
+ * @param a [t_vec] starting point
+ * @param b [t_vec] ending point
+ * @return [t_vec]
 */
 t_vec	connect(t_vec a, t_vec b)
 {
@@ -68,8 +68,8 @@ t_vec	connect(t_vec a, t_vec b)
 
 /**
  * @brief add a two vectors together
- * @param a [double*] the vector being added to
- * @param b [double*] the vector to add
+ * @param a [t_vec] the vector being added to
+ * @param b [t_vec] the vector to add
 */
 void	addto(t_vec *a, t_vec b)
 {
@@ -80,7 +80,7 @@ void	addto(t_vec *a, t_vec b)
 
 /**
  * @brief multiply a vector by a constant
- * @param a [double*] the vector mutiplied
+ * @param a [t_vec] the vector mutiplied
  * @param m [double] the multiplicant
 */
 void	product(t_vec *a, double m)
@@ -94,7 +94,7 @@ void	product(t_vec *a, double m)
 
 /**
  * @brief add a set distance to a vector
- * @param a [double*] the vector
+ * @param a [t_vec] the vector
  * @param m [double] to be added length
 */
 void	resize(t_vec *a, double m)
@@ -114,7 +114,7 @@ void	resize(t_vec *a, double m)
 
 /**
  * @brief change a vecto to have the total lenth of 1, no change direction
- * @param a [double*] vector to operade on
+ * @param a [t_vec] vector to operade on
  * @return [void]
 */
 void	unit(t_vec	*a)
@@ -130,8 +130,8 @@ void	unit(t_vec	*a)
 }
 /**
  * @brief calculate the angle between two vectors
- * @param a [double*]
- * @param b [double*]
+ * @param a [t_vec]
+ * @param b [t_vec]
 */
 double	angle(t_vec a, t_vec b)
 {
@@ -165,8 +165,8 @@ double	calculate_dot(t_vec *a, t_vec *b)
 
 /**
  * @brief reflect a given vector on a normal-vector
- * @param in [double*] the vector to be reflected
- * @param norm [double*] the achse to reflect over
+ * @param in [t_vec] the vector to be reflected
+ * @param norm [t_vec] the achse to reflect over
  * we create a vector perpendiculliar to NORM and IN
  * and then use that vector to create another, perpendiculliar to NORM but in plane with IN
  * -> TANG; which we will use to calculate the reflection in 2d geometry.

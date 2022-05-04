@@ -19,23 +19,22 @@ int	colorme(t_mrt *mrt, t_obj *obj, t_vec ray)
 	int		res;
 	double	bright = 10;
 
-	// if (!obj) // point of failiure
-	// 	return (0);
+	if (!obj) // point of failiure
+		return (0);
 	res = 0;
 	impact = mrt->cam->cor;
 	addto(&impact, ray);
-				norm = init_vec(1,0,0);
 	if (obj && obj->id == 'S')
 	{
 		norm = connect(obj->cor, impact);
 	}
-	else if (obj)
+	else
 	{
 		norm = obj->v_o;
 	}
+	unit(&norm);
 	light = connect(impact, mrt->l->cor);
-	bright = angle(light, norm);
-	return (create_trgb(0,(int)(bright * light.x),(int)(bright * light.y),(int)(bright * light.z)));
+	bright = angle(light, norm) * 10;
 	// if (shadow(mrt, impact, 0) == 1)
 	// {
 	// 	return 0;
@@ -45,47 +44,43 @@ int	colorme(t_mrt *mrt, t_obj *obj, t_vec ray)
 							,	obj->g
 							,	obj->b);
 	return (res);
+	return (create_trgb(0,(int)(bright * norm.x * 128),(int)(bright * norm.y * 128),(int)(bright * norm.z * 128)));
 }
 
 int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img)
 {
-	double	sd;
-	double	col;
+	double	old_d;
+	double	d;
 	int		rgb;
 	int		i;
 	t_obj	*near;
 	t_vec	ray;
 
-	sd = RENDER_DISTANCE;
 	near = NULL;
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	i = 0;
-	col = 0;
-	while (mrt->obj[i])
+	old_d = RENDER_DISTANCE;
+	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
 	{
+		d = 0;
 		if (mrt->obj[i]->id == 'S')
 		{
-			col = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
-			if (col < sd && col > 0)
-			{
-				near = mrt->obj[i];
-				sd = col;
-			}
+			d = ROUND_ERROR * hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
 		}
-		else if (mrt->obj[i]->id == 'P')
+		if (mrt->obj[i]->id == 'P')
 		{
-			col = ROUND_ERROR * hit_plane(mrt, ray, mrt->obj[i]);
-			if (col < sd && col > 0)
-			{
-				near = mrt->obj[i];
-				sd = col;
-			}
+			d = ROUND_ERROR * hit_plane(mrt, ray, mrt->obj[i]);
+		}
+		if (d && d > 0 && d < old_d)
+		{
+			near = mrt->obj[i];
+			unit(&ray);
+			product(&ray, d);
+			rgb = colorme(mrt, near, ray);
+			my_mlx_pixel_put(img, x, y, rgb);
+			old_d = d;
 		}
 		i++;
 	}
-	unit(&ray);
-	product(&ray, col);
-	rgb = colorme(mrt, NULL, ray);
-	my_mlx_pixel_put(img, x, y, rgb);
 	return (0);
 }
