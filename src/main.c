@@ -79,6 +79,7 @@ void	debug(t_mrt *mrt)
 		{
 			resize(&ray, d);
 			printf("KIND %C	, at a distance of %lf\nInput Colors R%d G%d B%d\n", mrt->obj[i]->id, d, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+			printf("norm of object  %lf  %lf  %lf\n", norm.x, norm.y, norm.z);
 			impact = mrt->cam->cor;
 			addto(&impact, ray);
 			light = connect(impact, mrt->l->cor);

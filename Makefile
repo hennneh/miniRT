@@ -1,4 +1,4 @@
-NAME = miniRT
+NAME = minirt
 CC = gcc
 FLAGS = -Wall -Werror -Wextra
 
