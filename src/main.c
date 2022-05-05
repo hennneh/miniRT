@@ -77,7 +77,7 @@ void	debug(t_mrt *mrt)
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
-			d = ROUND_ERROR * new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &mrt->cam->cor, &ray);
+			d = new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &mrt->cam->cor, &ray);
 			norm = init_vec(mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z);
 		}
 		if (d)
