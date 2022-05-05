@@ -3,7 +3,6 @@
 /**
  * @brief Return the the distance to the given sphere
  * if it hitting as a double else it return -1
- * 
  * @param sph_org Pointer of type double that save the coordinate
  * 				of the sphere point[3]
  * @param sph_rad Radius of the sphere as double

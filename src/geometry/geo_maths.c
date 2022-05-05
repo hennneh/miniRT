@@ -46,8 +46,8 @@ t_vec	*vec_alloc(t_vec clone)
 double	veclen(t_vec a)
 {
 	if (a.x || a.y || a.z)
-		return(pow(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2), 0.5));
-	return(0);
+		return (pow(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2), 0.5));
+	return (0);
 }
 
 /**
@@ -119,15 +119,16 @@ void	resize(t_vec *a, double m)
 */
 void	unit(t_vec	*a)
 {
-	if (!a)
-		return ;
 	double	d;
 
+	if (!a)
+		return ;
 	d = 1 / veclen(*a);
 	a->x *= d;
 	a->y *= d;
 	a->z *= d;
 }
+
 /**
  * @brief calculate the angle between two vectors
  * @param a [t_vec]
@@ -135,7 +136,7 @@ void	unit(t_vec	*a)
 */
 double	angle(t_vec a, t_vec b)
 {
-	double scalar;
+	double	scalar;
 
 	unit(&a);
 	unit(&b);
@@ -168,9 +169,11 @@ double	calculate_dot(t_vec *a, t_vec *b)
  * @param in [t_vec] the vector to be reflected
  * @param norm [t_vec] the achse to reflect over
  * we create a vector perpendiculliar to NORM and IN
- * and then use that vector to create another, perpendiculliar to NORM but in plane with IN
+ * and then use that vector to create another, perpendiculliar to NORM but in
+ * plane with IN
  * -> TANG; which we will use to calculate the reflection in 2d geometry.
- * a connecting vector between IN (1) and TANG (calc) is then returned as the result
+ * a connecting vector between IN (1) and TANG (calc) is then returned as the
+ * result
 */
 t_vec	reflect(t_vec in, t_vec norm)
 {

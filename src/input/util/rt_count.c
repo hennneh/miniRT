@@ -2,7 +2,7 @@
 #include "../../../inc/minirt.h"
 
 /**
- * @param count [int *[6]] [A][C][L][sp][pl][cy]
+ * @param count [int *[3]] [A][C][L][obj]
  * @param tmp [char *] always NULL;
 */
 int	count_input(t_list *lst, int *count, char *tmp)
@@ -10,8 +10,6 @@ int	count_input(t_list *lst, int *count, char *tmp)
 	while (lst)
 	{
 		tmp = trm_whtsp((char *)lst->content, 2);
-		// if (ft_strlen(tmp) < 3)
-		// 	invalid_line();//ERROR
 		if (tmp[0] == 'A' && ft_white(tmp[1]))
 			count[0]++;
 		else if (tmp[0] == 'C' && ft_white(tmp[1]))
@@ -24,6 +22,11 @@ int	count_input(t_list *lst, int *count, char *tmp)
 			count[3]++;
 		else if (!ft_strncmp(tmp, "cy", 2) && ft_white(tmp[2]))
 			count[3]++;
+		else
+		{
+			free(tmp);
+			return (printf("ERROR\n Line invalid\n"));
+		}
 		free(lst->content);
 		lst->content = tmp;
 		lst = lst->next;
