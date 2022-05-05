@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 		{
 			// my_mlx_pixel_put(&img1, x, y, create_trgb(0, veclen(mrt.ray[y][x]), 0, 0));
 			my_mlx_pixel_put(&img1, x, y, create_trgb(0, 0, -19 * plane_intercept(&mrt, mrt.ray[y][x], mrt.pl[0]), 0));
-			my_mlx_pixel_put(&img2, x, y, create_trgb(0, 0, 0, (unsigned char)cylinder_intersect(mrt.cy[0]->cor, mrt.cy[0]->rad, mrt.cy[0]->hght, mrt.cam->cor, mrt.ray[y][x])));
+			my_mlx_pixel_put(&img2, x, y, create_trgb(0, 0, 0, -1 * (unsigned char)newer_cylinder_intersect(mrt.cy[0]->cor, mrt.cy[0]->v_o, mrt.cy[0]->rad, mrt.cy[0]->hght, mrt.cam->cor, mrt.ray[y][x])));
 			my_mlx_pixel_put(&img3, x, y, create_trgb(0, -100 * hit_sphere(mrt.sp[0]->cor, mrt.sp[0]->rad, mrt.cam->cor, mrt.ray[y][x]), 0, 0));
 			// mlx_putpixel(img4, l, i, create_trgb(mrt.pixels[i][l]->clr_r, mrt.pixels[i][l]->clr_g, mrt.pixels[i][l]->clr_b, mrt.pixels[i][l]->light));
 			if ((x == 0 || x == WDTH - 1) && (y == HGHT/2 || y == HGHT/2 + 1))

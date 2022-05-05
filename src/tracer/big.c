@@ -60,10 +60,10 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = hit_plane(mrt, ray, mrt->obj[i]);
 		}
-		// if (mrt->obj[i]->id == 'Z')
-		// {
-		// 	d = new_cylinder_intersect(NULL);
-		// }
+		if (mrt->obj[i]->id == 'Z')
+		{
+			d = new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &mrt->cam->cor, &ray);
+		}
 		if (d && d > 0 && d < old_d)
 		{
 			near = mrt->obj[i];

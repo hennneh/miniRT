@@ -32,7 +32,7 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count, int flag)
 			flag = init_cyl(mrt->obj, tmp, --count);
 		free_2dstr(tmp);
 		if (flag)
-			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) + count);//ERROR
+			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) + count + 1);//ERROR
 		lst = lst->next;
 	}
 	return (0);
@@ -78,11 +78,15 @@ int	input(t_mrt *mrt, char *file)
 	good = 0;
 	ft_bzero(count, sizeof(int) * 4);
 	if (!count_input(lst, count, NULL) && !check_count(count))
+	{
 		good = parse_input(mrt, lst, count[3], 0);
+	}
 	else
+	{
 		good = -1;
+	}
 	ft_lstclear(&lst, free);
 	if (good > 0)
-		rt_er_exit(mrt, good, count[3]);
+		rt_er_exit(mrt, good - 1, count[3]);
 	return (good);
 }
