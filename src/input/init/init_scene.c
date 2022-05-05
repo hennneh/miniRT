@@ -72,7 +72,7 @@ int	init_lol(t_lol *l, char **info)
 		l->id = 'L';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &l->cor, 0))
 		return (1);
-	if (!info[i] || init_dim(info[i ++], &l->brit, 2))
+	if (!info[i] || init_dim(info[i ++], &l->lr, 2))
 		return (1);
 	if (info[i])
 		return (1);

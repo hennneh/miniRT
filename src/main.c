@@ -95,8 +95,52 @@ int	key_hook(int key, t_mrt *mrt)
 		printf("dimmer light\n");
 		calc(mrt);
 	}
-	if (swtch)
-		printf("%i\n", key);
+	if (key == 65362 && swtch) // UP
+	{
+		t_vec	*scr;
+
+		scr = scream(mrt->cam);
+		unit(&mrt->cam->v_o);
+		addto(&mrt->cam->v_o, v_product(scr[1], -0.2));
+		unit(&mrt->cam->v_o);
+		printf("look up\n");
+		calc(mrt);
+	}
+	else if (key == 65364 && swtch) // DOWN
+	{
+		t_vec	*scr;
+
+		scr = scream(mrt->cam);
+		unit(&mrt->cam->v_o);
+		addto(&mrt->cam->v_o, v_product(scr[1], 0.2));
+		unit(&mrt->cam->v_o);
+		printf("look down\n");
+		calc(mrt);
+	}
+	else if (key == 65361 && swtch) // left
+	{
+		t_vec	*scr;
+
+		scr = scream(mrt->cam);
+		unit(&mrt->cam->v_o);
+		addto(&mrt->cam->v_o, v_product(scr[0], -0.2));
+		unit(&mrt->cam->v_o);
+		printf("look left\n");
+		calc(mrt);
+	}
+	else if (key == 65363 && swtch) // right
+	{
+		t_vec	*scr;
+
+		scr = scream(mrt->cam);
+		unit(&mrt->cam->v_o);
+		addto(&mrt->cam->v_o, v_product(scr[0], 0.2));
+		unit(&mrt->cam->v_o);
+		printf("look right\n");
+		calc(mrt);
+	}
+	// if (swtch)
+	// 	printf("%i\n", key);
 	return (0);
 }
 
