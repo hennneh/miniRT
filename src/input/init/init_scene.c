@@ -52,6 +52,7 @@ int	init_cam(t_cam *ca, char **info)
 	if (ca->v_o.x == 0.0 && ca->v_o.y == 0.0 && ca->v_o.z == 0.0)
 		ca->v_o.x = 1.0;
 	// printf("good Camera\n");//DELETE
+	limit(&ca->fov, 179.9, 0);
 	return (0);
 }
 

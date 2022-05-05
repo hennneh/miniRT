@@ -8,7 +8,7 @@
 # define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
-# define DIVERGENCE 0.1
+# define DIVERGENCE 0.001
 # define PI 3.14159265359
 
 /*
@@ -117,6 +117,7 @@ char	**split_wh(char const *s);
 
 int		count_input(t_list *lst, int *count, char *tmp);
 int		check_count(int *count);
+void	limit(double *var, double upper, double lower);
 
 //INITIALIZATION
 

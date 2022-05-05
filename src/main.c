@@ -34,6 +34,79 @@ void	calc(t_mrt *mrt)
 	// need to free scr
 }
 
+void	light(t_mrt *mrt, int key)
+{
+	if (key == 43)
+		mrt->l->lr *= 1.125;
+	if (key == 45)
+		mrt->l->lr *= 0.875;
+	if (key == 119)
+		mrt->l->cor.z += 5;
+	if (key == 97)
+		mrt->l->cor.x += 5;
+	if (key == 115)
+		mrt->l->cor.z -= 5;
+	if (key == 100)
+		mrt->l->cor.x -= 5;
+	if (key == 102)
+		mrt->l->cor.y += 5;
+	if (key == 98)
+		mrt->l->cor.y -= 5;
+	limit(&mrt->l->lr, 1, 0);
+	calc(mrt);
+}
+
+void	camera(t_mrt *mrt, int key)
+{
+	t_vec	*scr;
+
+	scr = scream(mrt->cam);
+	unit(&mrt->cam->v_o);
+	if (key == 65362) // UP
+		addto(&mrt->cam->v_o, v_product(scr[1], -0.2));
+	if (key == 65364) // DOWN
+		addto(&mrt->cam->v_o, v_product(scr[1], 0.2));
+	if (key == 65361) // left
+		addto(&mrt->cam->v_o, v_product(scr[0], -0.2));
+	if (key == 65363) // right
+		addto(&mrt->cam->v_o, v_product(scr[0], 0.2));
+	if (key == 228) // Ä
+		mrt->cam->fov = mrt->cam->fov + (10 * (PI / 180));
+	if (key == 35) // #
+		mrt->cam->fov = mrt->cam->fov - (10 * (PI / 180));
+	limit(&mrt->cam->fov, 179 * (PI / 180), 0);
+	unit(&mrt->cam->v_o);
+	calc(mrt);
+}
+
+void	controls()
+{
+	char	*red;
+	char	*green;
+	char	*yellow;
+	char	*normal;
+
+	red = "\033[0;31m";
+	green = "\033[0;32m";
+	yellow = "\033[1;33m";
+	normal = "\033[0m";
+	printf("\n");
+	printf("\t%sControls :%s\n\n", red, normal);
+	printf("%sCamera Tilt   %s┏┉┉┉┓%s     	Field of vision %s┏┉┉┉┓%s     	Light                %s┏┉┉┉┓%s                 %s┏┉┉┉┓%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┇ ⇧ ┇%s     	                %s┇ Ä ┇%s     	     Position        %s┇ W ┇%s      Intensity  %s┇ + ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┏┉┉┉┛   ┗┉┉┉┓%s 	                %s┇ ↑ ┇%s     	                 %s┏┉┉┉┛ ↑ ┗┉┉┉┓%s             %s┇ ↑ ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┇ ⇦       ⇨ ┇%s 	                %s┇   ┇%s     	  Front   Back   %s┇ A ←   → S ┇%s             %s┇   ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┗┉┉┉┓   ┏┉┉┉┛%s 	                %s┇ ↓ ┇%s     	  %s┏┉┉┉┉┉┉┉┉┉┉┉┓  ┗┉┉┉┓ ↓ ┏┉┉┉┛%s             %s┇ ↓ ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┇ ⇩ ┇%s     	                %s┇ # ┇%s     	  %s┇ F ↙   ↗ B ┇      ┇ D ┇%s                 %s┇ - ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┗┉┉┉┛%s     	                %s┗┉┉┉┛%s     	  %s┗┉┉┉┉┉┉┉┉┉┉┉┛      ┗┉┉┉┛%s                 %s┗┉┉┉┛%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("\n");
+	printf("T  Toggle Debug info\n");
+	printf("C  Show this Menu\n");
+	printf("R  Retrace the Pixel at current Mouse-Position\n");
+	printf("ESC  Exit Process\n");
+	printf("\n");
+}
+
 // Trace me baby one more time
 void	debug(t_mrt *mrt)
 {
@@ -71,7 +144,7 @@ int	key_hook(int key, t_mrt *mrt)
 
 	if (key == 65307)
 		end(mrt);
-	if (key == 100) // d
+	if (key == 116) // T
 	{
 		printf("Toggle debugger\n");
 		if (swtch)
@@ -79,68 +152,14 @@ int	key_hook(int key, t_mrt *mrt)
 		else
 			swtch = TRUE;
 	}
-	if (key == 114 && swtch) // r
+	if (key == 99 && swtch) // c
+		controls();
+	else if (key == 114 && swtch) // r
 		debug(mrt);
-	if (key == 43 && swtch) // +
-	{
-		mrt->l->lr *= 1.125;
-		limit(&mrt->l->lr, 1, 0);
-		printf("brighter light\n");
-		calc(mrt);
-	}
-	if (key == 45 && swtch) // -
-	{
-		mrt->l->lr *= 0.875;
-		limit(&mrt->l->lr, 1, 0);
-		printf("dimmer light\n");
-		calc(mrt);
-	}
-	if (key == 65362 && swtch) // UP
-	{
-		t_vec	*scr;
-
-		scr = scream(mrt->cam);
-		unit(&mrt->cam->v_o);
-		addto(&mrt->cam->v_o, v_product(scr[1], -0.2));
-		unit(&mrt->cam->v_o);
-		printf("look up\n");
-		calc(mrt);
-	}
-	else if (key == 65364 && swtch) // DOWN
-	{
-		t_vec	*scr;
-
-		scr = scream(mrt->cam);
-		unit(&mrt->cam->v_o);
-		addto(&mrt->cam->v_o, v_product(scr[1], 0.2));
-		unit(&mrt->cam->v_o);
-		printf("look down\n");
-		calc(mrt);
-	}
-	else if (key == 65361 && swtch) // left
-	{
-		t_vec	*scr;
-
-		scr = scream(mrt->cam);
-		unit(&mrt->cam->v_o);
-		addto(&mrt->cam->v_o, v_product(scr[0], -0.2));
-		unit(&mrt->cam->v_o);
-		printf("look left\n");
-		calc(mrt);
-	}
-	else if (key == 65363 && swtch) // right
-	{
-		t_vec	*scr;
-
-		scr = scream(mrt->cam);
-		unit(&mrt->cam->v_o);
-		addto(&mrt->cam->v_o, v_product(scr[0], 0.2));
-		unit(&mrt->cam->v_o);
-		printf("look right\n");
-		calc(mrt);
-	}
-	// if (swtch)
-	// 	printf("%i\n", key);
+	else if (swtch && (key == 65362 || key == 65364 || key == 65361 || key == 65363 || key == 228 || key == 35))
+		camera(mrt, key);
+	else if (swtch && (key == 119 || key == 97 || key == 115 || key == 100 || key == 102 || key == 98 || key == 43 || key == 45))
+		light(mrt, key);
 	return (0);
 }
 

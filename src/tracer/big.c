@@ -88,14 +88,11 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	else if (near->id == 'P')
 		norm = near->v_o;
 	else /*if (near->id == 'Z')*/
-		norm = near->v_o;
+		norm = cross(near->v_o, cross(impact, connect(impact, near->cor)));
 
 	light = connect(mrt->l->cor, impact);
 	bright = angle(light, norm);
-	if (bright < 0)
-		bright = 0;
-	if (bright > 1)
-		bright = 1;
+	limit(&bright, 1, 0);
 	if (near && p)
 	{
 		printvec(&norm, "Norm");
