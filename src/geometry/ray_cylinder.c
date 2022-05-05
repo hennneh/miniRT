@@ -16,7 +16,7 @@ double	*get_vector(double *point_one, double *point_two)
 t_vec	vec_product(t_vec a, double m)
 {
 	t_vec	res;
- 
+
 	res.x = a.x * m;
 	res.y = a.y * m;
 	res.z = a.z * m;
@@ -79,23 +79,35 @@ t_vec	calc_cy_normal(double *x, t_vec pos, t_vec dir, double *dist, t_vec ray_or
 	return (tmp);
 }
 
-double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
+t_vec	new_pos(t_vec *posi, t_vec *dir, double height, t_vec *norm)
+{
+	t_vec	pos;
+
+	*norm = *dir;
+	unit(norm);
+	pos.x = posi->x - (norm->x * (height / 2));
+	pos.y = posi->y - (norm->y * (height / 2));
+	pos.z = posi->z - (norm->z * (height / 2));
+	return (pos);
+}
+
+double	new_cylinder_intersect(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
 {
 	double	x[2];
 	double	dist[2];
 	t_vec	normalized;
+	t_vec	pos;
+	t_vec	helper;
 
-	normalized = *dir;
-	unit(&normalized);
-	if (cylinder_coefficient(pos, dir, radius, x, ray_or, ray_dir) == 0)
+	pos = new_pos(posi, dir, height, &normalized);
+	if (cylinder_coefficient(&pos, dir, radius, x, ray_or, ray_dir) == 0)
 		return (0);
-
-	t_vec helper = connect(connect(*ray_or, *pos), vec_product(*ray_dir, x[0]));
+	helper = connect(connect(*ray_or, pos), vec_product(*ray_dir, x[0]));
 	dist[0] = calculate_dot(&normalized, &helper);
-	helper = connect(connect(*ray_or, *pos), vec_product(*ray_dir, x[1]));
+	helper = connect(connect(*ray_or, pos), vec_product(*ray_dir, x[1]));
 	dist[1] = calculate_dot(&normalized, &helper);
 	if (!((dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON) || (dist[1] >= 0 && dist[1] <= height && x[0] > EPSILON)))
 		return (0);
-	calc_cy_normal(x, *pos, *dir, dist, *ray_or, *ray_dir, height);
+	calc_cy_normal(x, pos, *dir, dist, *ray_or, *ray_dir, height);
 	return (x[0]);
 }
