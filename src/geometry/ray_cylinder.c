@@ -33,16 +33,14 @@ int	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec
 	unit(&normalized);
 	v = vec_product(normalized, calculate_dot(ray_dir, &normalized));
 	v = connect(v, *ray_dir);
-	t_vec tmp = connect(*ray_or, *pos);
+	t_vec tmp = connect(*pos, *ray_or);
 	u = vec_product(normalized, calculate_dot(&tmp, &normalized));
 	u = connect(u, connect(*pos, *ray_or));
-	double a = calculate_dot(&v, &v);//1 - pow(calculate_dot(ray_dir, n), 2);
+	double a = calculate_dot(&v, &v);
 	double b = 2 * calculate_dot(&v, &u);
 	double c = calculate_dot(&u, &u) - pow(radius, 2);
 	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
 	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
-	//x[0] = fabs(x[0]);
-	//x[1] = fabs(x[1]);
 	if ((x[0] != x[0] && x[1] != x[1]) || (x[0] < EPSILON && x[1] < EPSILON))
 	{
 		x[0] = INFINITY;
