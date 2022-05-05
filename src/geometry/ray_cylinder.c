@@ -33,15 +33,16 @@ int	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec
 	unit(&normalized);
 	v = vec_product(normalized, calculate_dot(ray_dir, &normalized));
 	v = connect(v, *ray_dir);
-	u = vec_product(normalized, calculate_dot(ray_or, pos));
+	t_vec tmp = connect(*ray_or, *pos);
+	u = vec_product(normalized, calculate_dot(&tmp, &normalized));
 	u = connect(u, connect(*pos, *ray_or));
 	double a = calculate_dot(&v, &v);//1 - pow(calculate_dot(ray_dir, n), 2);
 	double b = 2 * calculate_dot(&v, &u);
 	double c = calculate_dot(&u, &u) - pow(radius, 2);
-	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
-	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) - (2 * a);
-	x[0] = fabs(x[0]);
-	x[1] = fabs(x[1]);
+	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
+	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
+	//x[0] = fabs(x[0]);
+	//x[1] = fabs(x[1]);
 	if ((x[0] != x[0] && x[1] != x[1]) || (x[0] < EPSILON && x[1] < EPSILON))
 	{
 		x[0] = INFINITY;
@@ -64,14 +65,14 @@ t_vec	calc_cy_normal(double *x, t_vec pos, t_vec dir, double *dist, t_vec ray_or
 		d = x[0] < x[1] ? dist[0] : dist[1];
 		t = x[0] < x[1] ? x[0] : x[1];
 	}
-	else if(dist[0] >= 0 && dist[0] <= height)
+	else if(dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON)
 	{
 		d = dist[0];
 		t = x[0];
 	}
 	else
 	{
-		d = dist[1];
+		d = dist[1];     
 		t = x[1];
 	}
 	x[0] = t;
@@ -91,9 +92,9 @@ double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double heig
 	if (cylinder_coefficient(pos, dir, radius, x, ray_or, ray_dir) == 0)
 		return (0);
 
-	t_vec helper = connect(normalized, connect(connect(*ray_or, *pos), vec_product(*ray_dir, x[0])));
+	t_vec helper = connect(connect(*ray_or, *pos), vec_product(*ray_dir, x[0]));
 	dist[0] = calculate_dot(&normalized, &helper);
-	helper = connect(normalized, connect(connect(*ray_or, *pos), vec_product(*ray_dir, x[1])));
+	helper = connect(connect(*ray_or, *pos), vec_product(*ray_dir, x[1]));
 	dist[1] = calculate_dot(&normalized, &helper);
 	if (!((dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON) || (dist[1] >= 0 && dist[1] <= height && x[0] > EPSILON)))
 		return (0);
