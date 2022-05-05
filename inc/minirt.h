@@ -72,6 +72,7 @@ double	veclen(t_vec a);
 t_vec	connect(t_vec a, t_vec b);
 void	addto(t_vec *a, t_vec b);
 void	product(t_vec *a, double m);
+t_vec	v_product(t_vec a, double m);
 void	resize(t_vec *a, double m);
 void	unit(t_vec	*a);
 double	angle(t_vec a, t_vec b);
@@ -88,7 +89,7 @@ double	cylinder_intersect(double *pos, double radius, double height, double *ray
 
 int		shadow(t_mrt *mrt, t_vec impact, char p);
 int		colorme(t_mrt *mrt, t_obj *obj, t_vec ray);
-int		nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img);
+int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p);
 
 //SRC
 

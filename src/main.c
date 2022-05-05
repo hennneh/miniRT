@@ -14,6 +14,14 @@
 // 	return (1);
 // }
 
+void	limit(double *var, double upper, double lower)
+{
+	if (*var > upper)
+		*var = upper;
+	if (*var < lower)
+		*var = lower;
+}
+
 void	calc(t_mrt *mrt)
 {
 	t_data	img;
@@ -30,7 +38,7 @@ void	calc(t_mrt *mrt)
 		x = 0;
 		while (x < WDTH)
 		{
-			nachfolger(x, y, mrt, scr, &img);
+			nachfolger(x, y, mrt, scr, &img, FALSE);
 			x++;
 		}
 		y++;
@@ -44,63 +52,14 @@ void	debug(t_mrt *mrt)
 {
 	int	x;
 	int	y;
-	int	i;
-	// int	shad;
-	double	d;
-	// double	bright;
 	t_vec	ray;
-	t_vec	impact;
-	t_vec	norm;
-	// t_vec	light;
 	t_vec	*scr;
 
 	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
 	scr = scream(mrt->cam);
 	printf("ray trough x %i, y %i\n", x, y);
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
-	i = 0;
-	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
-	{
-		d = 0;
-		impact = init_vec(mrt->cam->cor.x, mrt->cam->cor.y, mrt->cam->cor.z);
-		addto(&impact, ray);
-				norm = init_vec(1,0,0);
-		if (mrt->obj[i]->id == 'S')
-		{
-			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
-			norm = connect(impact, mrt->obj[i]->cor);
-		}
-		if (mrt->obj[i]->id == 'P')
-		{
-			d = hit_plane(mrt, ray, mrt->obj[i]);
-			norm = init_vec(mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z);
-		}
-		if (d)
-		{
-			resize(&ray, d);
-			printf("KIND %C	, at a distance of %lf\n", mrt->obj[i]->id, d);
-			printf("Input Colors R%d G%d B%d\n", mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-			// printf("norm of object  %lf  %lf  %lf\n", norm.x, norm.y, norm.z);
-			// impact = mrt->cam->cor;
-			// addto(&impact, ray);
-			// light = connect(impact, mrt->l->cor);
-			// unit (&norm);
-			// bright = angle(light, norm);
-			// printf("light %lf %lf %lf\n", light.x, light.y, light.z);
-			// printf("\t\t\tangle %lf \n", bright + 1);
-			// shad = shadow(mrt, impact, 'P');
-			printf("object nr %i\n", i);
-		}
-		i++;
-	}
-	// i = 0;
-	// while (mrt && mrt->cy && mrt->cy[i])
-	// {
-	// 	d = cylinder_intersect(mrt->cy[i]->cor, mrt->cy[i]->rad, mrt->cy[i]->hght, mrt->cam->cor, ray);
-	// 	if (d)
-	// 		printf("cylinder hit	%i, at a distance of %i\n", i, d);
-	// 	i++;
-	// }
+	nachfolger(x, y, mrt, scr, NULL, TRUE);
 }
 
 
@@ -120,10 +79,37 @@ int	end(t_mrt *mrt)
 
 int	key_hook(int key, t_mrt *mrt)
 {
+	static t_bool	swtch;
+
+
 	if (key == 65307)
 		end(mrt);
-	if (key == 100)
+	if (key == 100) // d
+	{
+		printf("Toggle debugger\n");
+		if (swtch)
+			swtch = FALSE;
+		else
+			swtch = TRUE;
+	}
+	if (key == 114 && swtch) // r
 		debug(mrt);
+	if (key == 43 && swtch) // +
+	{
+		mrt->l->lr *= 1.125;
+		limit(&mrt->l->lr, 1, 0);
+		printf("brighter light\n");
+		calc(mrt);
+	}
+	if (key == 45 && swtch) // -
+	{
+		mrt->l->lr *= 0.875;
+		limit(&mrt->l->lr, 1, 0);
+		printf("dimmer light\n");
+		calc(mrt);
+	}
+	if (swtch)
+		printf("%i\n", key);
 	return (0);
 }
 
