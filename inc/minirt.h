@@ -71,10 +71,12 @@ t_vec	*vec_alloc(t_vec clone);
 double	veclen(t_vec a);
 t_vec	connect(t_vec a, t_vec b);
 void	addto(t_vec *a, t_vec b);
+t_vec	v_sum(t_vec a, t_vec b);
 void	product(t_vec *a, double m);
 t_vec	v_product(t_vec a, double m);
 void	resize(t_vec *a, double m);
 void	unit(t_vec	*a);
+t_vec	v_unit(t_vec	a);
 double	angle(t_vec a, t_vec b);
 double	calculate_dot(t_vec *a, t_vec *b);
 t_vec	reflect(t_vec in, t_vec norm);
@@ -86,6 +88,7 @@ t_vec	single_ray(int x, int y, t_cam *cam, t_vec	scr[3]);
 double	hit_sphere(t_vec sph_org, double sph_rad, t_vec ray_or, t_vec ray_dir);
 double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane);
 double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir);
+double	cap_intersection(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir);
 double	hit_cylinder(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir);
 
 

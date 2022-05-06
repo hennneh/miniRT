@@ -112,32 +112,9 @@ double	new_cylinder_intersect(t_vec *posi, t_vec *dir, double radius, double hei
 	return (x[0]);
 }
 
-double	hit_cap(t_vec ray_or, t_vec ray, t_vec cor, t_vec v_o)
+double	cap1(t_obj cyl, t_vec ray_org, t_vec ray)
 {
-	double	t;
-	double	test;
-	t_vec	tmp;
-
-	t = 0;
-	test = calculate_dot(&v_o, &ray);
-	if (!test || fabs(test) < 0.0001)
-		return (0);
-	else
-	{
-		tmp = connect(ray_or, cor);
-		t = (calculate_dot(&tmp, &v_o) / test);
-		if (t >= 0)
-			return (t);
-		return (0);
-	}
-}
-
-double	distance(t_vec p1, t_vec p2)
-{
-	double d;
-
-	d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
-	return (d);
+	
 }
 
 double	cap_intersection(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
@@ -147,15 +124,14 @@ double	cap_intersection(t_vec *posi, t_vec *dir, double radius, double height, t
 	double	len1;
 	double	len2;
 
+	unit(dir);
 	len1 = hit_cap(*ray_or, *ray_dir, v_product(*dir, (height / 2)), *dir);
-	len2 = hit_cap(*ray_or, *ray_dir, v_product(*dir, ((height / 2)) * -1), *dir);
-	if (len1 > 0 || len2 > 0)
+	len2 = hit_cap(*ray_or, *ray_dir, v_product(*dir, (height / -2)), *dir);
+	if (len1)
 	{
-		cap1 = *ray_or;
-		addto(&cap1, v_product(*ray_dir, len1));
-		cap2 = *ray_or;
-		addto(&cap2, v_product(*ray_dir, len2));
-		if (veclen(connect(v_product(*dir, ((height / 2)) * -1), cap2)) < radius && len2 < len1 && len2 > 0)
+		cap1 = v_sum(*ray_or, v_product(*ray_dir, len1));
+		cap2 = v_sum(*ray_or, v_product(*ray_dir, len2));
+		if (veclen(connect(v_product(*dir, (height / -2)), cap2)) <= radius && len2 < len1 && len2 > 0)
 			return (len2);
 		else if (len1 > 0 && veclen(connect(v_product(*dir, (height / 2)), cap1)) < radius)
 		return (len1);
@@ -169,12 +145,13 @@ double	hit_cylinder(t_vec *posi, t_vec *dir, double radius, double height, t_vec
 	double	cap_inter;
 
 	cylinder_inter = new_cylinder_intersect(posi, dir, radius, height, ray_or, ray_dir);
+	limit(&cylinder_inter, RENDER_DISTANCE, 0);
 	cap_inter = cap_intersection(posi, dir, radius, height, ray_or, ray_dir);
-	if (cap_inter > 0 && cap_inter < cylinder_inter)
+	limit(&cap_inter, RENDER_DISTANCE, 0);
+	// if (cap_inter < cylinder_inter && 0 < cap_inter)
 		return (cap_inter);
-	else if (cylinder_inter < cap_inter)
-		return (cylinder_inter);
-	return (0);
+	// else
+	// 	return (cylinder_inter);
 }
 
 // t_vec	vsubstract(t_vec a, t_vec b)

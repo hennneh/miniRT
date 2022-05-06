@@ -79,6 +79,21 @@ void	addto(t_vec *a, t_vec b)
 }
 
 /**
+ * @brief add a two vectors together
+ * @param a [t_vec] the vector being added to
+ * @param b [t_vec] the vector to add
+*/
+t_vec	v_sum(t_vec a, t_vec b)
+{
+	t_vec	res;
+
+	res.x = a.x + b.x;
+	res.y = a.y + b.y;
+	res.z = a.z + b.z;
+	return (res);
+}
+
+/**
  * @brief multiply a vector by a constant
  * @param a [t_vec] the vector mutiplied
  * @param m [double] the multiplicant
@@ -143,6 +158,24 @@ void	unit(t_vec	*a)
 	a->y *= d;
 	a->z *= d;
 }
+
+/**
+ * @brief change a vecto to have the total lenth of 1, no change direction
+ * @param a [t_vec] vector to operade on
+ * @return [void]
+*/
+t_vec	v_unit(t_vec	a)
+{
+	t_vec	res;
+	double	d;
+
+	d = 1 / veclen(a);
+	res.x = a.x * d;
+	res.y = a.y * d;
+	res.z = a.z * d;
+	return (res);
+}
+
 /**
  * @brief calculate the angle between two vectors
  * @param a [t_vec]

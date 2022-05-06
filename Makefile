@@ -19,10 +19,10 @@ SRC =	$(SR)main.c \
 		$(UT)rt_whtspc.c \
 		$(GE)geo_maths.c \
 		$(GE)ray_plane.c \
+		$(GE)ray_cylinder.c \
 		$(GE)ray_sphere.c \
 		src/setup/rayinit.c \
-		src/tracer/big.c \
-		$(GE)ray_cylinder.c
+		src/tracer/big.c
 
 OBJ = $(SRC:.c=.o)
 
