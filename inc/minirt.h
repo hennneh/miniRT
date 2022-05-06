@@ -84,7 +84,7 @@ t_vec	reflect(t_vec in, t_vec norm);
 t_vec	*scream(t_cam *cam);
 t_vec	single_ray(int x, int y, t_cam *cam, t_vec	scr[3]);
 double	hit_sphere(t_vec sph_org, double sph_rad, t_vec ray_or, t_vec ray_dir);
-double	hit_plane(t_mrt *mrt, t_vec ray, t_obj *plane);
+double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane);
 double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir);
 
 

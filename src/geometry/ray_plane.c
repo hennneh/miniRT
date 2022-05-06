@@ -20,7 +20,7 @@
  * t = ((p0 - l0) * n) / (l * n)
  */
 
-double	hit_plane(t_mrt *mrt, t_vec ray, t_obj *plane)
+double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane)
 {
 	double	t;
 	double	test;
@@ -32,7 +32,7 @@ double	hit_plane(t_mrt *mrt, t_vec ray, t_obj *plane)
 		return (0);
 	else
 	{
-		tmp = connect(mrt->cam->cor, plane->cor);
+		tmp = connect(ray_or, plane->cor);
 		t = (calculate_dot(&tmp, &plane->v_o) / test);
 		if (t >= 0)
 			return (t);

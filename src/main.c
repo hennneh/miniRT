@@ -79,7 +79,7 @@ void	camera(t_mrt *mrt, int key)
 	calc(mrt);
 }
 
-void	controls()
+void	controls(t_mrt *mrt)
 {
 	char	*red;
 	char	*green;
@@ -92,13 +92,14 @@ void	controls()
 	normal = "\033[0m";
 	printf("\n");
 	printf("\t%sControls :%s\n\n", red, normal);
-	printf("%sCamera Tilt   %s┏┉┉┉┓%s     	Field of vision %s┏┉┉┉┓%s     	Light                %s┏┉┉┉┓%s                 %s┏┉┉┉┓%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
-	printf("%s              %s┇ ⇧ ┇%s     	                %s┇ Ä ┇%s     	     Position        %s┇ W ┇%s      Intensity  %s┇ + ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
-	printf("%s          %s┏┉┉┉┛   ┗┉┉┉┓%s 	                %s┇ ↑ ┇%s     	                 %s┏┉┉┉┛ ↑ ┗┉┉┉┓%s             %s┇ ↑ ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
-	printf("%s          %s┇ ⇦       ⇨ ┇%s 	                %s┇   ┇%s     	  Front   Back   %s┇ A ←   → S ┇%s             %s┇   ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
-	printf("%s          %s┗┉┉┉┓   ┏┉┉┉┛%s 	                %s┇ ↓ ┇%s     	  %s┏┉┉┉┉┉┉┉┉┉┉┉┓  ┗┉┉┉┓ ↓ ┏┉┉┉┛%s             %s┇ ↓ ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
-	printf("%s              %s┇ ⇩ ┇%s     	                %s┇ # ┇%s     	  %s┇ F ↙   ↗ B ┇      ┇ D ┇%s                 %s┇ - ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
-	printf("%s              %s┗┉┉┉┛%s     	                %s┗┉┉┉┛%s     	  %s┗┉┉┉┉┉┉┉┉┉┉┉┛      ┗┉┉┉┛%s                 %s┗┉┉┉┛%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	mlx_string_put(mrt->mlx, mrt->win, 10, HGHT + 10, create_trgb(0, -1, 0, 0), "Controls :");
+	printf("%sCamera Tilt   %s┏┉┉┉┓%s    	Field of vision %s┏┉┉┉┓%s	Light                %s┏┉┉┉┓%s               %s┏┉┉┉┓%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┇ ⇧ ┇%s    	                %s┇ Ä ┇%s	     Position        %s┇ W ┇%s    Intensity  %s┇ + ┇%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┏┉┉┉┛   ┗┉┉┉┓%s	                %s┇ ↑ ┇%s	                 %s┏┉┉┉┛ ↑ ┗┉┉┉┓%s           %s┇ ↑ ┇%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┇ ⇦       ⇨ ┇%s	                %s┇   ┇%s	  Front   Back   %s┇ A ←   → S ┇%s           %s┇   ┇%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┗┉┉┉┓   ┏┉┉┉┛%s	                %s┇ ↓ ┇%s	  %s┏┉┉┉┉┉┉┉┉┉┉┉┓  ┗┉┉┉┓ ↓ ┏┉┉┉┛%s           %s┇ ↓ ┇%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┇ ⇩ ┇%s    	                %s┇ # ┇%s	  %s┇ F ↙   ↗ B ┇      ┇ D ┇%s               %s┇ - ┇%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┗┉┉┉┛%s    	                %s┗┉┉┉┛%s	  %s┗┉┉┉┉┉┉┉┉┉┉┉┛      ┗┉┉┉┛%s               %s┗┉┉┉┛%s\n", normal, green, normal, yellow, normal, red, normal, red, normal);
 	printf("\n");
 	printf("T  Toggle Debug info\n");
 	printf("C  Show this Menu\n");
@@ -141,7 +142,6 @@ int	key_hook(int key, t_mrt *mrt)
 {
 	static t_bool	swtch;
 
-
 	if (key == 65307)
 		end(mrt);
 	if (key == 116) // T
@@ -152,13 +152,13 @@ int	key_hook(int key, t_mrt *mrt)
 		else
 			swtch = TRUE;
 	}
-	if (key == 99 && swtch) // c
-		controls();
-	else if (key == 114 && swtch) // r
+	if (key == 99 && !swtch) // c
+		controls(mrt);
+	else if (key == 114 && !swtch) // r
 		debug(mrt);
-	else if (swtch && (key == 65362 || key == 65364 || key == 65361 || key == 65363 || key == 228 || key == 35))
+	else if (!swtch && (key == 65362 || key == 65364 || key == 65361 || key == 65363 || key == 228 || key == 35))
 		camera(mrt, key);
-	else if (swtch && (key == 119 || key == 97 || key == 115 || key == 100 || key == 102 || key == 98 || key == 43 || key == 45))
+	else if (!swtch && (key == 119 || key == 97 || key == 115 || key == 100 || key == 102 || key == 98 || key == 43 || key == 45))
 		light(mrt, key);
 	return (0);
 }
@@ -175,7 +175,7 @@ int	main(int argc, char **argv)
 	if (input(&mrt, argv[1]))
 		return (printf("ERROR INPUT\n"));
 	mrt.mlx = mlx_init();
-	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT, "I wanna be Tracer");
+	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT + 100, "I wanna be Tracer");
 	calc(&mrt);
 	mlx_mouse_show(mrt.mlx, mrt.win);
 	mlx_loop_hook(mrt.mlx, render, &mrt);
