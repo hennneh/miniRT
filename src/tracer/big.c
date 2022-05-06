@@ -54,11 +54,11 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		d = 0;
 		if (mrt->obj[i]->id == 'S')
 		{
-			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
+			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray) / 2;
 		}
 		if (mrt->obj[i]->id == 'P')
 		{
-			d = hit_plane(mrt, ray, mrt->obj[i]);
+			d = hit_plane(mrt->cam->cor, ray, mrt->obj[i]);
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
@@ -69,11 +69,17 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 			near = mrt->obj[i];
 			old_d = d;
 		}
+			// if (p && d)
+			// {
+			// 	printf("hit %c\n Distance %lf\n", mrt->obj[i]->id, d);
+			// }
 		i++;
 	}
+
 	if (!near)
 	{
-		my_mlx_pixel_put(img, x, y, rgb);
+		if (img)
+			my_mlx_pixel_put(img, x, y, rgb);
 		return(0);
 	}
 	t_vec	impact = mrt->cam->cor;
@@ -90,15 +96,17 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	else /*if (near->id == 'Z')*/
 		norm = cross(near->v_o, cross(impact, connect(impact, near->cor)));
 
-	light = connect(mrt->l->cor, impact);
-	bright = angle(light, norm);
-	limit(&bright, 1, 0);
+	light = connect(impact, mrt->l->cor);
+	unit(&light);
+	bright = mrt->l->lr - angle(light, norm);
+	limit(&bright, mrt->l->lr, 0);
 	if (near && p)
 	{
-		printvec(&norm, "Norm");
+		printf("Distance %lf\n", old_d);
+		// printvec(&norm, "Norm");
 		printvec(&light, "light");
-		printvec(NULL, "angle");
-		printf("	%lf\n", bright);
+		// printvec(NULL, "angle");
+		// printf("	%lf\n", bright);
 	}
 	if (near)
 	{
@@ -106,6 +114,34 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 								near->g + ((255 - near->g) * bright * mrt->l->lr),
 								near->b + ((255 - near->b) * bright * mrt->l->lr));
 	}
+
+	t_bool shadow = FALSE;
+
+	i = 0;
+	while(mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
+	{
+		d = 0;
+		if (mrt->obj[i]->id == 'S')
+		{
+			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, impact, light);
+		}
+		if (mrt->obj[i]->id == 'P')
+		{
+			d = hit_plane(mrt->cam->cor, light, mrt->obj[i]);
+		}
+		if (mrt->obj[i]->id == 'Z')
+		{
+			d = new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &impact, &light);
+		}
+		if (d > 0.1 || -0.1 > d)
+		{
+			shadow = TRUE;
+			break ;
+		}
+		i++;
+	}
+	if (shadow == TRUE)
+		rgb = create_trgb(0, 0, 0, 0);
 	if (img)
 		my_mlx_pixel_put(img, x, y, rgb);
 	return (0);
