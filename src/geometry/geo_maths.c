@@ -93,6 +93,21 @@ void	product(t_vec *a, double m)
 }
 
 /**
+ * @brief multiply a vector by a constant, and return a dublicate
+ * @param a [t_vec] the vector mutiplied
+ * @param m [double] the multiplicant
+ */
+t_vec	v_product(t_vec a, double m)
+{
+	t_vec	res;
+
+	res.x = a.x * m;
+	res.y = a.y * m;
+	res.z = a.z * m;
+	return (res);
+}
+
+/**
  * @brief add a set distance to a vector
  * @param a [t_vec] the vector
  * @param m [double] to be added length
@@ -139,10 +154,8 @@ double	angle(t_vec a, t_vec b)
 
 	unit(&a);
 	unit(&b);
-	scalar = calculate_dot(&a, &b);
-	if (scalar < 0)
-		scalar *= -1;
-	return ((acos(scalar)) / PI);
+	scalar = fabs(calculate_dot(&a, &b));
+	return ((acos(scalar)));
 }
 
 /**

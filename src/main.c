@@ -1,18 +1,13 @@
 #include "../inc/minirt.h"
 
-// int	print_mrt(t_mrt *m)
-// {
-// 	printf("\nLIGHT\n{\n");
-// 	printf("id : [%c]\n", m->l->id);
-// 	printf("cor : [%f][%f][%f]\n", m->l->cor[0], m->l->cor[1], m->l->cor[2]);
-// 	printf("brit : [%f]\n}\n", m->l->brit);
-// 	printf("\nSPHERE\n{\n");
-// 	printf("id : [%c]\n", m->sp[0]->id);
-// 	printf("cor : [%f][%f][%f]\n", m->sp[0]->cor[0], m->sp[0]->cor[1], m->sp[0]->cor[2]);
-// 	printf("rad : [%f]\n", m->sp[0]->rad);
-// 	printf("rgb : [%d][%d][%d]\n}\n", m->sp[0]->r, m->sp[0]->g, m->sp[0]->b);
-// 	return (1);
-// }
+
+void	limit(double *var, double upper, double lower)
+{
+	if (*var > upper)
+		*var = upper;
+	if (*var < lower)
+		*var = lower;
+}
 
 void	calc(t_mrt *mrt)
 {
@@ -30,7 +25,7 @@ void	calc(t_mrt *mrt)
 		x = 0;
 		while (x < WDTH)
 		{
-			nachfolger(x, y, mrt, scr, &img);
+			nachfolger(x, y, mrt, scr, &img, FALSE);
 			x++;
 		}
 		y++;
@@ -39,68 +34,92 @@ void	calc(t_mrt *mrt)
 	// need to free scr
 }
 
+void	light(t_mrt *mrt, int key)
+{
+	if (key == 43)
+		mrt->l->lr *= 1.125;
+	if (key == 45)
+		mrt->l->lr *= 0.875;
+	if (key == 119)
+		mrt->l->cor.z += 5;
+	if (key == 97)
+		mrt->l->cor.x += 5;
+	if (key == 115)
+		mrt->l->cor.z -= 5;
+	if (key == 100)
+		mrt->l->cor.x -= 5;
+	if (key == 102)
+		mrt->l->cor.y += 5;
+	if (key == 98)
+		mrt->l->cor.y -= 5;
+	limit(&mrt->l->lr, 1, 0);
+	calc(mrt);
+}
+
+void	camera(t_mrt *mrt, int key)
+{
+	t_vec	*scr;
+
+	scr = scream(mrt->cam);
+	unit(&mrt->cam->v_o);
+	if (key == 65362) // UP
+		addto(&mrt->cam->v_o, v_product(scr[1], -0.2));
+	if (key == 65364) // DOWN
+		addto(&mrt->cam->v_o, v_product(scr[1], 0.2));
+	if (key == 65361) // left
+		addto(&mrt->cam->v_o, v_product(scr[0], -0.2));
+	if (key == 65363) // right
+		addto(&mrt->cam->v_o, v_product(scr[0], 0.2));
+	if (key == 228) // Ä
+		mrt->cam->fov = mrt->cam->fov + (10 * (PI / 180));
+	if (key == 35) // #
+		mrt->cam->fov = mrt->cam->fov - (10 * (PI / 180));
+	limit(&mrt->cam->fov, 179 * (PI / 180), 0);
+	unit(&mrt->cam->v_o);
+	calc(mrt);
+}
+
+void	controls()
+{
+	char	*red;
+	char	*green;
+	char	*yellow;
+	char	*normal;
+
+	red = "\033[0;31m";
+	green = "\033[0;32m";
+	yellow = "\033[1;33m";
+	normal = "\033[0m";
+	printf("\n");
+	printf("\t%sControls :%s\n\n", red, normal);
+	printf("%sCamera Tilt   %s┏┉┉┉┓%s     	Field of vision %s┏┉┉┉┓%s     	Light                %s┏┉┉┉┓%s                 %s┏┉┉┉┓%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┇ ⇧ ┇%s     	                %s┇ Ä ┇%s     	     Position        %s┇ W ┇%s      Intensity  %s┇ + ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┏┉┉┉┛   ┗┉┉┉┓%s 	                %s┇ ↑ ┇%s     	                 %s┏┉┉┉┛ ↑ ┗┉┉┉┓%s             %s┇ ↑ ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┇ ⇦       ⇨ ┇%s 	                %s┇   ┇%s     	  Front   Back   %s┇ A ←   → S ┇%s             %s┇   ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s          %s┗┉┉┉┓   ┏┉┉┉┛%s 	                %s┇ ↓ ┇%s     	  %s┏┉┉┉┉┉┉┉┉┉┉┉┓  ┗┉┉┉┓ ↓ ┏┉┉┉┛%s             %s┇ ↓ ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┇ ⇩ ┇%s     	                %s┇ # ┇%s     	  %s┇ F ↙   ↗ B ┇      ┇ D ┇%s                 %s┇ - ┇%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("%s              %s┗┉┉┉┛%s     	                %s┗┉┉┉┛%s     	  %s┗┉┉┉┉┉┉┉┉┉┉┉┛      ┗┉┉┉┛%s                 %s┗┉┉┉┛%s    \n", normal, green, normal, yellow, normal, red, normal, red, normal);
+	printf("\n");
+	printf("T  Toggle Debug info\n");
+	printf("C  Show this Menu\n");
+	printf("R  Retrace the Pixel at current Mouse-Position\n");
+	printf("ESC  Exit Process\n");
+	printf("\n");
+}
+
 // Trace me baby one more time
 void	debug(t_mrt *mrt)
 {
 	int	x;
 	int	y;
-	int	i;
-	// int	shad;
-	double	d;
-	// double	bright;
 	t_vec	ray;
-	t_vec	impact;
-	t_vec	norm;
-	// t_vec	light;
 	t_vec	*scr;
 
 	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
 	scr = scream(mrt->cam);
 	printf("ray trough x %i, y %i\n", x, y);
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
-	i = 0;
-	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
-	{
-		d = 0;
-		impact = init_vec(mrt->cam->cor.x, mrt->cam->cor.y, mrt->cam->cor.z);
-		addto(&impact, ray);
-				norm = init_vec(1,0,0);
-		if (mrt->obj[i]->id == 'S')
-		{
-			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, mrt->cam->cor, ray);
-			norm = connect(impact, mrt->obj[i]->cor);
-		}
-		if (mrt->obj[i]->id == 'P')
-		{
-			d = hit_plane(mrt, ray, mrt->obj[i]);
-			norm = init_vec(mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z);
-		}
-		if (d)
-		{
-			resize(&ray, d);
-			printf("KIND %C	, at a distance of %lf\n", mrt->obj[i]->id, d);
-			printf("Input Colors R%d G%d B%d\n", mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
-			// printf("norm of object  %lf  %lf  %lf\n", norm.x, norm.y, norm.z);
-			// impact = mrt->cam->cor;
-			// addto(&impact, ray);
-			// light = connect(impact, mrt->l->cor);
-			// unit (&norm);
-			// bright = angle(light, norm);
-			// printf("light %lf %lf %lf\n", light.x, light.y, light.z);
-			// printf("\t\t\tangle %lf \n", bright + 1);
-			// shad = shadow(mrt, impact, 'P');
-			printf("object nr %i\n", i);
-		}
-		i++;
-	}
-	// i = 0;
-	// while (mrt && mrt->cy && mrt->cy[i])
-	// {
-	// 	d = cylinder_intersect(mrt->cy[i]->cor, mrt->cy[i]->rad, mrt->cy[i]->hght, mrt->cam->cor, ray);
-	// 	if (d)
-	// 		printf("cylinder hit	%i, at a distance of %i\n", i, d);
-	// 	i++;
-	// }
+	nachfolger(x, y, mrt, scr, NULL, TRUE);
 }
 
 
@@ -120,10 +139,27 @@ int	end(t_mrt *mrt)
 
 int	key_hook(int key, t_mrt *mrt)
 {
+	static t_bool	swtch;
+
+
 	if (key == 65307)
 		end(mrt);
-	if (key == 100)
+	if (key == 116) // T
+	{
+		printf("Toggle debugger\n");
+		if (swtch)
+			swtch = FALSE;
+		else
+			swtch = TRUE;
+	}
+	if (key == 99 && swtch) // c
+		controls();
+	else if (key == 114 && swtch) // r
 		debug(mrt);
+	else if (swtch && (key == 65362 || key == 65364 || key == 65361 || key == 65363 || key == 228 || key == 35))
+		camera(mrt, key);
+	else if (swtch && (key == 119 || key == 97 || key == 115 || key == 100 || key == 102 || key == 98 || key == 43 || key == 45))
+		light(mrt, key);
 	return (0);
 }
 

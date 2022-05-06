@@ -1,5 +1,13 @@
 #include "../../inc/minirt.h"
 
+void	printvec(t_vec *p, char *description)
+{
+	if (p)
+		printf("%s : %lf %lf %lf\n", description, p->x, p->y, p->z);
+	else
+		printf("%s\n", description);
+}
+
 //	a function that is given a position and calculates
 //	1: the ray to that position in an imaginary screen (given, to reduce redundant calculation)
 //	2: the closest intsersection with any object (within reasonable distance)
@@ -25,7 +33,7 @@
  * 	3 the angle at which the light hits the object
  */
 
-int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img)
+int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 {
 	double	old_d;
 	double	d;
@@ -33,11 +41,13 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img)
 	int		i;
 	t_obj	*near;
 	t_vec	ray;
+	t_vec	norm;
 
 	near = NULL;
 	old_d = RENDER_DISTANCE;
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
 	unit(&ray);
+	rgb = create_trgb(0, mrt->al->lr * mrt->al->r, mrt->al->lr * mrt->al->g, mrt->al->lr * mrt->al->b);
 	i = 0;
 	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
 	{
@@ -52,7 +62,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img)
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
-			d = new_cylinder_intersect(NULL);
+			d = new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &mrt->cam->cor, &ray);
 		}
 		if (d && d > 0 && d < old_d)
 		{
@@ -61,18 +71,42 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img)
 		}
 		i++;
 	}
-	product(&ray, d);
-
+	if (!near)
+	{
+		my_mlx_pixel_put(img, x, y, rgb);
+		return(0);
+	}
 	t_vec	impact = mrt->cam->cor;
+	t_vec	light;
+	double	bright;
 
+	product(&ray, old_d);
 	addto(&impact, ray);
-	rgb = create_trgb(0, mrt->al->lr * mrt->al->r, mrt->al->lr * mrt->al->g, mrt->al->lr * mrt->al->b);
+
+	if (near->id == 'S')
+		norm = connect(near->cor, impact);
+	else if (near->id == 'P')
+		norm = near->v_o;
+	else /*if (near->id == 'Z')*/
+		norm = cross(near->v_o, cross(impact, connect(impact, near->cor)));
+
+	light = connect(mrt->l->cor, impact);
+	bright = angle(light, norm);
+	limit(&bright, 1, 0);
+	if (near && p)
+	{
+		printvec(&norm, "Norm");
+		printvec(&light, "light");
+		printvec(NULL, "angle");
+		printf("	%lf\n", bright);
+	}
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r + ((255 - near->r) * 0.6),
-								near->g + ((255 - near->g) * 0.6),
-								near->b + ((255 - near->b) * 0.6));
+		rgb = create_trgb(0,	near->r + ((255 - near->r) * bright * mrt->l->lr),
+								near->g + ((255 - near->g) * bright * mrt->l->lr),
+								near->b + ((255 - near->b) * bright * mrt->l->lr));
 	}
-	my_mlx_pixel_put(img, x, y, rgb);
+	if (img)
+		my_mlx_pixel_put(img, x, y, rgb);
 	return (0);
 }

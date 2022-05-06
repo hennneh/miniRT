@@ -1,5 +1,9 @@
 libft.a
 miniRT
 *.o
+libmlx.a
+libmlx_Darwin.a
+mlx-test
+.DS_Store
 .vscode/
 extra/test_files/
