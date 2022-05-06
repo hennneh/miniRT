@@ -69,10 +69,10 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 			near = mrt->obj[i];
 			old_d = d;
 		}
-			// if (p && d)
-			// {
-			// 	printf("hit %c\n Distance %lf\n", mrt->obj[i]->id, d);
-			// }
+		if (p && d && TRUE == FALSE)
+		{
+			printf("hit %c\n Distance %lf\n", mrt->obj[i]->id, d);
+		}
 		i++;
 	}
 
@@ -103,7 +103,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	limit(&bright, 1, -1);
 	if (near && p)
 	{
-		// printf("Distance %lf\n", old_d);
+		printf("Distance %lf\n", old_d);
 		printvec(&norm, "Norm");
 		printvec(&light, "light");
 		printvec(NULL, "angle");
@@ -137,7 +137,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &impact, &light);
 		}
-		if (d > 0.1)
+		if (d > 0.1 && d < veclen(connect(impact, mrt->l->cor)))
 		{
 			shadow = TRUE;
 			break ;
