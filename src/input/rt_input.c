@@ -46,18 +46,22 @@ t_list	*import_data(char *file)
 	char	*line;
 
 	fd = open(file, O_RDONLY);
-	if (fd == -1 || ft_strnstr(file, ".rt", ft_strlen(file)) != &file[ft_strlen(file) - 3])
+	if (fd == -1 || ft_strnstr(file, ".rt", ft_strlen(file))
+		!= &file[ft_strlen(file) - 3])
 	{
 		perror("Error\nNot a valid file");
-		exit(close(fd));//EXIT HANDELING
+		exit(close(fd));
 	}
 	i = 1;
 	lst = NULL;
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
-		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1) < ft_strlen(line))
+		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1)
+			< ft_strlen(line))
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
+		else
+			free(line);
 	}
 	close(fd);
 	return (lst);

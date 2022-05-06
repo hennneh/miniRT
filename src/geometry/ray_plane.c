@@ -1,8 +1,8 @@
 #include "../../inc/minirt.h"
 
-/*
- * if the ray vector given to the function times the normal of the plane is equal 
- * to 0, they are in parallel.
+/**
+ * if the ray vector given to the function times the normal of the plane is
+ * equal to 0, they are in parallel.
  * l * n = 0
  *
  * if some point on the plane and some point on the

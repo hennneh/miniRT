@@ -12,7 +12,7 @@ int	init_al(t_al *al, char **info)
 	int	i;
 
 	i = 1;
-	if (!info || !info[0])// check the indentifyer ??
+	if (!info || !info[0])
 		return (1);
 	else
 		al->id = 'A';
@@ -22,7 +22,6 @@ int	init_al(t_al *al, char **info)
 		return (1);
 	if (info[i])
 		return (1);
-	// printf("good ambient light\n");//DELETE
 	return (0);
 }
 
@@ -37,7 +36,7 @@ int	init_cam(t_cam *ca, char **info)
 	int	i;
 
 	i = 1;
-	if (!info || !info[0])// check the indentifyer ??
+	if (!info || !info[0])
 		return (1);
 	else
 		ca->id = 'K';
@@ -51,7 +50,6 @@ int	init_cam(t_cam *ca, char **info)
 		return (1);
 	if (ca->v_o.x == 0.0 && ca->v_o.y == 0.0 && ca->v_o.z == 0.0)
 		ca->v_o.x = 1.0;
-	// printf("good Camera\n");//DELETE
 	limit(&ca->fov, 179.9, 0);
 	return (0);
 }
@@ -67,7 +65,7 @@ int	init_lol(t_lol *l, char **info)
 	int	i;
 
 	i = 1;
-	if (!info || !info[0])// check the indentifyer ??
+	if (!info || !info[0])
 		return (1);
 	else
 		l->id = 'L';
@@ -77,7 +75,6 @@ int	init_lol(t_lol *l, char **info)
 		return (1);
 	if (info[i])
 		return (1);
-	// printf("good light\n");//DELETE
 	return (0);
 }
 
@@ -92,7 +89,7 @@ int	init_lol_b(t_lol_b *l, char **info)
 	int	i;
 
 	i = 1;
-	if (!info || !info[0])// check the indentifyer ??
+	if (!info || !info[0])
 		return (1);
 	else
 		l->id = 'l';
@@ -104,6 +101,5 @@ int	init_lol_b(t_lol_b *l, char **info)
 		return (1);
 	if (info[i])
 		return (1);
-	// printf("good light bonus\n");//DELETE
 	return (0);
 }

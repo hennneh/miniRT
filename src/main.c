@@ -1,5 +1,5 @@
-#include "../inc/minirt.h"
 
+#include "../inc/minirt.h"
 
 void	limit(double *var, double upper, double lower)
 {
@@ -12,8 +12,8 @@ void	limit(double *var, double upper, double lower)
 void	calc(t_mrt *mrt)
 {
 	t_data	img;
-	int	y;
-	int	x;
+	int		y;
+	int		x;
 	t_vec	*scr;
 
 	scr = scream(mrt->cam);
