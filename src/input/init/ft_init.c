@@ -31,7 +31,7 @@ int	check_deci(char *s)
 */
 int	init_cor(char **info, t_vec *cor, int flag)
 {
-	int	i;
+	int		i;
 	double	tmp[3];
 
 	ft_bzero(cor, 3 * sizeof(double));
@@ -39,10 +39,10 @@ int	init_cor(char **info, t_vec *cor, int flag)
 	while (info[i])
 	{
 		if (i > 2 || check_deci(info[i]) > 1 || ft_isdouble(info[i]))
-			return (free_2dstr(info) + 1);//ERROR
+			return (free_2dstr(info) + 1);
 		tmp[i] = ft_atof(info[i]);
 		if (flag == 1 && (tmp[i] < -1 || tmp[i] > 1))
-			return (free_2dstr(info) + 1);//ERROR
+			return (free_2dstr(info) + 1);
 		i ++;
 	}
 	cor->x = tmp[0];

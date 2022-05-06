@@ -39,7 +39,7 @@ int	shadow(t_mrt *mrt, t_vec impact, char p)
 		i++;
 	}
 	if (res)
-		return(1);
+		return (1);
 	return (0);
 }
 
