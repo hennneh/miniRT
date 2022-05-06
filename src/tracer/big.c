@@ -89,30 +89,31 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	product(&ray, old_d);
 	addto(&impact, ray);
 
+	norm = init_vec(0, 0, 0);
 	if (near->id == 'S')
 		norm = connect(near->cor, impact);
 	else if (near->id == 'P')
 		norm = near->v_o;
-	else /*if (near->id == 'Z')*/
+	else if (near->id == 'Z')
 		norm = cross(near->v_o, cross(impact, connect(impact, near->cor)));
 
 	light = connect(impact, mrt->l->cor);
 	unit(&light);
-	bright = mrt->l->lr - angle(light, norm);
-	limit(&bright, mrt->l->lr, 0);
+	bright = 1 - (2 * angle(light, norm) / (PI));
+	limit(&bright, 1, -1);
 	if (near && p)
 	{
-		printf("Distance %lf\n", old_d);
-		// printvec(&norm, "Norm");
+		// printf("Distance %lf\n", old_d);
+		printvec(&norm, "Norm");
 		printvec(&light, "light");
-		// printvec(NULL, "angle");
-		// printf("	%lf\n", bright);
+		printvec(NULL, "angle");
+		printf("	%lf\n", bright);
 	}
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r + ((255 - near->r) * bright * mrt->l->lr),
-								near->g + ((255 - near->g) * bright * mrt->l->lr),
-								near->b + ((255 - near->b) * bright * mrt->l->lr));
+		rgb = create_trgb(0,	near->r + ((bright > 0) * (255 - near->r) * bright * mrt->l->lr) - ((bright < 0) * (255 + near->r) / bright * mrt->l->lr),
+								near->g + ((bright > 0) * (255 - near->g) * bright * mrt->l->lr) - ((bright < 0) * (255 + near->g) / bright * mrt->l->lr),
+								near->b + ((bright > 0) * (255 - near->b) * bright * mrt->l->lr) - ((bright < 0) * (255 + near->b) / bright * mrt->l->lr));
 	}
 
 	t_bool shadow = FALSE;
@@ -133,7 +134,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = new_cylinder_intersect(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &impact, &light);
 		}
-		if (d > 0.1 || -0.1 > d)
+		if (d > 0.1)
 		{
 			shadow = TRUE;
 			break ;

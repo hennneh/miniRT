@@ -154,7 +154,7 @@ double	angle(t_vec a, t_vec b)
 
 	unit(&a);
 	unit(&b);
-	scalar = fabs(calculate_dot(&a, &b));
+	scalar = calculate_dot(&a, &b);
 	return ((acos(scalar)));
 }
 
