@@ -1,3 +1,4 @@
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -88,10 +89,9 @@ double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane);
 double	new_cylinder_intersect(t_vec *pos, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir);
 double	hit_cylinder(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir);
 
-
 int		shadow(t_mrt *mrt, t_vec impact, char p);
 int		colorme(t_mrt *mrt, t_obj *obj, t_vec ray);
-int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p);
+int		nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p);
 
 //SRC
 
