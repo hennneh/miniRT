@@ -111,9 +111,12 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	}
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r + ((bright > 0) * (255 - near->r) * bright * mrt->l->lr) - ((bright < 0) * (255 + near->r) / bright * mrt->l->lr),
-								near->g + ((bright > 0) * (255 - near->g) * bright * mrt->l->lr) - ((bright < 0) * (255 + near->g) / bright * mrt->l->lr),
-								near->b + ((bright > 0) * (255 - near->b) * bright * mrt->l->lr) - ((bright < 0) * (255 + near->b) / bright * mrt->l->lr));
+		rgb = create_trgb(0,	near->r * bright * (bright >= 0) + 0,
+								near->g * bright * (bright >= 0) + 0,
+								near->b * bright * (bright >= 0) + 0);
+		// rgb = create_trgb(0,	near->r + ((bright > 0) * (255 - near->r) * bright * mrt->l->lr) - ((bright < 0) * (near->r) - bright * -mrt->l->lr),
+		// 						near->g + ((bright > 0) * (255 - near->g) * bright * mrt->l->lr) - ((bright < 0) * (near->g) - bright * -mrt->l->lr),
+		// 						near->b + ((bright > 0) * (255 - near->b) * bright * mrt->l->lr) - ((bright < 0) * (near->b) - bright * -mrt->l->lr));
 	}
 
 	t_bool shadow = FALSE;
