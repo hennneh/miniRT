@@ -112,54 +112,27 @@ double	new_cylinder_intersect(t_vec *posi, t_vec *dir, double radius, double hei
 	return (x[0]);
 }
 
-t_vec	vsubstract(t_vec a, t_vec b)
+double	hit_cap(t_vec ray_or, t_vec ray, t_vec cor, t_vec v_o)
 {
-	t_vec	p;
+	double	t;
+	double	test;
+	t_vec	tmp;
 
-	p.x = a.x - b.x;
-	p.y = a.y - b.y;
-	p.z = a.z - b.z;
-	return (p);
+	t = 0;
+	test = calculate_dot(&v_o, &ray);
+	if (!test || fabs(test) < 0.0001)
+		return (0);
+	else
+	{
+		tmp = connect(ray_or, cor);
+		t = (calculate_dot(&tmp, &v_o) / test);
+		if (t >= 0)
+			return (t);
+		return (0);
+	}
 }
 
-double		dot(t_vec a, t_vec b)
-{
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
-}
-
-double	solve_plane(t_vec o, t_vec d, t_vec plane_p, t_vec plane_nv)
-{
-	double	x;
-	double	denom;
-
-	denom = dot(plane_nv, d);
-	if (denom == 0)
-		return (INFINITY);
-	x = (dot(plane_nv, vsubstract(plane_p, o))) / denom;
-	return (x > 0 ? x : INFINITY);
-}
-
-t_vec	vadd(t_vec a, t_vec b)
-{
-	t_vec	p;
-
-	p.x = a.x + b.x;
-	p.y = a.y + b.y;
-	p.z = a.z + b.z;
-	return (p);
-}
-
-t_vec		scal_x_vec(double n, t_vec p)
-{
-	t_vec	v;
-
-	v.x = n * p.x;
-	v.y = n * p.y;
-	v.z = n * p.z;
-	return (v);
-}
-
-double		distance(t_vec p1, t_vec p2)
+double	distance(t_vec p1, t_vec p2)
 {
 	double d;
 
@@ -167,30 +140,25 @@ double		distance(t_vec p1, t_vec p2)
 	return (d);
 }
 
-double	caps_intersection(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
+double	cap_intersection(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
 {
-	double	id1;
-	double	id2;
-	t_vec	ip1;
-	t_vec	ip2;
-	t_vec	c2;
-	t_vec	nom;
+	t_vec	cap1;
+	t_vec	cap2;
+	double	len1;
+	double	len2;
 
-	new_pos(posi, dir, height, &nom);
-	c2 = vadd(*ray_or, scal_x_vec(height, nom));	//gotta add normvec herre!!!!!!
-	id1 = solve_plane(*ray_or, *ray_dir, *posi, nom);//gotta add normvec herre!!!!!!
-	id2 = solve_plane(*ray_or, *ray_dir, c2, nom);  //gotta add normvec herre!!!!!!
-	if (id1 > 0 || id2 > 0)
+	len1 = hit_cap(*ray_or, *ray_dir, v_product(*dir, (height / 2)), *dir);
+	len2 = hit_cap(*ray_or, *ray_dir, v_product(*dir, ((height / 2)) * -1), *dir);
+	if (len1 > 0 || len2 > 0)
 	{
-		ip1 = vadd(*ray_or, scal_x_vec(id1, *ray_dir));
-		ip2 = vadd(*ray_or, scal_x_vec(id2, *ray_dir));
-		if ((id1 > 0 && distance(ip1, *posi) <= radius) && (id2 > 0 && distance(ip2, c2) <= radius))
-			return (id1 < id2 ? id1 : id2);
-		else if (id1 > 0 && distance(ip2, c2) <= radius)
-			return (id1);
-		else if (id2 > 0 && distance(ip2, c2) <= radius)
-			return (id2);
-		return (0);
+		cap1 = *ray_or;
+		addto(&cap1, v_product(*ray_dir, len1));
+		cap2 = *ray_or;
+		addto(&cap2, v_product(*ray_dir, len2));
+		if (veclen(connect(v_product(*dir, ((height / 2)) * -1), cap2)) < radius && len2 < len1 && len2 > 0)
+			return (len2);
+		else if (len1 > 0 && veclen(connect(v_product(*dir, (height / 2)), cap1)) < radius)
+		return (len1);
 	}
 	return (0);
 }
@@ -198,17 +166,112 @@ double	caps_intersection(t_vec *posi, t_vec *dir, double radius, double height, 
 double	hit_cylinder(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
 {
 	double	cylinder_inter;
-	double	caps_inter;
-	t_vec	cy_normal;
+	double	cap_inter;
 
 	cylinder_inter = new_cylinder_intersect(posi, dir, radius, height, ray_or, ray_dir);
-	caps_inter = caps_intersection(posi, dir, radius, height, ray_or, ray_dir);
-	if (cylinder_inter > 0 || caps_inter > 0)
-	{
-		if (cylinder_inter < caps_inter)
-			return (cylinder_inter);
-		else
-			return (caps_inter);
-	}
+	cap_inter = cap_intersection(posi, dir, radius, height, ray_or, ray_dir);
+	if (cap_inter > 0 && cap_inter < cylinder_inter)
+		return (cap_inter);
+	else if (cylinder_inter < cap_inter)
+		return (cylinder_inter);
 	return (0);
 }
+
+// t_vec	vsubstract(t_vec a, t_vec b)
+// {
+// 	t_vec	p;
+
+// 	p.x = a.x - b.x;
+// 	p.y = a.y - b.y;
+// 	p.z = a.z - b.z;
+// 	return (p);
+// }
+
+// double		dot(t_vec a, t_vec b)
+// {
+// 	return (a.x * b.x + a.y * b.y + a.z * b.z);
+// }
+
+// double	solve_plane(t_vec o, t_vec d, t_vec plane_p, t_vec plane_nv)
+// {
+// 	double	x;
+// 	double	denom;
+
+// 	denom = dot(plane_nv, d);
+// 	if (denom == 0)
+// 		return (INFINITY);
+// 	x = (dot(plane_nv, vsubstract(plane_p, o))) / denom;
+// 	return (x > 0 ? x : INFINITY);
+// }
+
+// t_vec	vadd(t_vec a, t_vec b)
+// {
+// 	t_vec	p;
+
+// 	p.x = a.x + b.x;
+// 	p.y = a.y + b.y;
+// 	p.z = a.z + b.z;
+// 	return (p);
+// }
+
+// t_vec		scal_x_vec(double n, t_vec p)
+// {
+// 	t_vec	v;
+
+// 	v.x = n * p.x;
+// 	v.y = n * p.y;
+// 	v.z = n * p.z;
+// 	return (v);
+// }
+
+// double		distance(t_vec p1, t_vec p2)
+// {
+// 	double d;
+
+// 	d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
+// 	return (d);
+// }
+
+// double	caps_intersection(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
+// {
+// 	double	id1;
+// 	double	id2;
+// 	t_vec	ip1;
+// 	t_vec	ip2;
+// 	t_vec	c2;
+
+// 	c2 = vadd(*ray_or, scal_x_vec(height, *dir));	//gotta add normvec herre!!!!!!
+// 	id1 = solve_plane(*ray_or, *ray_dir, *posi, *dir);//gotta add normvec herre!!!!!!
+// 	id2 = solve_plane(*ray_or, *ray_dir, c2, *dir);  //gotta add normvec herre!!!!!!
+// 	if (id1 < INFINITY || id2 < INFINITY)
+// 	{
+// 		ip1 = vadd(*ray_or, scal_x_vec(id1, *ray_dir));
+// 		ip2 = vadd(*ray_or, scal_x_vec(id2, *ray_dir));
+// 		if ((id1 < INFINITY && distance(ip1, *posi) <= radius) && (id2 < INFINITY && distance(ip2, c2) <= radius))
+// 			return (id1 < id2 ? id1 : id2);
+// 		else if (id1 < INFINITY && distance(ip2, c2) <= radius)
+// 			return (id1);
+// 		else if (id2 < INFINITY && distance(ip2, c2) <= radius)
+// 			return (id2);
+// 		return (INFINITY);
+// 	}
+// 	return (INFINITY);
+// }
+
+// double	hit_cylinder(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
+// {
+// 	double	cylinder_inter;
+// 	double	caps_inter;
+
+// 	cylinder_inter = new_cylinder_intersect(posi, dir, radius, height, ray_or, ray_dir);
+// 	caps_inter = caps_intersection(posi, dir, radius, height, ray_or, ray_dir);
+// 	if (cylinder_inter > 0 || caps_inter > 0)
+// 	{
+// 		if (cylinder_inter < caps_inter)
+// 			return (cylinder_inter);
+// 		else
+// 			return (caps_inter);
+// 	}
+// 	return (0);
+// }
+
