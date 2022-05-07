@@ -210,6 +210,20 @@ double	calculate_dot(t_vec *a, t_vec *b)
 }
 
 /**
+ * @brief return a vector wit all the inverted values of the argument
+ * @param a vector to invert
+*/
+t_vec	v_invert(t_vec a)
+{
+	t_vec	res;
+
+	res.x = -a.x;
+	res.y = -a.y;
+	res.z = -a.z;
+	return (res);
+}
+
+/**
  * @brief reflect a given vector on a normal-vector
  * @param in [t_vec] the vector to be reflected
  * @param norm [t_vec] the achse to reflect over

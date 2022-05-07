@@ -96,6 +96,26 @@ void	move(t_mrt *mrt, int key)
 	calc(mrt);
 }
 
+void	print_config(t_mrt *mrt)
+{
+	int	i;
+
+	printf("%c %lf %i,%i,%i\n", 'A', mrt->al->lr, mrt->al->r, mrt->al->g, mrt->al->b);
+	printf("%c %lf,%lf,%lf %lf,%lf,%lf %lf\n", 'C', mrt->cam->cor.x, mrt->cam->cor.y, mrt->cam->cor.z, mrt->cam->v_o.x, mrt->cam->v_o.y, mrt->cam->v_o.z, mrt->cam->fov * (180/PI));
+	printf("%c %lf,%lf,%lf %lf\n", 'L', mrt->l->cor.x, mrt->l->cor.y, mrt->l->cor.z, mrt->l->lr);
+	i = 0;
+	while (mrt->obj[i])
+	{
+		if (mrt->obj[i]->id == 'S')
+			printf("%s %lf,%lf,%lf %lf %i,%i,%i\n", "sp", mrt->obj[i]->cor.x, mrt->obj[i]->cor.y, mrt->obj[i]->cor.z, mrt->obj[i]->rad * 2, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+		if (mrt->obj[i]->id == 'P')
+			printf("%s %lf,%lf,%lf %lf,%lf,%lf %i,%i,%i\n", "pl", mrt->obj[i]->cor.x, mrt->obj[i]->cor.y, mrt->obj[i]->cor.z, mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+		if (mrt->obj[i]->id == 'Z')
+			printf("%s %lf,%lf,%lf %lf,%lf,%lf %lf %lf %i,%i,%i\n", "cy", mrt->obj[i]->cor.x, mrt->obj[i]->cor.y, mrt->obj[i]->cor.z, mrt->obj[i]->v_o.x, mrt->obj[i]->v_o.y, mrt->obj[i]->v_o.z, mrt->obj[i]->rad * 2, mrt->obj[i]->hght, mrt->obj[i]->r, mrt->obj[i]->g, mrt->obj[i]->b);
+		i++;
+	}
+}
+
 void	controls(t_mrt *mrt)
 {
 	char	*red;
@@ -108,7 +128,7 @@ void	controls(t_mrt *mrt)
 	blue = "\033[0;34m";
 	green = "\033[0;32m";
 	yellow = "\033[1;33m";
-	normal = "\033[1;30m";
+	normal = "\033[0m";
 	printf("\n");
 	printf("\t%sControls :%s\n\n", red, normal);
 	mlx_string_put(mrt->mlx, mrt->win, 10, HGHT + 10, create_trgb(0, -1, 0, 0), "Controls :");
@@ -123,6 +143,7 @@ void	controls(t_mrt *mrt)
 	printf("T  Toggle Debug info\n");
 	printf("C  Show this Menu\n");
 	printf("R  Retrace the Pixel at current Mouse-Position\n");
+	printf("P  Print Input of current Scene\n");
 	printf("ESC  Exit Process\n");
 	printf("\n");
 }
@@ -173,6 +194,8 @@ int	key_hook(int key, t_mrt *mrt)
 	}
 	if (key == 99 && !swtch) // c
 		controls(mrt);
+	else if (key == 112 && !swtch)
+		print_config(mrt);
 	else if (key == 114 && !swtch) // r
 		debug(mrt);
 	else if (!swtch && (key == 105 || key == 106 || key == 107 || key == 108 || key == 246 || key == 252))

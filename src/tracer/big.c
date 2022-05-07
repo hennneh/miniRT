@@ -43,6 +43,8 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	t_vec	ray;
 	t_vec	norm;
 
+	t_bool	is_cap = FALSE;
+
 	near = NULL;
 	old_d = RENDER_DISTANCE;
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
@@ -62,7 +64,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
-			d = hit_cylinder(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &mrt->cam->cor, &ray);
+			d = hit_cylinder(*mrt->obj[i], mrt->cam->cor, ray, &is_cap);
 		}
 		if (d && d > 0 && d < old_d)
 		{
@@ -71,7 +73,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		if (p && d)
 		{
-			printf("hit %c\n Distance %lf\n", mrt->obj[i]->id, d);
+			printf("hit %c\nDistance %lf\n", mrt->obj[i]->id, d);
 		}
 		i++;
 	}
@@ -82,7 +84,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 			my_mlx_pixel_put(img, x, y, rgb);
 		return(0);
 	}
-	t_vec	impact = v_sum(mrt->cam->cor, v_product(ray, old_d));
+	t_vec	impact = v_sum(mrt->cam->cor, v_product(v_unit(ray), old_d));
 	t_vec	light;
 	double	bright;
 
@@ -93,35 +95,38 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		norm = near->v_o;
 	else if (near->id == 'Z')
 	{
-		norm = near->v_o;
-		if (cap_intersection(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray) < \
-			new_cylinder_intersect(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray))
-			norm = cross(near->v_o, cross(connect(impact, near->cor), impact));
+		if (is_cap)
+			norm = near->v_o;
+		else
+			norm = v_invert(cross(near->v_o, cross(near->v_o, connect(near->cor, impact))));
 	}
 
 	light = connect(impact, mrt->l->cor);
 	unit(&light);
 	bright = 1 - (2 * angle(light, norm) / (PI));
-	limit(&bright, 1, -1);
+	limit(&bright, 1, 0);
 	if (near && p)
 	{
 		unit(&norm);
-		printf("Distance %lf\n", old_d);
 		printvec(&norm, "Norm");
 		printvec(&light, "light");
 		printvec(NULL, "angle");
 		printf("	%lf\n", bright);
 		if (near->id == 'Z')
 		{
-			printf("cap  %lf\n", cap_intersection(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray));
-			printf("rest %lf\n", new_cylinder_intersect(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray));
+			near->id = 'D';
+			printf("intersect cap  %lf\n", cap_intersection(*near, mrt->cam->cor, ray, 1));
+			printf("intersect mant %lf\n", new_cylinder_intersect(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray));
+			printf("%s\n", is_cap ? "true" : "false");
+			// cap(*near, mrt->cam->cor, ray, 0);
+			near->id = 'Z';
 		}
 	}
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r * bright * (bright >= 0) + 0,
-								near->g * bright * (bright >= 0) + 0,
-								near->b * bright * (bright >= 0) + 0);
+		rgb = create_trgb(0,	near->r * bright/* * (bright >= 0) + 0*/,
+								near->g * bright/* * (bright >= 0) + 0*/,
+								near->b * bright/* * (bright >= 0) + 0*/);
 		// rgb = create_trgb(0,	near->r + ((bright > 0) * (255 - near->r) * bright * mrt->l->lr) - ((bright < 0) * (near->r) - bright * -mrt->l->lr),
 		// 						near->g + ((bright > 0) * (255 - near->g) * bright * mrt->l->lr) - ((bright < 0) * (near->g) - bright * -mrt->l->lr),
 		// 						near->b + ((bright > 0) * (255 - near->b) * bright * mrt->l->lr) - ((bright < 0) * (near->b) - bright * -mrt->l->lr));
@@ -143,7 +148,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
-			d = hit_cylinder(&mrt->obj[i]->cor, &mrt->obj[i]->v_o, mrt->obj[i]->rad, mrt->obj[i]->hght, &impact, &light);
+			d = hit_cylinder(*mrt->obj[i], impact, light, &shadow);
 		}
 		if (d > 0.1 && d < veclen(connect(impact, mrt->l->cor)))
 		{
