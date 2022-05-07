@@ -114,12 +114,9 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		printf("	%lf\n", bright);
 		if (near->id == 'Z')
 		{
-			near->id = 'D';
 			printf("intersect cap  %lf\n", cap_intersection(*near, mrt->cam->cor, ray, 1));
 			printf("intersect mant %lf\n", new_cylinder_intersect(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray));
 			printf("%s\n", is_cap ? "true" : "false");
-			// cap(*near, mrt->cam->cor, ray, 0);
-			near->id = 'Z';
 		}
 	}
 	if (near)
