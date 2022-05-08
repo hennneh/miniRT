@@ -112,85 +112,13 @@ double	new_cylinder_intersect(t_vec *posi, t_vec *dir, double radius, double hei
 	return (x[0]);
 }
 
-/**
- * @brief calculate if a ray intersects with a cap at a given offset
- *  within the bounds of the cap
- * @param	cyl the cylinder object
- * @param	ray_org the origin of the ray (cam or impact on othe object)
- * @param	ray	self explanatory
- * @param	off	the offset of the cap to the origin of the cylinder
- * @return	if interception point is within the radius the distance is returned;
- *  else  -1
-*/
-double	cap(t_obj cyl, t_vec ray_org, t_vec ray, double off)
-{
-	t_obj	cap;
-	double	inter;
-	t_vec	impact;
-	double	dist;
-
-	cap.cor = v_sum(cyl.cor, v_product(v_unit(cyl.v_o), off));
-	if (off == 0) // debugger
-		cap.cor = v_sum(cyl.cor, v_product(v_unit(cyl.v_o), cyl.hght / 2));
-	cap.v_o = cyl.v_o;
-	cap.id = 'P';
-	inter = hit_plane(ray_org, v_unit(ray), &cap);
-	impact = v_sum(ray_org, v_product(v_unit(ray), inter));
-	if (off == 0) // debugger
-	{
-		printf("upper off %lf\nactual upper off %lf\n", cyl.hght / 2, veclen(connect(cyl.cor, cap.cor)));
-		printf("inter %lf\n", inter);
-		printf("distance to center %lf\nRadius %lf\n", veclen(connect(cap.cor, impact)), cyl.rad);
-		printf("pl %lf,%lf,%lf %lf,%lf,%lf 128,128,128\n", cap.cor.x, cap.cor.y, cap.cor.z, cap.v_o.x, cap.v_o.y, cap.v_o.z);
-	}
-	dist = veclen(connect(cap.cor, impact));
-	if (dist > 0 && dist < cyl.rad)
-		return (inter);
-	return (-10);
-}
-
-
-double	cap_intersection(t_obj cyl, t_vec ray_or, t_vec ray, int d)
-{
-	double	cap1;
-	double	cap2;
-
-	cap1 = cap(cyl, ray_or, ray, cyl.hght / 2);
-	cap2 = cap(cyl, ray_or, ray, cyl.hght / -2);
-	if (d)
-	{
-		cap1 = cap(cyl, ray_or, ray, 0);
-		printf("cap1 %lf\n", cap1);
-		printf("cap2 %lf\n", cap2);
-	}
-	if (cap1 < 0 && cap2 < 0)
-		return (-100);
-	if (cap1 >= 0 && (cap1 < cap2 && cap2 > 0 || cap1 > cap2 && cap2 < 0))
-		return (cap1);
-	if (cap2 >= 0 && (cap2 < cap1 && cap1 > 0 || cap2 > cap1 && cap1 < 0))
-		return (cap2);
-	return (-2);
-}
-
 double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir, t_bool *is_cap)
 {
 	double	cylinder_inter;
-	double	cap_inter;
 
 	cylinder_inter = new_cylinder_intersect(&cyl.cor, &cyl.v_o, cyl.rad, cyl.hght, &ray_or, &ray_dir);
 	// limit(&cylinder_inter, RENDER_DISTANCE, 0);
-	cap_inter = cap_intersection(cyl, ray_or, ray_dir, 0);
-	// limit(&cap_inter, RENDER_DISTANCE, 0);
-	if (0 < cap_inter && cap_inter < cylinder_inter)
-	{
-		*is_cap = TRUE;
-		return (cap_inter);
-	}
-	else
-	{
-		*is_cap = FALSE;
-		return (cylinder_inter);
-	}
+	return (cylinder_inter);
 }
 
 // t_vec	vsubstract(t_vec a, t_vec b)

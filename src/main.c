@@ -86,9 +86,9 @@ void	move(t_mrt *mrt, int key)
 	if (key == 107) // K
 		mrt->cam->cor.z -= 5;
 	if (key == 106) // J
-		mrt->cam->cor.x -= 5;
-	if (key == 108) // L
 		mrt->cam->cor.x += 5;
+	if (key == 108) // L
+		mrt->cam->cor.x -= 5;
 	if (key == 252) // Ü close
 		mrt->cam->cor.y -= 5;
 	if (key == 246) // Ö far
@@ -265,6 +265,58 @@ int	key_hook(int key, t_mrt *mrt)
 	return (0);
 }
 
+t_obj	*circle_obj(t_obj cyl, double dst)
+{
+	t_obj	*res;
+
+	res = malloc(sizeof(t_obj));
+	res->id = 'C';
+	res->cor = v_sum(cyl.cor, v_product(v_unit(cyl.v_o), dst));
+	if (dst > 0)
+		res->v_o = cyl.v_o;
+	else
+		res->v_o = v_invert(cyl.v_o);
+	res->r = cyl.r;
+	res->g = cyl.g;
+	res->b = cyl.b;
+	res->rad = cyl.rad;
+	return (res);
+}
+
+void	expand_obj(t_mrt *mrt)
+{
+	int		i;
+	int		e;
+	t_obj	**new;
+
+	i = 0;
+	e = 0;
+	while (mrt->obj[i])
+	{
+		if (mrt->obj[i]->id == 'Z')
+			e += 2;
+		i++;
+		e++;
+	}
+	new = ft_calloc(e + 1, sizeof(t_obj*));
+	i = 0;
+	e = 0;
+	while (mrt->obj[i])
+	{
+		if (mrt->obj[i]->id != 'Z')
+			new[i + e] = mrt->obj[i];
+		else
+		{
+			new[i + e++] = mrt->obj[i];
+			new[i + e++] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / 2);
+			new[i + e] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / -2);
+		}
+		i++;
+	}
+	free(mrt->obj);
+	mrt->obj = new;
+}
+
 int	main(int argc, char **argv)
 {
 	t_mrt	mrt;
@@ -276,6 +328,7 @@ int	main(int argc, char **argv)
 	}
 	if (input(&mrt, argv[1]))
 		return (printf("ERROR INPUT\n"));
+	expand_obj(&mrt);
 	mrt.mlx = mlx_init();
 	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT + 100, "I wanna be Tracer");
 	calc(&mrt);

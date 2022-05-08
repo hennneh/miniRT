@@ -62,6 +62,10 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = hit_plane(mrt->cam->cor, ray, mrt->obj[i]);
 		}
+		if (mrt->obj[i]->id == 'C')
+		{
+			d = hit_circle(mrt->cam->cor, ray, mrt->obj[i]);
+		}
 		if (mrt->obj[i]->id == 'O')
 		{
 			d = hit_line(mrt->cam->cor, ray, mrt->obj[i]);
@@ -98,7 +102,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	norm = init_vec(0, 1, 0);
 	if (near->id == 'S')
 		norm = connect(near->cor, impact);
-	else if (near->id == 'P')
+	else if (near->id == 'P' || near->id == 'C')
 		norm = near->v_o;
 	else if (near->id == 'Z')
 	{
@@ -119,23 +123,14 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		printvec(&light, "light");
 		printvec(NULL, "angle");
 		printf("	%lf\n", bright);
-		if (near->id == 'Z')
-		{
-			printf("intersect cap  %lf\n", cap_intersection(*near, mrt->cam->cor, ray, 1));
-			printf("intersect mant %lf\n", new_cylinder_intersect(&near->cor, &near->v_o, near->rad, near->hght, &mrt->cam->cor, &ray));
-			printf("%s\n", is_cap ? "true" : "false");
-		}
 	}
 	if (near->id == 'O')
 		bright = 1;
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r /* bright/* * (bright >= 0) + 0*/,
-								near->g /* bright/* * (bright >= 0) + 0*/,
-								near->b /* bright/* * (bright >= 0) + 0*/);
-		// rgb = create_trgb(0,	near->r + ((bright > 0) * (255 - near->r) * bright * mrt->l->lr) - ((bright < 0) * (near->r) - bright * -mrt->l->lr),
-		// 						near->g + ((bright > 0) * (255 - near->g) * bright * mrt->l->lr) - ((bright < 0) * (near->g) - bright * -mrt->l->lr),
-		// 						near->b + ((bright > 0) * (255 - near->b) * bright * mrt->l->lr) - ((bright < 0) * (near->b) - bright * -mrt->l->lr));
+		rgb = create_trgb(0,	near->r * bright/* * (bright >= 0) + 0*/,
+								near->g * bright/* * (bright >= 0) + 0*/,
+								near->b * bright/* * (bright >= 0) + 0*/);
 	}
 
 	t_bool shadow = FALSE;
@@ -152,6 +147,10 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = hit_plane(mrt->cam->cor, light, mrt->obj[i]);
 		}
+		// if (mrt->obj[i]->id == 'C')
+		// {
+		// 	d = hit_circle(mrt->cam->cor, ray, mrt->obj[i]);
+		// }
 		if (mrt->obj[i]->id == 'Z')
 		{
 			d = hit_cylinder(*mrt->obj[i], impact, light, &shadow);
@@ -163,8 +162,8 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		i++;
 	}
-	// if (shadow == TRUE)
-	// 	rgb = create_trgb(0, 0, 0, 0);
+	if (shadow == TRUE)
+		rgb = create_trgb(0, 0, 0, 0);
 	if (img)
 		my_mlx_pixel_put(img, x, y, rgb);
 	return (0);

@@ -59,7 +59,7 @@ double	hit_line(t_vec ray_or, t_vec ray, t_obj *plane)
 		return (0);
 }
 
-double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane, double rad)
+double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane)
 {
 	double	t;
 	double	test;
@@ -77,7 +77,7 @@ double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane, double rad)
 		if (t < 0)
 			return (0);
 		impact = v_sum(v_product(v_unit(ray), t), ray_or);
-		if (veclen(connect(impact, plane->cor)) < rad)
+		if (veclen(connect(impact, plane->cor)) < plane->rad)
 			return (t);
 		return (0);
 	}
