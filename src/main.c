@@ -131,7 +131,6 @@ void	origin(t_mrt *mrt)
 		i++;
 	new = ft_calloc((i + 4), sizeof(t_obj*));
 	i = 0;
-	printf("lal\n");
 	while(mrt->obj[i] && i < (i + 4 - s))
 	{
 		if (!(s && mrt->obj[i]->id == 'O'))
@@ -228,7 +227,6 @@ int	render(t_mrt *mrt)
 
 int	end(t_mrt *mrt)
 {
-	//exit functions
 	if (mrt)
 		exit(0);
 	return (0);

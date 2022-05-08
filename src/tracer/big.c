@@ -145,17 +145,17 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		if (mrt->obj[i]->id == 'P')
 		{
-			d = hit_plane(mrt->cam->cor, light, mrt->obj[i]);
+			d = hit_plane(impact, light, mrt->obj[i]);
 		}
-		// if (mrt->obj[i]->id == 'C')
-		// {
-		// 	d = hit_circle(mrt->cam->cor, ray, mrt->obj[i]);
-		// }
+		if (mrt->obj[i]->id == 'C')
+		{
+			d = hit_circle(impact, light, mrt->obj[i]);
+		}
 		if (mrt->obj[i]->id == 'Z')
 		{
 			d = hit_cylinder(*mrt->obj[i], impact, light, &shadow);
 		}
-		if (d > 0.1 && d < veclen(connect(impact, mrt->l->cor)))
+		if (d > 000.1 && d < veclen(connect(impact, mrt->l->cor)))
 		{
 			shadow = TRUE;
 			break ;

@@ -40,23 +40,26 @@ double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane)
 	}
 }
 
-double	hit_line(t_vec ray_or, t_vec ray, t_obj *plane)
+double	hit_rect(t_vec ray_or, t_vec ray, t_obj *plane)
 {
 	double	t;
 	double	test;
-	t_vec	orth;
-	t_vec inter_ray;
-	t_vec inter_or;
+	t_vec	tmp;
+	t_vec	impact;
+
 	t = 0;
-	
-	inter_ray = plane->v_o;
-	inter_or = plane->cor;
-	orth = cross(inter_ray, connect(inter_or, ray_or));
-	test = calculate_dot(&orth, &ray);
-	if (!test || fabs(test) < 0.001)
-		return (1);
-	else
+	test = calculate_dot(&plane->v_o, &ray);
+	if (!test || fabs(test) < 0.0001)
 		return (0);
+	else
+	{
+		tmp = connect(ray_or, plane->cor);
+		t = (calculate_dot(&tmp, &plane->v_o) / test);
+		if (t < 0)
+			return (0);
+		impact = v_sum(v_product(v_unit(ray), t), ray_or);
+		return (0);
+	}
 }
 
 double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane)
@@ -81,4 +84,23 @@ double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane)
 			return (t);
 		return (0);
 	}
+}
+
+double	hit_line(t_vec ray_or, t_vec ray, t_obj *plane)
+{
+	double	t;
+	double	test;
+	t_vec	orth;
+	t_vec inter_ray;
+	t_vec inter_or;
+	t = 0;
+	
+	inter_ray = plane->v_o;
+	inter_or = plane->cor;
+	orth = cross(inter_ray, connect(inter_or, ray_or));
+	test = calculate_dot(&orth, &ray);
+	if (!test || fabs(test) < 0.001)
+		return (1);
+	else
+		return (0);
 }
