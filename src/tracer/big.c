@@ -62,14 +62,21 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = hit_plane(mrt->cam->cor, ray, mrt->obj[i]);
 		}
+		if (mrt->obj[i]->id == 'O')
+		{
+			d = hit_line(mrt->cam->cor, ray, mrt->obj[i]);
+		}
 		if (mrt->obj[i]->id == 'Z')
 		{
 			d = hit_cylinder(*mrt->obj[i], mrt->cam->cor, ray, &is_cap);
 		}
 		if (d && d > 0 && d < old_d)
 		{
-			near = mrt->obj[i];
-			old_d = d;
+			if(!near || near->id != 'O')
+			{
+				near = mrt->obj[i];
+				old_d = d;
+			}
 		}
 		if (p && d)
 		{
@@ -119,11 +126,13 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 			printf("%s\n", is_cap ? "true" : "false");
 		}
 	}
+	if (near->id == 'O')
+		bright = 1;
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r * bright/* * (bright >= 0) + 0*/,
-								near->g * bright/* * (bright >= 0) + 0*/,
-								near->b * bright/* * (bright >= 0) + 0*/);
+		rgb = create_trgb(0,	near->r /* bright/* * (bright >= 0) + 0*/,
+								near->g /* bright/* * (bright >= 0) + 0*/,
+								near->b /* bright/* * (bright >= 0) + 0*/);
 		// rgb = create_trgb(0,	near->r + ((bright > 0) * (255 - near->r) * bright * mrt->l->lr) - ((bright < 0) * (near->r) - bright * -mrt->l->lr),
 		// 						near->g + ((bright > 0) * (255 - near->g) * bright * mrt->l->lr) - ((bright < 0) * (near->g) - bright * -mrt->l->lr),
 		// 						near->b + ((bright > 0) * (255 - near->b) * bright * mrt->l->lr) - ((bright < 0) * (near->b) - bright * -mrt->l->lr));
@@ -154,8 +163,8 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		i++;
 	}
-	if (shadow == TRUE)
-		rgb = create_trgb(0, 0, 0, 0);
+	// if (shadow == TRUE)
+	// 	rgb = create_trgb(0, 0, 0, 0);
 	if (img)
 		my_mlx_pixel_put(img, x, y, rgb);
 	return (0);

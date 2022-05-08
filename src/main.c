@@ -96,6 +96,62 @@ void	move(t_mrt *mrt, int key)
 	calc(mrt);
 }
 
+t_obj	*line_obj(t_vec	origin, t_vec direction, char color)
+{
+	t_obj	*res;
+
+	res = malloc(sizeof(t_obj));
+	res->id = 'O';
+	res->cor = origin;
+	res->v_o = direction;
+	res->r = 0;
+	res->g = 0;
+	res->b = 0;
+	if (color == 'r')
+		res->r = 255;
+	if (color == 'g')
+		res->g = 255;
+	if (color == 'b')
+		res->b = 255;
+	return (res);
+}
+
+/**
+ * add 3 elements to the object list that disply the coordinate center
+ * but it also displays the intersection point behinf the camera
+*/
+void	origin(t_mrt *mrt)
+{
+	static	int	s;
+	int		i;
+	t_obj	**new;
+
+	i = 0;
+	while (mrt->obj[i])
+		i++;
+	new = ft_calloc((i + 4), sizeof(t_obj*));
+	i = 0;
+	printf("lal\n");
+	while(mrt->obj[i] && i < (i + 4 - s))
+	{
+		if (!(s && mrt->obj[i]->id == 'O'))
+		new[i] = mrt->obj[i];
+		i++;
+	}
+	if (!s)
+	{
+		new[i++] = line_obj(init_vec(0, 0, 0), init_vec(0, 0, 1), 'r');
+		new[i++] = line_obj(init_vec(0, 0, 0), init_vec(0, 1, 0), 'g');
+		new[i++] = line_obj(init_vec(0, 0, 0), init_vec(1, 0, 0), 'b');
+		s = 3;
+	}
+	else
+		s = 0;
+	free(mrt->obj);
+	mrt->obj = new;
+	calc(mrt);
+}
+
 void	print_config(t_mrt *mrt)
 {
 	int	i;
@@ -192,11 +248,11 @@ int	key_hook(int key, t_mrt *mrt)
 		else
 			swtch = FALSE;
 	}
-	if (key == 99 && !swtch) // c
+	if (!swtch && key == 99) // c
 		controls(mrt);
-	else if (key == 112 && !swtch)
+	else if (!swtch && key == 112)
 		print_config(mrt);
-	else if (key == 114 && !swtch) // r
+	else if (!swtch && key == 114) // r
 		debug(mrt);
 	else if (!swtch && (key == 105 || key == 106 || key == 107 || key == 108 || key == 246 || key == 252))
 		move(mrt, key);
@@ -204,6 +260,8 @@ int	key_hook(int key, t_mrt *mrt)
 		camera(mrt, key);
 	else if (!swtch && (key == 119 || key == 97 || key == 115 || key == 100 || key == 102 || key == 98 || key == 43 || key == 45))
 		light(mrt, key);
+	else if (!swtch && key == 111)
+		origin(mrt);
 	return (0);
 }
 
