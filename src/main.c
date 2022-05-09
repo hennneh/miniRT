@@ -1,3 +1,4 @@
+#include "../inc/minirt.h"
 
 void	limit(double *var, double upper, double lower)
 {
