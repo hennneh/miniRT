@@ -2,27 +2,6 @@
 
 #define EPSILON 0.00001
 
-double	*get_vector(double *point_one, double *point_two)
-{
-	double	*vec;
-
-	vec = malloc(sizeof(double) * 3);
-	vec[0] = point_two[0] - point_one[0];
-	vec[1] = point_two[1] - point_one[1];
-	vec[2] = point_two[2] - point_one[2];
-	return (vec);
-}
-
-t_vec	vec_product(t_vec a, double m)
-{
-	t_vec	res;
-
-	res.x = a.x * m;
-	res.y = a.y * m;
-	res.z = a.z * m;
-	return (res);
-}
-
 int	cylinder_coefficient(t_obj cyl, double *x, t_vec *ray_or, t_vec *ray_dir)
 {
 	t_vec	v;
@@ -32,10 +11,10 @@ int	cylinder_coefficient(t_obj cyl, double *x, t_vec *ray_or, t_vec *ray_dir)
 
 	normalized = cyl.v_o;
 	unit(&normalized);
-	v = vec_product(normalized, calculate_dot(ray_dir, &normalized));
+	v = v_product(normalized, calculate_dot(ray_dir, &normalized));
 	v = connect(v, *ray_dir);
 	tmp = connect(cyl.cor, *ray_or);
-	u = vec_product(normalized, calculate_dot(&tmp, &normalized));
+	u = v_product(normalized, calculate_dot(&tmp, &normalized));
 	u = connect(u, connect(cyl.cor, *ray_or));
 	tmp.x = calculate_dot(&v, &v);
 	tmp.y = 2 * calculate_dot(&v, &u);
@@ -74,7 +53,7 @@ t_vec	calc_cy_normal(double *x, t_obj cyl, t_vec ray_or, t_vec ray_dir)
 	}
 	x[0] = d[1];
 	return (v_unit(connect(connect(ray_or, cyl.cor), connect(\
-	vec_product(v_unit(cyl.v_o), d[0]), vec_product(ray_dir, d[1])))));
+	v_product(v_unit(cyl.v_o), d[0]), v_product(ray_dir, d[1])))));
 }
 
 t_vec	new_pos(t_vec *posi, t_vec *dir, double height, t_vec *norm)
@@ -98,9 +77,9 @@ double	new_cylinder_intersect(t_obj cyl, t_vec *ray_or, t_vec *ray_dir)
 	cyl.cor = new_pos(&cyl.cor, &cyl.v_o, cyl.hght, &normalized);
 	if (cylinder_coefficient(cyl, x, ray_or, ray_dir) == 0)
 		return (0);
-	helper = connect(connect(*ray_or, cyl.cor), vec_product(*ray_dir, x[0]));
+	helper = connect(connect(*ray_or, cyl.cor), v_product(*ray_dir, x[0]));
 	x[2] = calculate_dot(&normalized, &helper);
-	helper = connect(connect(*ray_or, cyl.cor), vec_product(*ray_dir, x[1]));
+	helper = connect(connect(*ray_or, cyl.cor), v_product(*ray_dir, x[1]));
 	x[3] = calculate_dot(&normalized, &helper);
 	if (!((x[2] >= 0 && x[2] <= cyl.hght && x[0] > EPSILON) || (x[3] >= 0 && \
 			x[3] <= cyl.hght && x[0] > EPSILON)))

@@ -130,8 +130,7 @@ int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
 
 	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), mrt->cam, scr);
 	unit(&ray);
-	rgb = create_trgb(0, mrt->al->lr * mrt->al->r, mrt->al->lr * mrt->al->g, \
-	mrt->al->lr * mrt->al->b);
+	rgb = create_trgb(0, 0, 0, 0);
 	d = nearest(mrt, ray, &near, p);
 	if (!near)
 	{
@@ -139,8 +138,12 @@ int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
 		return (0);
 	}
 	bright = lumen(mrt, near, ray, d);
-		rgb = create_trgb(0, near->r * (bright * mrt->l->lr), near->g * (\
-		bright * mrt->l->lr), near->b * (bright * mrt->l->lr));
+	double alp = mrt->al->lr / (mrt->al->lr + mrt->l->lr);
+	double lp = mrt->l->lr / (mrt->al->lr + mrt->l->lr);
+	int r = mrt->al->r * alp + near->r * lp;
+	int g = mrt->al->g * alp + near->g * lp;
+	int b = mrt->al->b * alp + near->b * lp;
+	rgb = create_trgb(0, r * bright, g * bright, b * bright);
 	if (shaed(mrt, ray, d))
 		rgb = create_trgb(0, 0, 0, 0);
 	my_mlx_pixel_put(&mrt->img, cord[0], cord[1], rgb);
