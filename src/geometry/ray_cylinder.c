@@ -23,24 +23,25 @@ t_vec	vec_product(t_vec a, double m)
 	return (res);
 }
 
-int	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec *ray_or, t_vec *ray_dir)
+int	cylinder_coefficient(t_obj cyl, double *x, t_vec *ray_or, t_vec *ray_dir)
 {
 	t_vec	v;
 	t_vec	u;
 	t_vec	normalized;
+	t_vec	tmp;
 
-	normalized = *dir;
+	normalized = cyl.v_o;
 	unit(&normalized);
 	v = vec_product(normalized, calculate_dot(ray_dir, &normalized));
 	v = connect(v, *ray_dir);
-	t_vec tmp = connect(*pos, *ray_or);
+	tmp = connect(cyl.cor, *ray_or);
 	u = vec_product(normalized, calculate_dot(&tmp, &normalized));
-	u = connect(u, connect(*pos, *ray_or));
-	double a = calculate_dot(&v, &v);
-	double b = 2 * calculate_dot(&v, &u);
-	double c = calculate_dot(&u, &u) - pow(radius, 2);
-	x[0] = (-b + sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
-	x[1] = (-b - sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
+	u = connect(u, connect(cyl.cor, *ray_or));
+	tmp.x = calculate_dot(&v, &v);
+	tmp.y = 2 * calculate_dot(&v, &u);
+	tmp.z = calculate_dot(&u, &u) - pow(cyl.rad, 2);
+	x[0] = (-tmp.y + sqrt(pow(tmp.y, 2) - 4 * tmp.x * tmp.z)) / (2 * tmp.x);
+	x[1] = (-tmp.y - sqrt(pow(tmp.y, 2) - 4 * tmp.x * tmp.z)) / (2 * tmp.x);
 	if ((x[0] != x[0] && x[1] != x[1]) || (x[0] < EPSILON && x[1] < EPSILON))
 	{
 		x[0] = INFINITY;
@@ -50,33 +51,30 @@ int	cylinder_coefficient(t_vec *pos, t_vec *dir, double radius, double *x, t_vec
 	return (1);
 }
 
-t_vec	calc_cy_normal(double *x, t_vec pos, t_vec dir, double *dist, t_vec ray_or, t_vec ray_dir, double height)
+t_vec	calc_cy_normal(double *x, t_obj cyl, t_vec ray_or, t_vec ray_dir)
 {
-	double	d;
-	double	t;
-	t_vec	normalized;
+	double	d[2];
 
-	normalized = dir;
-	unit(&normalized);
-	if ((dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON) && (dist[1] >= 0 && dist[1] <= height && x[1] > EPSILON))
+	unit(&cyl.v_o);
+	if ((x[2] >= 0 && x[2] <= cyl.hght && x[0] > EPSILON) && (x[3] >= \
+		0 && x[3] <= cyl.hght && x[1] > EPSILON))
 	{
-		d = x[0] < x[1] ? dist[0] : dist[1];
-		t = x[0] < x[1] ? x[0] : x[1];
+		d[0] = (x[0] < x[1]) * x[2] + (x[0] >= x[1]) * x[3];
+		d[1] = (x[0] < x[1]) * x[0] + (x[0] >= x[1]) * x[1];
 	}
-	else if(dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON)
+	else if (x[2] >= 0 && x[2] <= cyl.hght && x[0] > EPSILON)
 	{
-		d = dist[0];
-		t = x[0];
+		d[0] = x[2];
+		d[1] = x[0];
 	}
 	else
 	{
-		d = dist[1];     
-		t = x[1];
+		d[0] = x[3];
+		d[1] = x[1];
 	}
-	x[0] = t;
-	t_vec	tmp = connect(connect(ray_or, pos), connect(vec_product(normalized, d), vec_product(ray_dir, t)));
-	unit(&tmp);
-	return (tmp);
+	x[0] = d[1];
+	return (v_unit(connect(connect(ray_or, cyl.cor), connect(\
+	vec_product(v_unit(cyl.v_o), d[0]), vec_product(ray_dir, d[1])))));
 }
 
 t_vec	new_pos(t_vec *posi, t_vec *dir, double height, t_vec *norm)
@@ -91,24 +89,23 @@ t_vec	new_pos(t_vec *posi, t_vec *dir, double height, t_vec *norm)
 	return (pos);
 }
 
-double	new_cylinder_intersect(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
+double	new_cylinder_intersect(t_obj cyl, t_vec *ray_or, t_vec *ray_dir)
 {
-	double	x[2];
-	double	dist[2];
+	double	x[4];
 	t_vec	normalized;
-	t_vec	pos;
 	t_vec	helper;
 
-	pos = new_pos(posi, dir, height, &normalized);
-	if (cylinder_coefficient(&pos, dir, radius, x, ray_or, ray_dir) == 0)
+	cyl.cor = new_pos(&cyl.cor, &cyl.v_o, cyl.hght, &normalized);
+	if (cylinder_coefficient(cyl, x, ray_or, ray_dir) == 0)
 		return (0);
-	helper = connect(connect(*ray_or, pos), vec_product(*ray_dir, x[0]));
-	dist[0] = calculate_dot(&normalized, &helper);
-	helper = connect(connect(*ray_or, pos), vec_product(*ray_dir, x[1]));
-	dist[1] = calculate_dot(&normalized, &helper);
-	if (!((dist[0] >= 0 && dist[0] <= height && x[0] > EPSILON) || (dist[1] >= 0 && dist[1] <= height && x[0] > EPSILON)))
+	helper = connect(connect(*ray_or, cyl.cor), vec_product(*ray_dir, x[0]));
+	x[2] = calculate_dot(&normalized, &helper);
+	helper = connect(connect(*ray_or, cyl.cor), vec_product(*ray_dir, x[1]));
+	x[3] = calculate_dot(&normalized, &helper);
+	if (!((x[2] >= 0 && x[2] <= cyl.hght && x[0] > EPSILON) || (x[3] >= 0 && \
+			x[3] <= cyl.hght && x[0] > EPSILON)))
 		return (0);
-	calc_cy_normal(x, pos, *dir, dist, *ray_or, *ray_dir, height);
+	calc_cy_normal(x, cyl, *ray_or, *ray_dir);
 	return (x[0]);
 }
 
@@ -116,106 +113,6 @@ double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir)
 {
 	double	cylinder_inter;
 
-	cylinder_inter = new_cylinder_intersect(&cyl.cor, &cyl.v_o, cyl.rad, cyl.hght, &ray_or, &ray_dir);
-	// limit(&cylinder_inter, RENDER_DISTANCE, 0);
+	cylinder_inter = new_cylinder_intersect(cyl, &ray_or, &ray_dir);
 	return (cylinder_inter);
 }
-
-// t_vec	vsubstract(t_vec a, t_vec b)
-// {
-// 	t_vec	p;
-
-// 	p.x = a.x - b.x;
-// 	p.y = a.y - b.y;
-// 	p.z = a.z - b.z;
-// 	return (p);
-// }
-
-// double		dot(t_vec a, t_vec b)
-// {
-// 	return (a.x * b.x + a.y * b.y + a.z * b.z);
-// }
-
-// double	solve_plane(t_vec o, t_vec d, t_vec plane_p, t_vec plane_nv)
-// {
-// 	double	x;
-// 	double	denom;
-
-// 	denom = dot(plane_nv, d);
-// 	if (denom == 0)
-// 		return (INFINITY);
-// 	x = (dot(plane_nv, vsubstract(plane_p, o))) / denom;
-// 	return (x > 0 ? x : INFINITY);
-// }
-
-// t_vec	vadd(t_vec a, t_vec b)
-// {
-// 	t_vec	p;
-
-// 	p.x = a.x + b.x;
-// 	p.y = a.y + b.y;
-// 	p.z = a.z + b.z;
-// 	return (p);
-// }
-
-// t_vec		scal_x_vec(double n, t_vec p)
-// {
-// 	t_vec	v;
-
-// 	v.x = n * p.x;
-// 	v.y = n * p.y;
-// 	v.z = n * p.z;
-// 	return (v);
-// }
-
-// double		distance(t_vec p1, t_vec p2)
-// {
-// 	double d;
-
-// 	d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
-// 	return (d);
-// }
-
-// double	caps_intersection(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
-// {
-// 	double	id1;
-// 	double	id2;
-// 	t_vec	ip1;
-// 	t_vec	ip2;
-// 	t_vec	c2;
-
-// 	c2 = vadd(*ray_or, scal_x_vec(height, *dir));	//gotta add normvec herre!!!!!!
-// 	id1 = solve_plane(*ray_or, *ray_dir, *posi, *dir);//gotta add normvec herre!!!!!!
-// 	id2 = solve_plane(*ray_or, *ray_dir, c2, *dir);  //gotta add normvec herre!!!!!!
-// 	if (id1 < INFINITY || id2 < INFINITY)
-// 	{
-// 		ip1 = vadd(*ray_or, scal_x_vec(id1, *ray_dir));
-// 		ip2 = vadd(*ray_or, scal_x_vec(id2, *ray_dir));
-// 		if ((id1 < INFINITY && distance(ip1, *posi) <= radius) && (id2 < INFINITY && distance(ip2, c2) <= radius))
-// 			return (id1 < id2 ? id1 : id2);
-// 		else if (id1 < INFINITY && distance(ip2, c2) <= radius)
-// 			return (id1);
-// 		else if (id2 < INFINITY && distance(ip2, c2) <= radius)
-// 			return (id2);
-// 		return (INFINITY);
-// 	}
-// 	return (INFINITY);
-// }
-
-// double	hit_cylinder(t_vec *posi, t_vec *dir, double radius, double height, t_vec *ray_or, t_vec *ray_dir)
-// {
-// 	double	cylinder_inter;
-// 	double	caps_inter;
-
-// 	cylinder_inter = new_cylinder_intersect(posi, dir, radius, height, ray_or, ray_dir);
-// 	caps_inter = caps_intersection(posi, dir, radius, height, ray_or, ray_dir);
-// 	if (cylinder_inter > 0 || caps_inter > 0)
-// 	{
-// 		if (cylinder_inter < caps_inter)
-// 			return (cylinder_inter);
-// 		else
-// 			return (caps_inter);
-// 	}
-// 	return (0);
-// }
-

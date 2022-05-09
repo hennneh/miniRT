@@ -28,15 +28,3 @@ double	hit_sphere(t_vec sph_org, double sph_rad, t_vec ray_or, t_vec ray_dir)
 	else
 		return (-((tmp.y) + sqrt(disc)) / tmp.x);
 }
-
-
-// int main()
-// {
-// 	double sphere[3] = {-4.49801,1.14318,5.5404};
-// 	double sph_rad = 1.5;
-// 	double ray_or[3] = {-0.19, 1.82, 1.0};
-// 	double ray_dir[3] = {-6,0,7.62242};
-
-// 	double result = hit_sphere(sphere, sph_rad, ray_or, ray_dir);
-// 	printf("Calculated result is: %f\n", result);
-// }

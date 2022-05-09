@@ -1,6 +1,6 @@
 NAME = minirt
 CC = gcc
-FLAGS = #-Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra
 
 SR = ./src/
 EX = $(SR)exit/

@@ -181,7 +181,7 @@ void	print_config(t_mrt *mrt, int i)
 	}
 }
 
-void	controls(t_mrt *mrt)
+void	controls()
 {
 	printf("\n\t\033[0;34mControls :\033[0m\n\n");
 	printf("\033[0mCamera Tilt   \033[0;32m┏┉┉┉┓\033[0m  Field of vision \033[\
@@ -246,7 +246,7 @@ int	key_hook(int key, t_mrt *mrt)
 	if (key == 116)
 		swtch = !swtch;
 	if (!swtch && key == 99)
-		controls(mrt);
+		controls();
 	else if (!swtch && key == 112)
 		print_config(mrt, 0);
 	else if (!swtch && key == 114)
@@ -343,7 +343,7 @@ int	main(int argc, char **argv)
 	mrt.mlx = mlx_init();
 	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT, "I wanna be Tracer");
 	calc(&mrt);
-	controls(&mrt);
+	controls();
 	mlx_mouse_show(mrt.mlx, mrt.win);
 	mlx_loop_hook(mrt.mlx, render, &mrt);
 	mlx_key_hook(mrt.win, key_hook, &mrt);
