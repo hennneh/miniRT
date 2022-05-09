@@ -1,4 +1,3 @@
-
 #include "../../../inc/minirt.h"
 
 /**
@@ -50,6 +49,7 @@ int	init_cam(t_cam *ca, char **info)
 		return (1);
 	if (ca->v_o.x == 0.0 && ca->v_o.y == 0.0 && ca->v_o.z == 0.0)
 		ca->v_o.x = 1.0;
+	limit(&ca->fov, 179.9, 0);
 	return (0);
 }
 
@@ -70,7 +70,7 @@ int	init_lol(t_lol *l, char **info)
 		l->id = 'L';
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &l->cor, 0))
 		return (1);
-	if (!info[i] || init_dim(info[i ++], &l->brit, 2))
+	if (!info[i] || init_dim(info[i ++], &l->lr, 2))
 		return (1);
 	if (info[i])
 		return (1);

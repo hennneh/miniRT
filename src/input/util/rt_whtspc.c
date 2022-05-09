@@ -1,4 +1,3 @@
-
 #include "../../../inc/minirt.h"
 
 /**

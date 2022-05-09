@@ -44,27 +44,27 @@ typedef struct s_cam
 	char	id;
 	t_vec	cor;
 	t_vec	v_o;
-	double	fov;// double! NOTE TO VINNY: multiply initial value by (π / 180)
+	double	fov;
 }	t_cam;
 
 /**
  * struct for Light 
  * @param id [char] char identifier
  * @param cor [double[3]] coordinates of view point [x][y][z]
- * @param brit [double] light brightness ratio [0.0 - 1.0]
+ * @param brit [double] lighting ratio [0.0 - 1.0]
 */
 typedef struct s_lol
 {
 	char	id;
 	t_vec	cor;
-	double	brit;
+	double	lr;
 }	t_lol;
 
 /**
  * struct for Light bonus with RGB
  * @param id [char] char identifier
  * @param cor [double[3]] coordinates of view point [x][y][z]
- * @param brit [double] light brightness ratio [0.0 - 1.0]
+ * @param lr [double] lighting ratio [0.0 - 1.0]
  * @param r [int] Red [0 - 255]
  * @param g [int] Green [0 - 255]
  * @param b [int] Blue [0 - 255]
@@ -101,5 +101,7 @@ typedef struct s_obj
 	int		g;
 	int		b;
 }	t_obj;
+
+typedef enum e_bool{FALSE, TRUE}	t_bool;
 
 #endif

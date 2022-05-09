@@ -8,7 +8,7 @@
 # define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
-# define DIVERGENCE 0.1
+# define DIVERGENCE 0.001
 # define PI 3.14159265359
 
 /*
@@ -39,17 +39,6 @@
 
 # include "struct.h"
 
-typedef struct s_mrt
-{
-	void	*mlx;
-	void	*win;
-	t_al	*al;
-	t_lol	*l;
-	t_cam	*cam;
-	t_obj	**obj;
-	void	*img;
-}				t_mrt;
-
 typedef struct s_data
 {
 	void	*img;
@@ -58,6 +47,17 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }				t_data;
+
+typedef struct s_mrt
+{
+	void	*mlx;
+	void	*win;
+	t_al	*al;
+	t_lol	*l;
+	t_cam	*cam;
+	t_obj	**obj;
+	t_data	img;
+}				t_mrt;
 
 /*
  * FUNCTIONS
@@ -71,11 +71,15 @@ t_vec	*vec_alloc(t_vec clone);
 double	veclen(t_vec a);
 t_vec	connect(t_vec a, t_vec b);
 void	addto(t_vec *a, t_vec b);
+t_vec	v_sum(t_vec a, t_vec b);
 void	product(t_vec *a, double m);
+t_vec	v_product(t_vec a, double m);
 void	resize(t_vec *a, double m);
 void	unit(t_vec	*a);
+t_vec	v_unit(t_vec	a);
 double	angle(t_vec a, t_vec b);
 double	calculate_dot(t_vec *a, t_vec *b);
+t_vec	v_invert(t_vec a);
 t_vec	reflect(t_vec in, t_vec norm);
 
 //TRACER
@@ -83,12 +87,17 @@ t_vec	reflect(t_vec in, t_vec norm);
 t_vec	*scream(t_cam *cam);
 t_vec	single_ray(int x, int y, t_cam *cam, t_vec	scr[3]);
 double	hit_sphere(t_vec sph_org, double sph_rad, t_vec ray_or, t_vec ray_dir);
-double	hit_plane(t_mrt *mrt, t_vec ray, t_obj *plane);
-double	cylinder_intersect(double *pos, double radius, double height, double *ray_or, double *ray_dir);
+double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane);
+double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane);
+double	hit_line(t_vec ray_or, t_vec ray, t_obj *plane);
+double	new_cylinder_intersect(t_obj cyl, t_vec *ray_or, t_vec *ray_dir);
+double	cap_intersection(t_obj cyl, t_vec ray_or, t_vec ray, int d);
+double	cap(t_obj cyl, t_vec ray_org, t_vec ray, double off);
+double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir);
 
 int		shadow(t_mrt *mrt, t_vec impact, char p);
 int		colorme(t_mrt *mrt, t_obj *obj, t_vec ray);
-int		nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img);
+int		nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p);
 
 //SRC
 
@@ -115,6 +124,7 @@ char	**split_wh(char const *s);
 
 int		count_input(t_list *lst, int *count, char *tmp);
 int		check_count(int *count);
+void	limit(double *var, double upper, double lower);
 
 //INITIALIZATION
 

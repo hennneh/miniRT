@@ -10,7 +10,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	*(unsigned int *)dst = color;
 }
 
 /**
@@ -36,8 +36,9 @@ t_vec	*scream(t_cam *cam)
 	res[1] = cross(cam->v_o, res[0]);
 	unit(&res[1]);
 	res[2] = init_vec(cam->v_o.x, cam->v_o.y, cam->v_o.z);
-	resize(&res[2], cos(cam->fov / 2) * (((WDTH * DIVERGENCE) / 2) / cos(PI / 2 - (cam->fov / 2))));
-	return(res);
+	resize(&res[2], cos(cam->fov / 2) * (((WDTH * DIVERGENCE) / 2) / cos(PI / \
+	2 - (cam->fov / 2))));
+	return (res);
 }
 
 /**

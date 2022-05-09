@@ -1,4 +1,3 @@
-
 #include "../../inc/minirt.h"
 
 void	init_mrt(t_mrt *mrt, int count)
@@ -32,7 +31,8 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count, int flag)
 			flag = init_cyl(mrt->obj, tmp, --count);
 		free_2dstr(tmp);
 		if (flag)
-			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) + count + 1);//ERROR
+			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) \
+			+ count + 1);
 		lst = lst->next;
 	}
 	return (0);
@@ -46,8 +46,8 @@ t_list	*import_data(char *file)
 	char	*line;
 
 	fd = open(file, O_RDONLY);
-	if (fd == -1 || ft_strnstr(file, ".rt", ft_strlen(file))
-		!= &file[ft_strlen(file) - 3])
+	if (fd == -1 || ft_strnstr(file, ".rt", ft_strlen(file)) != \
+	&file[ft_strlen(file) - 3])
 	{
 		perror("Error\nNot a valid file");
 		exit(close(fd));
@@ -57,8 +57,8 @@ t_list	*import_data(char *file)
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
-		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1)
-			< ft_strlen(line))
+		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1) < \
+		ft_strlen(line))
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 		else
 			free(line);
@@ -82,9 +82,13 @@ int	input(t_mrt *mrt, char *file)
 	good = 0;
 	ft_bzero(count, sizeof(int) * 4);
 	if (!count_input(lst, count, NULL) && !check_count(count))
+	{
 		good = parse_input(mrt, lst, count[3], 0);
+	}
 	else
+	{
 		good = -1;
+	}
 	ft_lstclear(&lst, free);
 	if (good > 0)
 		rt_er_exit(mrt, good - 1, count[3]);

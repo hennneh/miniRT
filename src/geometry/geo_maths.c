@@ -79,6 +79,21 @@ void	addto(t_vec *a, t_vec b)
 }
 
 /**
+ * @brief add a two vectors together
+ * @param a [t_vec] the vector being added to
+ * @param b [t_vec] the vector to add
+*/
+t_vec	v_sum(t_vec a, t_vec b)
+{
+	t_vec	res;
+
+	res.x = a.x + b.x;
+	res.y = a.y + b.y;
+	res.z = a.z + b.z;
+	return (res);
+}
+
+/**
  * @brief multiply a vector by a constant
  * @param a [t_vec] the vector mutiplied
  * @param m [double] the multiplicant
@@ -90,6 +105,21 @@ void	product(t_vec *a, double m)
 	a->x *= m;
 	a->y *= m;
 	a->z *= m;
+}
+
+/**
+ * @brief multiply a vector by a constant, and return a dublicate
+ * @param a [t_vec] the vector mutiplied
+ * @param m [double] the multiplicant
+ */
+t_vec	v_product(t_vec a, double m)
+{
+	t_vec	res;
+
+	res.x = a.x * m;
+	res.y = a.y * m;
+	res.z = a.z * m;
+	return (res);
 }
 
 /**
@@ -130,6 +160,23 @@ void	unit(t_vec	*a)
 }
 
 /**
+ * @brief change a vecto to have the total lenth of 1, no change direction
+ * @param a [t_vec] vector to operade on
+ * @return [void]
+*/
+t_vec	v_unit(t_vec	a)
+{
+	t_vec	res;
+	double	d;
+
+	d = 1 / veclen(a);
+	res.x = a.x * d;
+	res.y = a.y * d;
+	res.z = a.z * d;
+	return (res);
+}
+
+/**
  * @brief calculate the angle between two vectors
  * @param a [t_vec]
  * @param b [t_vec]
@@ -141,9 +188,7 @@ double	angle(t_vec a, t_vec b)
 	unit(&a);
 	unit(&b);
 	scalar = calculate_dot(&a, &b);
-	if (scalar < 0)
-		scalar *= -1;
-	return ((acos(scalar)) / PI);
+	return ((acos(scalar)));
 }
 
 /**
@@ -165,15 +210,29 @@ double	calculate_dot(t_vec *a, t_vec *b)
 }
 
 /**
+ * @brief return a vector wit all the inverted values of the argument
+ * @param a vector to invert
+*/
+t_vec	v_invert(t_vec a)
+{
+	t_vec	res;
+
+	res.x = -a.x;
+	res.y = -a.y;
+	res.z = -a.z;
+	return (res);
+}
+
+/**
  * @brief reflect a given vector on a normal-vector
  * @param in [t_vec] the vector to be reflected
  * @param norm [t_vec] the achse to reflect over
  * we create a vector perpendiculliar to NORM and IN
- * and then use that vector to create another, perpendiculliar to NORM but in
- * plane with IN
+ * and then use that vector to create another, perpendiculliar to NORM but 
+ * in plane with IN
  * -> TANG; which we will use to calculate the reflection in 2d geometry.
- * a connecting vector between IN (1) and TANG (calc) is then returned as the
- * result
+ * a connecting vector between IN (1) and TANG (calc) is then returned as 
+ * the result
 */
 t_vec	reflect(t_vec in, t_vec norm)
 {
