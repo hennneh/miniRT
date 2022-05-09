@@ -230,19 +230,12 @@ int	render(t_mrt *mrt)
 	return (0);
 }
 
-int	end(t_mrt *mrt)
-{
-	if (mrt)
-		exit(0);
-	return (0);
-}
-
 int	key_hook(int key, t_mrt *mrt)
 {
 	static t_bool	swtch;
 
 	if (key == 65307)
-		end(mrt);
+		rt_exit(mrt);
 	if (key == 116)
 		swtch = !swtch;
 	if (!swtch && key == 99)
@@ -347,7 +340,7 @@ int	main(int argc, char **argv)
 	mlx_mouse_show(mrt.mlx, mrt.win);
 	mlx_loop_hook(mrt.mlx, render, &mrt);
 	mlx_key_hook(mrt.win, key_hook, &mrt);
-	mlx_hook(mrt.win, 33, (1L << 17), end, &mrt);
+	mlx_hook(mrt.win, 33, (1L << 17), rt_exit, &mrt);
 	mlx_loop(mrt.mlx);
 	rt_exit(&mrt);
 	return (0);
