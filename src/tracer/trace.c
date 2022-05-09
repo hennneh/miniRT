@@ -8,11 +8,6 @@ void	printvec(t_vec *p, char *description)
 		printf("%s\n", description);
 }
 
-//	suggestions for funky names:
-//	i_wanna_be_tracer
-//	i'm_already_tracer
-//	Amazing_trace,how_sweet_the_sound
-
 /**
  * find the object closest to the camera
  * put the representing color to the position in the image
