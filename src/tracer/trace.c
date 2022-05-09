@@ -1,13 +1,5 @@
 #include "../../inc/minirt.h"
 
-void	printvec(t_vec *p, char *description)
-{
-	if (p)
-		printf("%s : %lf %lf %lf\n", description, p->x, p->y, p->z);
-	else
-		printf("%s\n", description);
-}
-
 /**
  * find the object closest to the camera
  * put the representing color to the position in the image
@@ -95,18 +87,17 @@ t_bool	shaed(t_mrt *mrt, t_vec ray, double d)
 {
 	t_vec	light;
 	t_vec	impact;
-	t_bool	shadow;
 	int		i;
 
-	shadow = FALSE;
 	impact = v_sum(mrt->cam->cor, v_product(v_unit(ray), d));
 	light = v_unit(connect(impact, mrt->l->cor));
 	i = 0;
-	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id && !shadow)
+	while (mrt && mrt->obj && mrt->obj[i] && mrt->obj[i]->id)
 	{
 		d = 0;
 		if (mrt->obj[i]->id == 'S')
-			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, impact, light);
+			d = hit_sphere(mrt->obj[i]->cor, mrt->obj[i]->rad, impact, \
+			light) / 2;
 		if (mrt->obj[i]->id == 'P')
 			d = hit_plane(impact, light, mrt->obj[i]);
 		if (mrt->obj[i]->id == 'C')
@@ -114,10 +105,10 @@ t_bool	shaed(t_mrt *mrt, t_vec ray, double d)
 		if (mrt->obj[i]->id == 'Z')
 			d = hit_cylinder(*mrt->obj[i], impact, light);
 		if (d > 0.0001 && d < veclen(connect(impact, mrt->l->cor)))
-			shadow = TRUE;
+			return (TRUE);
 		i++;
 	}
-	return (shadow);
+	return (FALSE);
 }
 
 int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
@@ -128,7 +119,8 @@ int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
 	t_vec	ray;
 	int		rgb;
 
-	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), mrt->cam, scr);
+	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), \
+	mrt->cam, scr);
 	unit(&ray);
 	rgb = create_trgb(0, 0, 0, 0);
 	d = nearest(mrt, ray, &near, p);
@@ -138,12 +130,8 @@ int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
 		return (0);
 	}
 	bright = lumen(mrt, near, ray, d);
-	double alp = mrt->al->lr / (mrt->al->lr + mrt->l->lr);
-	double lp = mrt->l->lr / (mrt->al->lr + mrt->l->lr);
-	int r = mrt->al->r * alp + near->r * lp;
-	int g = mrt->al->g * alp + near->g * lp;
-	int b = mrt->al->b * alp + near->b * lp;
-	rgb = create_trgb(0, r * bright, g * bright, b * bright);
+	rgb = create_trgb(0, color(mrt, near, 'r') * bright, color(mrt, near, \
+	'g') * bright, color(mrt, near, 'b') * bright);
 	if (shaed(mrt, ray, d))
 		rgb = create_trgb(0, 0, 0, 0);
 	my_mlx_pixel_put(&mrt->img, cord[0], cord[1], rgb);
