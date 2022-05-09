@@ -39,17 +39,6 @@
 
 # include "struct.h"
 
-typedef struct s_mrt
-{
-	void	*mlx;
-	void	*win;
-	t_al	*al;
-	t_lol	*l;
-	t_cam	*cam;
-	t_obj	**obj;
-	void	*img;
-}				t_mrt;
-
 typedef struct s_data
 {
 	void	*img;
@@ -58,6 +47,17 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }				t_data;
+
+typedef struct s_mrt
+{
+	void	*mlx;
+	void	*win;
+	t_al	*al;
+	t_lol	*l;
+	t_cam	*cam;
+	t_obj	**obj;
+	t_data	img;
+}				t_mrt;
 
 /*
  * FUNCTIONS
@@ -98,7 +98,7 @@ double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir);
 
 int		shadow(t_mrt *mrt, t_vec impact, char p);
 int		colorme(t_mrt *mrt, t_obj *obj, t_vec ray);
-int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p);
+int		nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p);
 
 //SRC
 

@@ -8,6 +8,7 @@ IN = $(SR)input/
 IT = $(IN)init/
 UT = $(IN)util/
 GE = $(SR)geometry/
+TR = $(SR)tracer/
 
 SRC =	$(SR)main.c \
 		$(EX)rt_exit.c \
@@ -21,8 +22,8 @@ SRC =	$(SR)main.c \
 		$(GE)ray_plane.c \
 		$(GE)ray_cylinder.c \
 		$(GE)ray_sphere.c \
-		src/setup/rayinit.c \
-		src/tracer/big.c
+		$(TR)rayinit.c \
+		$(TR)trace.c
 
 OBJ = $(SRC:.c=.o)
 

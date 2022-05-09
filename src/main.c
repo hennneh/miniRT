@@ -10,27 +10,24 @@ void	limit(double *var, double upper, double lower)
 
 void	calc(t_mrt *mrt)
 {
-	t_data	img;
-	int		y;
-	int		x;
+	int		cord[2];
 	t_vec	*scr;
 
 	scr = scream(mrt->cam);
-	img.img = mlx_new_image(mrt->mlx, WDTH, HGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, \
-	&img.line_length, &img.endian);
-	y = 0;
-	while (y < HGHT)
+	mrt->img.img = mlx_new_image(mrt->mlx, WDTH, HGHT);
+	mrt->img.addr = mlx_get_data_addr(mrt->img.img, &mrt->img.bits_per_pixel, \
+	&mrt->img.line_length, &mrt->img.endian);
+	cord[1] = 0;
+	while (cord[1] < HGHT)
 	{
-		x = 0;
-		while (x < WDTH)
+		cord[0] = 0;
+		while (cord[0] < WDTH)
 		{
-			nachfolger(x, y, mrt, scr, &img, FALSE);
-			x++;
+			nachfolger(cord, mrt, scr, FALSE);
+			cord[0]++;
 		}
-		y++;
+		cord[1]++;
 	}
-	mrt->img = img.img;
 	free(scr);
 }
 
@@ -209,28 +206,27 @@ void	controls(t_mrt *mrt)
 	1;33m┗┉┉┉┛\033[0m   \033[1;31m┗┉┉┉┉┉┉┉┉┉┉┉┛      ┗┉┉┉┛\033[0m           \
 	\033[1;31m┗┉┉┉┛\033[0m \033[0;34m┗┉┉┉┉┉┉┉┉┉┉┉┛     ┗┉┉┉┛\033[0m    \n\n");
 	printf("T  Toggle Debug info\nC  Show this Menu\nR  Retrace the Pixel at \
-	current Mouse-Position\nO  Toggle Origin visualisation\nP  Print Input of\
-	 current Scene\nESC  Exit Process\n\n");
+current Mouse-Position\nO  Toggle Origin visualisation\nP  Print Input of \
+current Scene\nESC  Exit Process\n\n");
 }
 
 // Trace me baby one more time
 void	debug(t_mrt *mrt)
 {
-	int		x;
-	int		y;
+	int		cord[2];
 	t_vec	ray;
 	t_vec	*scr;
 
-	mlx_mouse_get_pos(mrt->mlx, mrt->win, &x, &y);
+	mlx_mouse_get_pos(mrt->mlx, mrt->win, &cord[0], &cord[1]);
 	scr = scream(mrt->cam);
-	printf("ray trough x %i, y %i\n", x, y);
-	ray = single_ray(x - (WDTH / 2), y - (HGHT / 2), mrt->cam, scr);
-	nachfolger(x, y, mrt, scr, NULL, TRUE);
+	printf("ray trough x %i, y %i\n", cord[0], cord[1]);
+	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), mrt->cam, scr);
+	nachfolger(cord, mrt, scr, TRUE);
 }
 
 int	render(t_mrt *mrt)
 {
-	mlx_put_image_to_window(mrt->mlx, mrt->win, mrt->img, 0, 0);
+	mlx_put_image_to_window(mrt->mlx, mrt->win, mrt->img.img, 0, 0);
 	return (0);
 }
 
@@ -312,7 +308,7 @@ void	expand_obj(t_mrt *mrt)
 
 	i = 0;
 	e = 0;
-	e = ft_pointlen((void **)mrt->obj);
+	e = ft_pointlen(mrt->obj);
 	new = ft_calloc(e + 1, sizeof(t_obj *));
 	i = 0;
 	e = 0;
