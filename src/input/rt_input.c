@@ -32,7 +32,7 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count, int flag)
 		free_2dstr(tmp);
 		if (flag)
 			return ((printf("[%d]{%s}\n", count, (char *)lst->content) * 0) \
-			+ count + 1);
+			+ count + 1); //DELETE
 		lst = lst->next;
 	}
 	return (0);
