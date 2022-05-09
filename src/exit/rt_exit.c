@@ -30,9 +30,9 @@ void	rt_er_exit(t_mrt *mrt, int good, int count)
 /**
  * Exit, goes through mrt and frees all inputs
  * @param mrt [t_mrt *] mrt struct
- * @return [void] exits at end of function with (0)
+ * @return [int] exits at end of function with (0)
 */
-void	rt_exit(t_mrt *mrt)
+int	rt_exit(t_mrt *mrt)
 {
 	int	x;
 
@@ -44,11 +44,14 @@ void	rt_exit(t_mrt *mrt)
 	if (mrt->l)
 		free(mrt->l);
 	while (mrt->obj[x])
-	{
-		free(mrt->obj[x]);
-		x ++;
-	}
+		free(mrt->obj[x ++]);
 	if (mrt->obj)
 		free(mrt->obj);
+	mlx_destroy_image(mrt->mlx, mrt->img.img);
+	mlx_destroy_window(mrt->mlx, mrt->win);
+	mlx_destroy_display(mrt->mlx);
+	if (mrt->mlx)
+		free(mrt->mlx);
 	exit(0);
+	return (0);
 }

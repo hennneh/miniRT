@@ -38,10 +38,9 @@ int	parse_input(t_mrt *mrt, t_list *lst, int count, int flag)
 	return (0);
 }
 
-t_list	*import_data(char *file)
+t_list	*import_data(char *file, t_list *lst)
 {
 	int		i;
-	t_list	*lst;
 	int		fd;
 	char	*line;
 
@@ -50,10 +49,11 @@ t_list	*import_data(char *file)
 	&file[ft_strlen(file) - 3])
 	{
 		perror("Error\nNot a valid file");
-		exit(close(fd));
+		if (fd != -1)
+			close(fd);
+		exit(1);
 	}
 	i = 1;
-	lst = NULL;
 	while (i > 0)
 	{
 		i = get_next_line(fd, &line);
@@ -73,7 +73,8 @@ int	input(t_mrt *mrt, char *file)
 	int		good;
 	t_list	*lst;
 
-	lst = import_data(file);
+	lst = NULL;
+	lst = import_data(file, lst);
 	if (!lst)
 	{
 		perror("Error\nEmpty file\n");
@@ -86,9 +87,7 @@ int	input(t_mrt *mrt, char *file)
 		good = parse_input(mrt, lst, count[3], 0);
 	}
 	else
-	{
 		good = -1;
-	}
 	ft_lstclear(&lst, free);
 	if (good > 0)
 		rt_er_exit(mrt, good - 1, count[3]);

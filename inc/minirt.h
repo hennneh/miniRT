@@ -106,7 +106,7 @@ int		main(int argc, char **argv);
 // EXIT
 
 void	rt_er_exit(t_mrt *mrt, int good, int count);
-void	rt_exit(t_mrt *mrt);
+int		rt_exit(t_mrt *mrt);
 
 // INPUT
 
