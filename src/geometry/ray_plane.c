@@ -40,28 +40,6 @@ double	hit_plane(t_vec ray_or, t_vec ray, t_obj *plane)
 	}
 }
 
-double	hit_rect(t_vec ray_or, t_vec ray, t_obj *plane)
-{
-	double	t;
-	double	test;
-	t_vec	tmp;
-	t_vec	impact;
-
-	t = 0;
-	test = calculate_dot(&plane->v_o, &ray);
-	if (!test || fabs(test) < 0.0001)
-		return (0);
-	else
-	{
-		tmp = connect(ray_or, plane->cor);
-		t = (calculate_dot(&tmp, &plane->v_o) / test);
-		if (t < 0)
-			return (0);
-		impact = v_sum(v_product(v_unit(ray), t), ray_or);
-		return (0);
-	}
-}
-
 double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane)
 {
 	double	t;

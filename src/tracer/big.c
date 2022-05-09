@@ -43,8 +43,6 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 	t_vec	ray;
 	t_vec	norm;
 
-	t_bool	is_cap = FALSE;
-
 	near = NULL;
 	old_d = RENDER_DISTANCE;
 	ray = single_ray(x - (WDTH/2), y - (HGHT/2), mrt->cam, scr);
@@ -62,17 +60,17 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		{
 			d = hit_plane(mrt->cam->cor, ray, mrt->obj[i]);
 		}
-		if (mrt->obj[i]->id == 'C')
+		if (mrt->obj[i]->id == 'C') // rendering of circles (caps) (evtl semispheres)
 		{
 			d = hit_circle(mrt->cam->cor, ray, mrt->obj[i]);
 		}
-		if (mrt->obj[i]->id == 'O')
+		if (mrt->obj[i]->id == 'O') // rendering of single lines
 		{
 			d = hit_line(mrt->cam->cor, ray, mrt->obj[i]);
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
-			d = hit_cylinder(*mrt->obj[i], mrt->cam->cor, ray, &is_cap);
+			d = hit_cylinder(*mrt->obj[i], mrt->cam->cor, ray);
 		}
 		if (d && d > 0 && d < old_d)
 		{
@@ -106,10 +104,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		norm = near->v_o;
 	else if (near->id == 'Z')
 	{
-		if (is_cap)
-			norm = near->v_o;
-		else
-			norm = v_invert(cross(near->v_o, cross(near->v_o, connect(near->cor, impact))));
+		norm = v_invert(cross(near->v_o, cross(near->v_o, connect(near->cor, impact))));
 	}
 
 	light = connect(impact, mrt->l->cor);
@@ -128,9 +123,9 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		bright = 1;
 	if (near)
 	{
-		rgb = create_trgb(0,	near->r * bright/* * (bright >= 0) + 0*/,
-								near->g * bright/* * (bright >= 0) + 0*/,
-								near->b * bright/* * (bright >= 0) + 0*/);
+		rgb = create_trgb(0,	near->r * (bright * mrt->l->lr)/* * (bright >= 0) + 0*/,
+								near->g * (bright * mrt->l->lr)/* * (bright >= 0) + 0*/,
+								near->b * (bright * mrt->l->lr)/* * (bright >= 0) + 0*/);
 	}
 
 	t_bool shadow = FALSE;
@@ -153,7 +148,7 @@ int	nachfolger(int x, int y, t_mrt *mrt, t_vec *scr, t_data *img, t_bool p)
 		}
 		if (mrt->obj[i]->id == 'Z')
 		{
-			d = hit_cylinder(*mrt->obj[i], impact, light, &shadow);
+			d = hit_cylinder(*mrt->obj[i], impact, light);
 		}
 		if (d > 000.1 && d < veclen(connect(impact, mrt->l->cor)))
 		{

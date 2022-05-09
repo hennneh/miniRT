@@ -112,7 +112,7 @@ double	new_cylinder_intersect(t_vec *posi, t_vec *dir, double radius, double hei
 	return (x[0]);
 }
 
-double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir, t_bool *is_cap)
+double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir)
 {
 	double	cylinder_inter;
 
