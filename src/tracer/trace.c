@@ -118,7 +118,9 @@ t_bool	shaed(t_mrt *mrt, t_vec ray, double d)
 			d = hit_circle(impact, light, mrt->obj[i]);
 		if (mrt->obj[i]->id == 'Z')
 			d = hit_cylinder(*mrt->obj[i], impact, light);
-		if (d > 000.1 && d < veclen(connect(impact, mrt->l->cor)))
+		if ((mrt->obj[i]->id == 'P' || mrt->obj[i]->id == 'C') && d > 0.0001)
+			d = 0.0002;
+		if (d > 0.0001 && d < veclen(connect(impact, mrt->l->cor)))
 			shadow = TRUE;
 		i++;
 	}
