@@ -7,3 +7,4 @@ mlx-test
 .DS_Store
 .vscode/
 extra/test_files/
+miniRT.dSYM
