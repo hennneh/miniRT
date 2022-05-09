@@ -1,4 +1,3 @@
-
 #include "get_next_line.h"
 
 static void	ft_buffdel(char *dest, char *src, int n)

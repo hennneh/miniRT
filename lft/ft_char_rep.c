@@ -2,7 +2,7 @@
 
 void	ft_char_rep(char *str, char target, char replacement)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str && str[i])

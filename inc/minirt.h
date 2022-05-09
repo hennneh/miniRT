@@ -95,7 +95,6 @@ double	cap_intersection(t_obj cyl, t_vec ray_or, t_vec ray, int d);
 double	cap(t_obj cyl, t_vec ray_org, t_vec ray, double off);
 double	hit_cylinder(t_obj cyl, t_vec ray_or, t_vec ray_dir);
 
-
 int		shadow(t_mrt *mrt, t_vec impact, char p);
 int		colorme(t_mrt *mrt, t_obj *obj, t_vec ray);
 int		nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p);

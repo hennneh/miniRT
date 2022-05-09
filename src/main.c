@@ -181,7 +181,7 @@ void	print_config(t_mrt *mrt, int i)
 	}
 }
 
-void	controls()
+void	controls(void)
 {
 	printf("\n\t\033[0;34mControls :\033[0m\n\n");
 	printf("\033[0mCamera Tilt   \033[0;32m┏┉┉┉┓\033[0m  Field of vision \033[\

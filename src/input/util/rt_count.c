@@ -1,4 +1,3 @@
-
 #include "../../../inc/minirt.h"
 
 /**
@@ -10,8 +9,6 @@ int	count_input(t_list *lst, int *count, char *tmp)
 	while (lst)
 	{
 		tmp = trm_whtsp((char *)lst->content, 2);
-		// if (ft_strlen(tmp) < 3)
-		// 	invalid_line();//ERROR
 		if (tmp[0] == 'A' && ft_white(tmp[1]))
 			count[0]++;
 		else if (tmp[0] == 'C' && ft_white(tmp[1]))

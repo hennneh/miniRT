@@ -44,7 +44,7 @@ typedef struct s_cam
 	char	id;
 	t_vec	cor;
 	t_vec	v_o;
-	double	fov;// double! NOTE TO VINNY: multiply initial value by (π / 180)
+	double	fov;
 }	t_cam;
 
 /**
