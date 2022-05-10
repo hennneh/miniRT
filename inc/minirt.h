@@ -10,6 +10,7 @@
 # define HGHT 640
 # define DIVERGENCE 0.001
 # define PI 3.14159265359
+# define SHADOW 0.0
 
 /*
 **	LIBRARY
@@ -162,5 +163,7 @@ void	expand_obj(t_mrt *mrt);
 void	flip(t_mrt *mrt);
 int		color(t_mrt *mrt, t_obj *near, char c);
 void	calc(t_mrt *mrt);
+int	shadow_color(t_mrt *mrt, t_obj *near, char c);
+
 
 #endif
