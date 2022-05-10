@@ -96,6 +96,7 @@ void	camera(t_mrt *mrt, int key)
 	limit(&mrt->cam->fov, 179 * (PI / 180), 0);
 	unit(&mrt->cam->v_o);
 	calc(mrt);
+	free(scr);
 }
 
 void	move(t_mrt *mrt, int key)

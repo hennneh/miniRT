@@ -6,9 +6,12 @@ void	calc(t_mrt *mrt)
 	t_vec	*scr;
 
 	scr = scream(mrt->cam);
-	mrt->img.img = mlx_new_image(mrt->mlx, WDTH, HGHT);
-	mrt->img.addr = mlx_get_data_addr(mrt->img.img, &mrt->img.bits_per_pixel, \
-	&mrt->img.line_length, &mrt->img.endian);
+	if (!mrt->img.img)
+	{
+		mrt->img.img = mlx_new_image(mrt->mlx, WDTH, HGHT);
+		mrt->img.addr = mlx_get_data_addr(mrt->img.img, &mrt->img.bits_per_pixel, \
+			&mrt->img.line_length, &mrt->img.endian);
+	}
 	cord[1] = 0;
 	while (cord[1] < HGHT)
 	{
@@ -72,6 +75,7 @@ int	main(int argc, char **argv)
 	flip(&mrt);
 	mrt.mlx = mlx_init();
 	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT, "I wanna be Tracer");
+	mrt.img.img = NULL;
 	calc(&mrt);
 	controls();
 	mlx_mouse_show(mrt.mlx, mrt.win);

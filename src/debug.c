@@ -76,4 +76,5 @@ void	debug(t_mrt *mrt)
 	printf("ray trough x %i, y %i\n", cord[0], cord[1]);
 	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), mrt->cam, scr);
 	nachfolger(cord, mrt, scr, TRUE);
+	free(scr);
 }
