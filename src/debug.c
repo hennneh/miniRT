@@ -68,13 +68,11 @@ current Scene\nESC  Exit Process\n\n");
 void	debug(t_mrt *mrt)
 {
 	int		cord[2];
-	t_vec	ray;
 	t_vec	*scr;
 
 	mlx_mouse_get_pos(mrt->mlx, mrt->win, &cord[0], &cord[1]);
 	scr = scream(mrt->cam);
 	printf("ray trough x %i, y %i\n", cord[0], cord[1]);
-	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), mrt->cam, scr);
 	nachfolger(cord, mrt, scr, TRUE);
 	free(scr);
 }

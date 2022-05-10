@@ -66,13 +66,11 @@ double	hit_circle(t_vec ray_or, t_vec ray, t_obj *plane)
 
 double	hit_line(t_vec ray_or, t_vec ray, t_obj *plane)
 {
-	double	t;
 	double	test;
 	t_vec	orth;
 	t_vec	inter_ray;
 	t_vec	inter_or;
 
-	t = 0;
 	inter_ray = plane->v_o;
 	inter_or = plane->cor;
 	orth = cross(inter_ray, connect(inter_or, ray_or));
