@@ -10,7 +10,6 @@
 # define HGHT 640
 # define DIVERGENCE 0.001
 # define PI 3.14159265359
-# define SHADOW 0.0
 
 /*
 **	LIBRARY
@@ -29,10 +28,6 @@
 # include <unistd.h> // close, read, write
 # include <stdlib.h> // malloc, free, exit
 # include <string.h> // strerror
-
-/*
-** MACROS
-*/
 
 /*
 **	STRUCTS
