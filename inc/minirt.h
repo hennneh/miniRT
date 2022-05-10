@@ -147,4 +147,20 @@ int		init_cyl(t_obj **cy, char **info, int p);
 
 int		input(t_mrt *mrt, char *file);
 
+//DEBUG
+
+void	controls(void);
+void	print_config(t_mrt *mrt, int i);
+void	debug(t_mrt *mrt);
+void	print_object(t_obj *obj);
+void	move(t_mrt *mrt, int key);
+void	camera(t_mrt *mrt, int key);
+void	light(t_mrt *mrt, int key);
+void	origin(t_mrt *mrt, int i);
+t_obj	*line_obj(t_vec	origin, t_vec direction, char color);
+void	expand_obj(t_mrt *mrt);
+void	flip(t_mrt *mrt);
+int		color(t_mrt *mrt, t_obj *near, char c);
+void	calc(t_mrt *mrt);
+
 #endif

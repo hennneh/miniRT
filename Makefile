@@ -19,11 +19,17 @@ SRC =	$(SR)main.c \
 		$(UT)rt_count.c \
 		$(UT)rt_whtspc.c \
 		$(GE)geo_maths.c \
+		$(GE)geo_maths1.c \
+		$(GE)geo_maths2.c \
 		$(GE)ray_plane.c \
 		$(GE)ray_cylinder.c \
 		$(GE)ray_sphere.c \
 		$(TR)rayinit.c \
-		$(TR)trace.c
+		$(TR)trace.c \
+		$(SR)debug.c \
+		$(SR)rearrange.c \
+		$(SR)obj_edit.c \
+		$(SR)utils.c
 
 OBJ = $(SRC:.c=.o)
 
