@@ -57,7 +57,6 @@ void	expand_obj(t_mrt *mrt)
 			new[i + e++] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / 2);
 			new[i + e] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / -2);
 		}
-
 		i++;
 	}
 	free(mrt->obj);
