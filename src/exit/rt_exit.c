@@ -23,7 +23,7 @@ void	rt_er_exit(t_mrt *mrt, int good, int count)
 	}
 	if (mrt->obj)
 		free(mrt->obj);
-	perror("ERROR\n Invalid input\n");
+	perror("Error\n Invalid input\n");
 	exit(1);
 }
 

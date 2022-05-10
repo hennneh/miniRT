@@ -24,7 +24,7 @@ int	count_input(t_list *lst, int *count, char *tmp)
 		else
 		{
 			free(tmp);
-			return (printf("ERROR\n Line invalid\n"));
+			return (printf("Error\n Line invalid\n"));
 		}
 		free(lst->content);
 		lst->content = tmp;

@@ -70,7 +70,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (input(&mrt, argv[1]))
-		return (printf("ERROR INPUT\n"));
+		return (printf("Error\n INPUT\n"));
 	expand_obj(&mrt);
 	flip(&mrt);
 	mrt.mlx = mlx_init();
