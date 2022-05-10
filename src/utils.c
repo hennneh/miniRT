@@ -21,20 +21,6 @@ int	color(t_mrt *mrt, t_obj *near, char c)
 	return (0);
 }
 
-int	shadow_color(t_mrt *mrt, t_obj *near, char c)
-{
-	double	alp;
-
-	alp = mrt->al->lr / (mrt->al->lr + mrt->l->lr);
-	if (c == 'r')
-		return (mrt->al->r * alp + near->r * SHADOW);
-	if (c == 'g')
-		return (mrt->al->g * alp + near->g * SHADOW);
-	if (c == 'b')
-		return (mrt->al->b * alp + near->b * SHADOW);
-	return (0);
-}
-
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
