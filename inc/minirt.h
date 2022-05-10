@@ -8,7 +8,7 @@
 # define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
-# define DIVERGENCE 100
+# define DIVERGENCE 100f
 # define PI 3.14159265359
 
 /*
