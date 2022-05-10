@@ -40,7 +40,7 @@ int	key_hook(int key, t_mrt *mrt)
 		rt_exit(mrt);
 	if (key == 116)
 		swtch = !swtch;
-	if (!swtch && key == 99)
+	if ((!swtch && key == 99) || (swtch && key == 116))
 		controls();
 	else if (swtch && key == 112)
 		print_config(mrt, 0);
@@ -76,7 +76,6 @@ int	main(int argc, char **argv)
 	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT, "I wanna be Tracer");
 	mrt.img.img = NULL;
 	calc(&mrt);
-	controls();
 	mlx_mouse_show(mrt.mlx, mrt.win);
 	mlx_loop_hook(mrt.mlx, render, &mrt);
 	mlx_key_hook(mrt.win, key_hook, &mrt);
