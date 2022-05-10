@@ -72,7 +72,6 @@ int	main(int argc, char **argv)
 	if (input(&mrt, argv[1]))
 		return (printf("Error\n INPUT\n"));
 	expand_obj(&mrt);
-	flip(&mrt);
 	mrt.mlx = mlx_init();
 	mrt.win = mlx_new_window(mrt.mlx, WDTH, HGHT, "I wanna be Tracer");
 	mrt.img.img = NULL;

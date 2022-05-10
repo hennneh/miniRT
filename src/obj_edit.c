@@ -9,8 +9,6 @@ size_t	ft_pointlen(t_obj **str)
 	res = 0;
 	while (str && str[i])
 	{
-		if (str[i]->id == 'P')
-			res += 2;
 		if (str[i]->id == 'Z')
 			res += 4;
 		i++;
@@ -59,6 +57,7 @@ void	expand_obj(t_mrt *mrt)
 			new[i + e++] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / 2);
 			new[i + e] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / -2);
 		}
+		
 		i++;
 	}
 	free(mrt->obj);
@@ -73,29 +72,4 @@ int	obj_count(t_obj **obj)
 	while (obj[i])
 		i++;
 	return (i);
-}
-
-void	flip(t_mrt *mrt)
-{
-	int	i;
-	int	limit;
-	int	pos;
-
-	i = 0;
-	limit = obj_count(mrt->obj);
-	while (mrt->obj[i] && i < limit)
-	{
-		if (mrt->obj[i]->id == 'P' || mrt->obj[i]->id == 'C')
-		{
-			pos = obj_count(mrt->obj);
-			mrt->obj[pos] = malloc(sizeof(t_obj));
-			mrt->obj[pos]->cor = mrt->obj[i]->cor;
-			mrt->obj[pos]->v_o = v_invert(mrt->obj[i]->v_o);
-			mrt->obj[pos]->id = mrt->obj[i]->id;
-			mrt->obj[pos]->r = mrt->obj[i]->r;
-			mrt->obj[pos]->g = mrt->obj[i]->g;
-			mrt->obj[pos]->b = mrt->obj[i]->b;
-		}
-		i++;
-	}
 }
