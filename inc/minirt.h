@@ -8,7 +8,7 @@
 # define RENDER_DISTANCE 20000
 # define WDTH 640
 # define HGHT 640
-# define DIVERGENCE 0.001
+# define DIVERGENCE 100
 # define PI 3.14159265359
 
 /*
@@ -158,7 +158,7 @@ void	expand_obj(t_mrt *mrt);
 void	flip(t_mrt *mrt);
 int		color(t_mrt *mrt, t_obj *near, char c);
 void	calc(t_mrt *mrt);
-int	shadow_color(t_mrt *mrt, t_obj *near, char c);
+double	hell(t_vec *norm, t_vec *light, t_vec *ray);
 
 
 #endif

@@ -65,7 +65,6 @@ double	lumen(t_mrt *mrt, t_obj *near, t_vec ray, double d)
 	t_vec	light;
 	t_vec	norm;
 	double	bright;
-	double	s[2];
 
 	impact = v_sum(mrt->cam->cor, v_product(v_unit(ray), d));
 	light = v_unit(connect(impact, mrt->l->cor));
@@ -77,15 +76,8 @@ double	lumen(t_mrt *mrt, t_obj *near, t_vec ray, double d)
 	else if (near->id == 'Z')
 		norm = v_invert(cross(near->v_o, cross(near->v_o, \
 			connect(near->cor, impact))));
-	if (near->id == 'P' || near->id == 'C')
-	{
-		s[0] = calculate_dot(&norm, &light);
-		s[1] = calculate_dot(&norm, &ray);
-		if (s[0] < 0)
-			norm = init_vec(-norm.x,-norm.y,-norm.z);
-		if ((s[0] < 0 && s[1] < 0) || (s[0] >= 0 && s[1] >= 0))
-			return (0);
-	}
+	if ((near->id == 'P' || near->id == 'C') && hell(&norm, &light, &ray))
+		return (0);
 	bright = 1 - (2 * fabs(angle(light, norm)) / (PI));
 	limit(&bright, 1, 0);
 	if (near->id == 'O')

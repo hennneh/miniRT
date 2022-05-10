@@ -57,7 +57,7 @@ void	expand_obj(t_mrt *mrt)
 			new[i + e++] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / 2);
 			new[i + e] = circle_obj(*mrt->obj[i], mrt->obj[i]->hght / -2);
 		}
-		
+
 		i++;
 	}
 	free(mrt->obj);
@@ -72,4 +72,17 @@ int	obj_count(t_obj **obj)
 	while (obj[i])
 		i++;
 	return (i);
+}
+
+double	hell(t_vec *norm, t_vec *light, t_vec *ray)
+{
+	double	s[2];
+
+	s[0] = calculate_dot(norm, light);
+	s[1] = calculate_dot(norm, ray);
+	if (s[0] < 0)
+		*norm = init_vec(-((*norm).x), -((*norm).y), -((*norm).z));
+	if ((s[0] < 0 && s[1] < 0) || (s[0] >= 0 && s[1] >= 0))
+		return (1);
+	return (0);
 }
