@@ -83,7 +83,7 @@ double	lumen(t_mrt *mrt, t_obj *near, t_vec ray, double d)
 	return (bright);
 }
 
-t_obj	*shaed(t_mrt *mrt, t_vec ray, double d)
+t_bool	shaed(t_mrt *mrt, t_vec ray, double d)
 {
 	t_vec	light;
 	t_vec	impact;
@@ -105,10 +105,10 @@ t_obj	*shaed(t_mrt *mrt, t_vec ray, double d)
 		if (mrt->obj[i]->id == 'Z')
 			d = hit_cylinder(*mrt->obj[i], impact, light);
 		if (d > 0.0001 && d < veclen(connect(impact, mrt->l->cor)))
-			return (mrt->obj[i]);
+			return (TRUE);
 		i++;
 	}
-	return (NULL);
+	return (FALSE);
 }
 
 int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
@@ -131,10 +131,9 @@ int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
 	}
 	bright = lumen(mrt, near, ray, d);
 	rgb = create_trgb(0, color(mrt, near, 'r') * bright, color(mrt, near, \
-	'g') * bright, color(mrt, near, 'b') * bright);
-	t_obj *o = shaed(mrt, ray, d);
-	if (o != NULL)
-		rgb = create_trgb(0, shadow_color(mrt, near, 'r'), shadow_color(mrt, near, 'g'), shadow_color(mrt, near, 'b'));
+		'g') * bright, color(mrt, near, 'b') * bright);
+	if (shaed(mrt, ray, d) == TRUE)
+		rgb = create_trgb(0, 0, 0, 0);
 	my_mlx_pixel_put(&mrt->img, cord[0], cord[1], rgb);
 	return (0);
 }
