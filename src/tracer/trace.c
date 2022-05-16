@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   trace.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hlehmann <hlehmann@student.42wolfsburg.de  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/16 11:30:42 by hlehmann          #+#    #+#             */
+/*   Updated: 2022/05/16 11:30:43 by hlehmann         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minirt.h"
 
 /**
@@ -13,7 +25,6 @@
  * 	2 the ambient light
  * 	3 the angle at which the light hits the object
  */
-
 double	hittem(t_mrt *mrt, t_obj *obj, t_vec ray)
 {
 	double	d;
@@ -79,7 +90,7 @@ double	lumen(t_mrt *mrt, t_obj *near, t_vec ray, double d)
 	if ((near->id == 'P' || near->id == 'C') && hell(&norm, &light, &ray))
 		return (0);
 	bright = 1 - (2 * fabs(angle(light, norm)) / (PI));
-	limit(&bright, 1, 0);
+	limit(&bright, mrt->l->lr, 0);
 	if (near->id == 'O')
 		bright = 1;
 	return (bright);
@@ -115,27 +126,29 @@ t_bool	shaed(t_mrt *mrt, t_vec ray, double d)
 
 int	nachfolger(int cord[2], t_mrt *mrt, t_vec *scr, t_bool p)
 {
-	double	d;
-	double	bright;
+	double	d[3];
 	t_obj	*near;
-	t_vec	ray;
-	int		rgb;
+	t_vec	ry;
+	int		c;
 
-	ray = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), \
-	mrt->cam, scr);
-	unit(&ray);
-	rgb = create_trgb(0, 0, 0, 0);
-	d = nearest(mrt, ray, &near, p);
+	ry = single_ray(cord[0] - (WDTH / 2), cord[1] - (HGHT / 2), mrt->cam, scr);
+	unit(&ry);
+	c = create_trgb(0, 0, 0, 0);
+	d[0] = nearest(mrt, ry, &near, p);
 	if (!near)
-	{
-		my_mlx_pixel_put(&mrt->img, cord[0], cord[1], rgb);
+		my_mlx_pixel_put(&mrt->img, cord[0], cord[1], c);
+	if (!near)
 		return (0);
-	}
-	bright = lumen(mrt, near, ray, d);
-	rgb = create_trgb(0, color(mrt, near, 'r') * bright, color(mrt, near, \
-		'g') * bright, color(mrt, near, 'b') * bright);
-	if (shaed(mrt, ray, d) == TRUE)
-		rgb = create_trgb(0, 0, 0, 0);
-	my_mlx_pixel_put(&mrt->img, cord[0], cord[1], rgb);
+	d[1] = lumen(mrt, near, ry, d[0]);
+	d[2] = mrt->al->lr + mrt->l->lr;
+	if (shaed(mrt, ry, d[0]) == FALSE && d[1] > 0)
+	c = create_trgb(0, color(mrt, near, 'r', d[1]), color(mrt, near, \
+		'g', d[1]), color(mrt, near, 'b', d[1]));
+	else
+		c = create_trgb(0, i_limit((mrt->al->lr / d[2] * mrt->al->r), 255 * \
+		d[2], 0), i_limit((mrt->al->lr / d[2] * mrt->al->g), 255 * d[2], 0), \
+		i_limit((mrt->al->lr / (mrt->al->lr + mrt->l->lr) * mrt->al->b), \
+		255 * d[2], 0));
+	my_mlx_pixel_put(&mrt->img, cord[0], cord[1], c);
 	return (0);
 }
