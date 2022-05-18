@@ -36,7 +36,7 @@ cd miniRT && make
 | vector     | float |
 | ratio      | float |
 | rgb color  | int   |
-| diameter   | flaot |
+| diameter   | float |
 | height     | float |
 
 ## Debugger
@@ -48,7 +48,5 @@ To enable the Debugger press T while running the program. It might take a while 
 ## Examples
 
 ![party.rt](extra/ethanol.png)
-party.rt
 
 ![shadows.rt](extra/basic_shapes.png)
-shadows.rt
